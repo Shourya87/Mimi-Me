@@ -1,0 +1,14 @@
+# Mini & Me
+
+> Soft, considered essentials for mothers, babies, and the families they grow — swaddles, knits, keepsakes, and gifts.
+
+Mini & Me is a small, mother-founded brand designing sustainably made baby and family essentials. Products use GOTS- and OEKO-TEX-certified materials, low-impact dyes, and recycled packaging, and ship carbon-neutral with free US shipping over $60.
+
+## Pages
+
+- [Home](/): Featured collections, best sellers, and brand story.
+- [Shop](/shop): Full product catalog with filters and categories.
+- [About](/about): Our story, values, and the team behind Mini & Me.
+- [FAQ](/faq): Shipping, returns, materials, and gifting answers.
+- [Contact](/contact): How to reach our team.
+- [Journal: Organizing baby clothes](/blog/organizing-baby-clothes): Guide to organizing baby clothes by size and season.
