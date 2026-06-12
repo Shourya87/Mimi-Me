@@ -7,14 +7,147 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          id: string
+          full_name: string | null
+          phone: string | null
+          address: string | null
+          city: string | null
+          zip: string | null
+          country: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          full_name?: string | null
+          phone?: string | null
+          address?: string | null
+          city?: string | null
+          zip?: string | null
+          country?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          full_name?: string | null
+          phone?: string | null
+          address?: string | null
+          city?: string | null
+          zip?: string | null
+          country?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          id: string
+          order_number: string
+          user_id: string | null
+          email: string
+          first_name: string
+          last_name: string
+          address: string
+          city: string
+          zip: string
+          country: string
+          items: Json
+          subtotal: number
+          shipping_cost: number
+          discount: number
+          total: number
+          payment_method: string
+          payment_ref: string | null
+          status: "confirmed" | "packed" | "shipped" | "delivered" | "cancelled"
+          tracking_url: string | null
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          order_number: string
+          user_id?: string | null
+          email: string
+          first_name: string
+          last_name: string
+          address: string
+          city: string
+          zip: string
+          country?: string
+          items?: Json
+          subtotal?: number
+          shipping_cost?: number
+          discount?: number
+          total?: number
+          payment_method?: string
+          payment_ref?: string | null
+          status?: "confirmed" | "packed" | "shipped" | "delivered" | "cancelled"
+          tracking_url?: string | null
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          status?: "confirmed" | "packed" | "shipped" | "delivered" | "cancelled"
+          tracking_url?: string | null
+          notes?: string | null
+          payment_ref?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_subs: {
+        Row: {
+          id: string
+          email: string
+          subscribed_at: string
+          source: string | null
+        }
+        Insert: {
+          id?: string
+          email: string
+          subscribed_at?: string
+          source?: string | null
+        }
+        Update: {
+          email?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
+      contact_messages: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          subject: string
+          message: string
+          replied: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          subject: string
+          message: string
+          replied?: boolean
+          created_at?: string
+        }
+        Update: {
+          replied?: boolean
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -129,23 +262,6 @@ export type Enums<
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
-  }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
-}
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {

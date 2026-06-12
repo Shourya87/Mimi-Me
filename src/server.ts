@@ -1,4 +1,10 @@
 import "./lib/error-capture";
+import ws from "ws";
+
+// Polyfill global WebSocket for Node.js < 22 environments (such as Vercel / server)
+if (typeof globalThis.WebSocket === "undefined") {
+  globalThis.WebSocket = ws as any;
+}
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";

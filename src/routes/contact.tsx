@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Mail, MessageCircle, Phone } from "lucide-react";
+import { Mail, MessageCircle, Phone, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
+import { submitContact } from "@/lib/api/contact.functions";
 
 const schema = z.object({
   name: z.string().min(1, "Required"),
@@ -40,10 +42,30 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const form = useForm<Values>({ resolver: zodResolver(schema) });
-  const onSubmit = (v: Values) => {
-    toast.success("Message sent", { description: `We'll get back to you at ${v.email} soon.` });
-    form.reset();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (v: Values) => {
+    setIsSubmitting(true);
+    try {
+      await submitContact({
+        data: {
+          name: v.name,
+          email: v.email,
+          subject: v.subject,
+          message: v.message,
+        },
+      });
+
+      toast.success("Message sent", { description: `We'll get back to you at ${v.email} soon.` });
+      form.reset();
+    } catch (err: unknown) {
+      console.error("Contact form error:", err);
+      toast.error(err instanceof Error ? err.message : "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   return (
     <>
@@ -61,26 +83,29 @@ function Contact() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Label className="mb-1.5 block text-xs uppercase tracking-widest text-muted-foreground">Name</Label>
-                <Input {...form.register("name")} className="h-11 rounded-xl" />
+                <Input {...form.register("name")} className="h-11 rounded-xl" disabled={isSubmitting} />
                 {form.formState.errors.name && <p className="mt-1 text-xs text-destructive">{form.formState.errors.name.message}</p>}
               </div>
               <div>
                 <Label className="mb-1.5 block text-xs uppercase tracking-widest text-muted-foreground">Email</Label>
-                <Input {...form.register("email")} className="h-11 rounded-xl" />
+                <Input {...form.register("email")} className="h-11 rounded-xl" disabled={isSubmitting} />
                 {form.formState.errors.email && <p className="mt-1 text-xs text-destructive">{form.formState.errors.email.message}</p>}
               </div>
             </div>
             <div>
               <Label className="mb-1.5 block text-xs uppercase tracking-widest text-muted-foreground">Subject</Label>
-              <Input {...form.register("subject")} className="h-11 rounded-xl" />
+              <Input {...form.register("subject")} className="h-11 rounded-xl" disabled={isSubmitting} />
               {form.formState.errors.subject && <p className="mt-1 text-xs text-destructive">{form.formState.errors.subject.message}</p>}
             </div>
             <div>
               <Label className="mb-1.5 block text-xs uppercase tracking-widest text-muted-foreground">Message</Label>
-              <Textarea {...form.register("message")} rows={6} className="rounded-xl" />
+              <Textarea {...form.register("message")} rows={6} className="rounded-xl" disabled={isSubmitting} />
               {form.formState.errors.message && <p className="mt-1 text-xs text-destructive">{form.formState.errors.message.message}</p>}
             </div>
-            <Button type="submit" size="lg" className="h-12 w-full rounded-full">Send message</Button>
+            <Button type="submit" size="lg" className="h-12 w-full rounded-full" disabled={isSubmitting}>
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {isSubmitting ? "Sending..." : "Send message"}
+            </Button>
           </form>
 
           <aside className="space-y-4">

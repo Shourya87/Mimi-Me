@@ -1,11 +1,20 @@
-import { Link } from "@tanstack/react-router";
-import { Heart, ShoppingBag, Search, User, Menu, Sparkles } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Heart, ShoppingBag, Search, User, Menu, Sparkles, LogOut, LogIn } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useCart } from "@/lib/store/cart";
 import { useWishlist } from "@/lib/store/wishlist";
 import { MobileMenu } from "./MobileMenu";
 import { SearchDialog } from "@/components/shop/SearchDialog";
+import { useAuth, signOut } from "@/hooks/use-auth";
 
 const nav = [
   { to: "/shop", label: "Shop" },
@@ -17,8 +26,30 @@ const nav = [
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const navigate = useNavigate();
   const cartCount = useCart((s) => s.count());
   const wishCount = useWishlist((s) => s.ids.length);
+  const { user, loading } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out successfully.");
+      navigate({ to: "/" });
+    } catch {
+      toast.error("Failed to sign out.");
+    }
+  };
+
+  // Get initials for avatar
+  const initials = user?.user_metadata?.full_name
+    ? user.user_metadata.full_name
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : user?.email?.[0]?.toUpperCase() ?? "U";
 
   return (
     <>
@@ -62,6 +93,7 @@ export function Navbar() {
             >
               <Search className="h-5 w-5" />
             </Button>
+
             <Link
               to="/wishlist"
               aria-label="Wishlist"
@@ -74,13 +106,61 @@ export function Navbar() {
                 </span>
               )}
             </Link>
-            <Link
-              to="/account"
-              aria-label="Account"
-              className="hidden h-10 w-10 items-center justify-center rounded-full hover:bg-secondary sm:inline-flex"
-            >
-              <User className="h-5 w-5" />
-            </Link>
+
+            {/* Auth-aware user menu */}
+            {!loading && (
+              <>
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        aria-label="Account menu"
+                        className="hidden h-10 w-10 items-center justify-center rounded-full bg-foreground text-background text-xs font-semibold hover:opacity-90 transition sm:inline-flex"
+                      >
+                        {initials}
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <div className="px-3 py-2">
+                        <p className="text-xs font-medium truncate">{user.user_metadata?.full_name ?? "Account"}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                      </div>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/account" className="cursor-pointer">
+                          <User className="mr-2 h-4 w-4" />
+                          My account
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/wishlist" className="cursor-pointer">
+                          <Heart className="mr-2 h-4 w-4" />
+                          Wishlist
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={handleSignOut}
+                        className="cursor-pointer text-destructive focus:text-destructive"
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link
+                    to="/login"
+                    aria-label="Sign in"
+                    className="hidden h-10 items-center gap-1.5 rounded-full border border-border px-4 text-sm hover:bg-secondary transition sm:inline-flex"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    Sign in
+                  </Link>
+                )}
+              </>
+            )}
+
             <Link
               to="/cart"
               aria-label="Cart"
@@ -96,7 +176,7 @@ export function Navbar() {
           </div>
         </div>
       </header>
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} user={user} onSignOut={handleSignOut} />
       <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </>
   );
