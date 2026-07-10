@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
-      maxlength: 10,
     },
     role: {
       type: String,
@@ -29,10 +28,16 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    otp: {
+      type: String,
+    },
+    otpExpiry: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const userModel = mongoose.model("user", userSchema);

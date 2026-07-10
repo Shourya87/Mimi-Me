@@ -1,11 +1,11 @@
 const dotenv = require('dotenv');
+dotenv.config();
 const app = require("./src/app");
 const ConnectDB = require("./src/config/database");
-dotenv.config();
+
 
 
 ConnectDB();
-
 
 app.get("/", (req, res) => {
     res.send("Backnend Working 🛰️");
