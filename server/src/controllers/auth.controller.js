@@ -52,7 +52,8 @@ const signUp = async (req, res) => {
 
       res.status(201).json({
         message:
-          "User registered successfully. Please check your email for the OTP.",
+          `Your account has been created successfully! 🌸
+          We've sent a verification code to your email. Please enter it to continue.`,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });

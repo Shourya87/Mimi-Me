@@ -1,20 +1,32 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from "react-hot-toast";
+import Signup from "./pages/Signup";
+import VerifyOtp from './pages/VerifyOtp';
+import Login from './pages/Login';
 
 export default function App() {
 
-  useEffect(() => {
+  // Backend Testing Code - 
+  // useEffect(() => {
 
-    axios
-    .get("http://localhost:3000/api/test")
-    .then((res) => console.log(res.data))
-    .catch(console.error);
+  //   axios
+  //   .get("http://localhost:3000/api/test")
+  //   .then((res) => console.log(res.data))
+  //   .catch(console.error);
 
-  },[])
+  // },[])
 
   return (
-    <div>
-      <h1>Mimi & Me</h1>
-    </div>
+    <BrowserRouter>
+      <Toaster position="top-center" />
+
+      <Routes>
+        <Route path="/signup" element={<Signup/>} />
+        <Route path="/verify-otp" element={<VerifyOtp/>} />
+        <Route path="/login" element={<Login/>} />
+      </Routes>
+
+    </BrowserRouter>
   )
 }

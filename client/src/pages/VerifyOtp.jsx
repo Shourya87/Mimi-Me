@@ -3,26 +3,22 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   Mail,
-  Lock,
-  Eye,
-  EyeOff,
+  ShieldCheck,
   Loader2,
 } from "lucide-react";
 
 import logo from "../assets/logo.png";
 import useAuthStore from "../store/authStore";
 
-export default function Login() {
+export default function VerifyOtp() {
   const navigate = useNavigate();
 
-  const login = useAuthStore((state) => state.login);
+  const verifyOtp = useAuthStore((state) => state.verifyOtp);
   const loading = useAuthStore((state) => state.loading);
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
+    otp: "",
   });
 
   const handleChange = (e) => {
@@ -35,13 +31,13 @@ export default function Login() {
   };
 
   const validateForm = (formData) => {
-    if (!formData.email || !formData.password) {
+    if (!formData.email || !formData.otp) {
       toast.error("Please fill all fields.");
       return false;
     }
 
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters.");
+    if (formData.otp.length !== 6) {
+      toast.error("OTP must be 6 digits.");
       return false;
     }
 
@@ -54,13 +50,13 @@ export default function Login() {
     if (!validateForm(formData)) return;
 
     try {
-      const data = await login(formData);
+      const data = await verifyOtp(formData);
 
       toast.success(data.message, {
         duration: 5000,
       });
 
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Something went wrong."
@@ -84,14 +80,14 @@ export default function Login() {
 
           {/* Heading */}
           <h1 className="logo-font text-5xl font-semibold tracking-tight text-center text-stone-900">
-            Welcome Back
+            Verify OTP
           </h1>
 
           <p className="mt-2 text-center text-sm leading-6 text-stone-500">
-            Log in to continue your journey with Mimi & Me.
+            Enter the verification code we sent to your email to activate your account.
           </p>
 
-          {/* Login Form */}
+          {/* Form */}
           <form
             noValidate
             onSubmit={handleSubmit}
@@ -125,56 +121,32 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Password */}
+            {/* OTP */}
             <div>
               <label
-                htmlFor="password"
+                htmlFor="otp"
                 className="block mb-2 text-sm font-medium text-stone-700"
               >
-                Password
+                OTP
               </label>
 
               <div className="relative">
-                <Lock
+                <ShieldCheck
                   size={18}
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"
                 />
 
                 <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  value={formData.password}
+                  type="text"
+                  id="otp"
+                  name="otp"
+                  value={formData.otp}
                   onChange={handleChange}
-                  autoComplete="current-password"
-                  placeholder="Enter your password"
-                  className="w-full rounded-xl border border-stone-300 bg-white py-3 pl-11 pr-12 outline-none transition-all focus:border-stone-600 focus:ring-4 focus:ring-stone-100"
+                  maxLength={6}
+                  placeholder="Enter 6-digit OTP"
+                  className="w-full rounded-xl border border-stone-300 bg-white py-3 pl-11 pr-4 outline-none transition-all focus:border-stone-600 focus:ring-4 focus:ring-stone-100"
                 />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowPassword(!showPassword)
-                  }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 transition"
-                >
-                  {showPassword ? (
-                    <EyeOff size={18} />
-                  ) : (
-                    <Eye size={18} />
-                  )}
-                </button>
               </div>
-            </div>
-
-            {/* Forgot Password */}
-            <div className="flex justify-end">
-              <Link
-                to="/forgot-password"
-                className="text-sm font-medium text-stone-700 hover:text-stone-900 hover:underline"
-              >
-                Forgot Password?
-              </Link>
             </div>
 
             {/* Button */}
@@ -189,21 +161,21 @@ export default function Login() {
                     size={18}
                     className="animate-spin"
                   />
-                  Logging In...
+                  Verifying...
                 </>
               ) : (
-                "Log In"
+                "Verify Account"
               )}
             </button>
 
             {/* Footer */}
             <p className="text-center text-sm text-stone-500">
-              Don't have an account?{" "}
+              Already verified?{" "}
               <Link
-                to="/signup"
+                to="/login"
                 className="font-medium text-stone-900 hover:underline"
               >
-                Create Account
+                Sign In
               </Link>
             </p>
           </form>
