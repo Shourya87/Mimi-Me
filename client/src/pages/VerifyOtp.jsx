@@ -1,12 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import {
-  Mail,
-  ShieldCheck,
-  Loader2,
-} from "lucide-react";
-
+import { showSuccessToast, showErrorToast } from "../utils/toast";
+import { Mail, ShieldCheck, Loader2 } from "lucide-react";
 import logo from "../assets/logo.png";
 import useAuthStore from "../store/authStore";
 
@@ -32,12 +28,25 @@ export default function VerifyOtp() {
 
   const validateForm = (formData) => {
     if (!formData.email || !formData.otp) {
-      toast.error("Please fill all fields.");
+      toast.error("Please fill all fields.", {
+        id: "verify-otp-validation",
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email.", {
+        id: "email-validation",
+      });
       return false;
     }
 
     if (formData.otp.length !== 6) {
-      toast.error("OTP must be 6 digits.");
+      toast.error("OTP must be 6 digits.", {
+        id: "verify-otp-length",
+      });
       return false;
     }
 
@@ -52,14 +61,14 @@ export default function VerifyOtp() {
     try {
       const data = await verifyOtp(formData);
 
-      toast.success(data.message, {
-        duration: 5000,
-      });
+      showSuccessToast(data.title, data.message, "verify-otp-success");
 
       navigate("/login");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Something went wrong."
+      showErrorToast(
+        "Verification Failed",
+        error.response?.data?.message || "Something went wrong.",
+        "verify-otp-error",
       );
     }
   };
@@ -68,7 +77,6 @@ export default function VerifyOtp() {
     <div className="min-h-screen bg-linear-to-br from-[#F8F5F1] via-[#FCFAF7] to-[#F2ECE5] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="rounded-3xl border border-stone-200 bg-white p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
-
           {/* Logo */}
           <div className="flex justify-center mb-2">
             <img
@@ -84,15 +92,12 @@ export default function VerifyOtp() {
           </h1>
 
           <p className="mt-2 text-center text-sm leading-6 text-stone-500">
-            Enter the verification code we sent to your email to activate your account.
+            Enter the verification code we sent to your email to activate your
+            account.
           </p>
 
           {/* Form */}
-          <form
-            noValidate
-            onSubmit={handleSubmit}
-            className="mt-8 space-y-5"
-          >
+          <form noValidate onSubmit={handleSubmit} className="mt-8 space-y-5">
             {/* Email */}
             <div>
               <label
@@ -157,10 +162,7 @@ export default function VerifyOtp() {
             >
               {loading ? (
                 <>
-                  <Loader2
-                    size={18}
-                    className="animate-spin"
-                  />
+                  <Loader2 size={18} className="animate-spin" />
                   Verifying...
                 </>
               ) : (
@@ -179,7 +181,6 @@ export default function VerifyOtp() {
               </Link>
             </p>
           </form>
-
         </div>
       </div>
     </div>

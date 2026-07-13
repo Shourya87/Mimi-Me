@@ -51,9 +51,8 @@ const signUp = async (req, res) => {
       );
 
       res.status(201).json({
-        message:
-          `Your account has been created successfully! 🌸
-          We've sent a verification code to your email. Please enter it to continue.`,
+        title: "Welcome to Mimi & Me! 🌸",
+        message: "We've sent a verification code to your email. Please enter it to continue.",
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -181,7 +180,7 @@ const verifyOtp = async (req, res) => {
     await user.save();
 
     return res.status(200).json({
-      message: "OTP verified successfully.",
+      message: "OTP verified successfully. 🎉",
     });
   } catch (error) {
     console.error(error);
@@ -201,7 +200,6 @@ const logOut = async (req, res) => {
     return res.status(200).json({
       message: "Logged out successfully.",
     });
-
   } catch (error) {
     console.error(error);
 
@@ -214,19 +212,15 @@ const logOut = async (req, res) => {
 // Get User Logic
 const getCurrentUser = async (req, res) => {
   try {
-
     return res.status(200).json({
       user: req.user,
     });
-
   } catch (error) {
-
     console.error(error);
 
     return res.status(500).json({
       message: "Internal Server Error.",
     });
-
   }
 };
 

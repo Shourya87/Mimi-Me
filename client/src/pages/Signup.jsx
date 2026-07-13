@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { showSuccessToast, showErrorToast } from "../utils/toast";
 import toast from "react-hot-toast";
 import useAuthStore from "../store/authStore";
 import logo from "../assets/logo.png";
@@ -37,6 +38,15 @@ export default function Signup() {
       return false;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email.", {
+        id: "email-validation",
+      });
+      return false;
+    }
+
     if (formData.password.length < 6) {
       toast.error("Password must be at least 6 characters.", {
         id: "password-validation",
@@ -55,13 +65,16 @@ export default function Signup() {
     try {
       const data = await signup(formData);
 
-      toast.success(data.message, {
-        duration: 5000,
-      });
+      showSuccessToast(data.title, data.message, "signup-success");
 
       navigate("/verify-otp");
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong.");
+      showErrorToast(
+        "Signup Failed",
+        error.response?.data?.message || "Something went wrong.",
+        //work as id -
+        "Signup-error",
+      );
     }
   };
 
@@ -182,7 +195,7 @@ export default function Signup() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-stone-900 py-3 font-medium text-white transition-all hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-stone-900 py-3 font-medium text-white transition-all hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>

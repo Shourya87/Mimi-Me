@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  Loader2,
-} from "lucide-react";
-
+import { showSuccessToast, showErrorToast } from "../utils/toast";
+import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import logo from "../assets/logo.png";
 import useAuthStore from "../store/authStore";
 
@@ -36,12 +30,25 @@ export default function Login() {
 
   const validateForm = (formData) => {
     if (!formData.email || !formData.password) {
-      toast.error("Please fill all fields.");
+      toast.error("Please fill all fields.", {
+        id: "login-validation",
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email.", {
+        id: "email-validation",
+      });
       return false;
     }
 
     if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters.");
+      toast.error("Password must be at least 6 characters.", {
+        id: "login-password-length",
+      });
       return false;
     }
 
@@ -56,14 +63,14 @@ export default function Login() {
     try {
       const data = await login(formData);
 
-      toast.success(data.message, {
-        duration: 5000,
-      });
+      showSuccessToast(data.title, data.message, "login-success");
 
       navigate("/");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Something went wrong."
+      showErrorToast(
+        "Login Failed",
+        error.response?.data?.message || "Something went wrong.",
+        "login-error",
       );
     }
   };
@@ -72,7 +79,6 @@ export default function Login() {
     <div className="min-h-screen bg-linear-to-br from-[#F8F5F1] via-[#FCFAF7] to-[#F2ECE5] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="rounded-3xl border border-stone-200 bg-white p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)]">
-
           {/* Logo */}
           <div className="flex justify-center mb-2">
             <img
@@ -92,11 +98,7 @@ export default function Login() {
           </p>
 
           {/* Login Form */}
-          <form
-            noValidate
-            onSubmit={handleSubmit}
-            className="mt-8 space-y-5"
-          >
+          <form noValidate onSubmit={handleSubmit} className="mt-8 space-y-5">
             {/* Email */}
             <div>
               <label
@@ -153,16 +155,10 @@ export default function Login() {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowPassword(!showPassword)
-                  }
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 transition"
                 >
-                  {showPassword ? (
-                    <EyeOff size={18} />
-                  ) : (
-                    <Eye size={18} />
-                  )}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -185,10 +181,7 @@ export default function Login() {
             >
               {loading ? (
                 <>
-                  <Loader2
-                    size={18}
-                    className="animate-spin"
-                  />
+                  <Loader2 size={18} className="animate-spin" />
                   Logging In...
                 </>
               ) : (
@@ -207,7 +200,6 @@ export default function Login() {
               </Link>
             </p>
           </form>
-
         </div>
       </div>
     </div>
