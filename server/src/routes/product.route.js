@@ -4,8 +4,9 @@ const router = express.Router();
 const protect = require("../middleware/auth.middleware");
 const admin = require("../middleware/admin.middleware");
 
-const { createProduct, getProducts, getProductBySlug, updateProduct, deleteProduct } = require("../controllers/product.controller");
+const upload = require("../middleware/upload.middleware");
 
+const { createProduct, getProducts, getProductBySlug, updateProduct, deleteProduct } = require("../controllers/product.controller");
 
 
 
@@ -17,10 +18,8 @@ router.route("/:slug").get(getProductBySlug);
 
 
 // Admin 
-router.route("/").post(protect, admin,/*upload.array('images', 5), */ createProduct);
+router.route("/").post(protect, admin, upload.array('images', 5),  createProduct);
 router.route("/:id").patch(protect, admin, updateProduct).delete(protect, admin, deleteProduct);
-
-
 
 
 

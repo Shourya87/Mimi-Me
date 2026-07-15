@@ -65,7 +65,7 @@ const productSchema = new mongoose.Schema(
         },
         rating: {
             type: Number,
-            default: [],
+            default: 0,
             min: 0,
             max: 5,
         },
