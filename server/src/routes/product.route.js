@@ -19,7 +19,7 @@ router.route("/:slug").get(getProductBySlug);
 
 // Admin 
 router.route("/").post(protect, admin, upload.array('images', 5),  createProduct);
-router.route("/:id").patch(protect, admin, updateProduct).delete(protect, admin, deleteProduct);
+router.route("/:id").patch(protect, admin, upload.array("images", 5), updateProduct).delete(protect, admin, deleteProduct);
 
 
 
