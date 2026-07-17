@@ -14,7 +14,7 @@ const useAuthStore = create((set) => ({
   loading: false,
 
   // Signup
-  signup: async (userData) => {
+  signUp: async (userData) => {
     try {
       set({ loading: true });
 
@@ -56,7 +56,7 @@ const useAuthStore = create((set) => ({
   },
 
   // Login
-  login: async (loginData) => {
+  logIn: async (loginData) => {
     try {
       set({ loading: true });
 
@@ -79,7 +79,7 @@ const useAuthStore = create((set) => ({
   },
 
   // Logout
-  logout: async () => {
+  logOut: async () => {
     try {
       set({ loading: true });
 

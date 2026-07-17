@@ -9,7 +9,7 @@ import { User, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 export default function Signup() {
   const navigate = useNavigate();
 
-  const signup = useAuthStore((state) => state.signup);
+  const signup = useAuthStore((state) => state.signUp);
 
   const loading = useAuthStore((state) => state.loading);
 

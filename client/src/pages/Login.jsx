@@ -9,7 +9,7 @@ import useAuthStore from "../store/authStore";
 export default function Login() {
   const navigate = useNavigate();
 
-  const login = useAuthStore((state) => state.login);
+  const login = useAuthStore((state) => state.logIn);
   const loading = useAuthStore((state) => state.loading);
 
   const [showPassword, setShowPassword] = useState(false);
