@@ -4,7 +4,9 @@ import { Toaster } from "react-hot-toast";
 import Signup from "./pages/Signup";
 import VerifyOtp from "./pages/VerifyOtp";
 import Login from "./pages/Login";
-import ProductCard from "./components/ProductCard";
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
+import ProductDetails from "./pages/ProductDetails";
 
 export default function App() {
   // Backend Testing Code -
@@ -41,10 +43,9 @@ export default function App() {
       <Toaster position="top-center" />
 
       <Routes>
-        <Route
-          path="/productcard"
-          element={<ProductCard product={product} />}
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/products/:slug" element={<ProductDetails />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/login" element={<Login />} />

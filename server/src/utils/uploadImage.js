@@ -1,18 +1,17 @@
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
 
-const uploadImage = async (filePath) => {
+const uploadImage = async (filePath, folder = "Mimi Me/Products") => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
-      folder: "Mimi Me/Products",
+      folder,
     });
 
-    // Delete local file after upload success
+    // Delete local file after upload
     fs.unlinkSync(filePath);
 
     return result;
   } catch (error) {
-    // Delete local file even if upload fails
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
