@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import Button from "../components/Button";
 import useProductStore from "../store/productStore";
 
 export default function ProductDetails() {
@@ -15,10 +16,12 @@ export default function ProductDetails() {
   } = useProductStore();
 
   useEffect(() => {
-    getProductBySlug(slug);
+    if (slug) {
+      getProductBySlug(slug);
+    }
 
     return () => clearProduct();
-  }, [slug]);
+  }, [slug, getProductBySlug, clearProduct]);
 
   if (loading) {
     return (
@@ -32,13 +35,11 @@ export default function ProductDetails() {
     return (
       <div className="flex min-h-[70vh] flex-col items-center justify-center gap-4">
         <h2 className="text-3xl font-bold">Something went wrong</h2>
-        <p className="text-gray-500">error</p>
 
-        <Link
-          to="/shop"
-          className="rounded-xl bg-black px-6 py-3 text-white"
-        >
-          Back to Shop
+        <p className="text-gray-500">{error}</p>
+
+        <Link to="/shop">
+          <Button>Back to Shop</Button>
         </Link>
       </div>
     );
@@ -49,11 +50,8 @@ export default function ProductDetails() {
       <div className="flex min-h-[70vh] flex-col items-center justify-center gap-4">
         <h2 className="text-3xl font-bold">Product Not Found</h2>
 
-        <Link
-          to="/shop"
-          className="rounded-xl bg-black px-6 py-3 text-white"
-        >
-          Back to Shop
+        <Link to="/shop">
+          <Button>Back to Shop</Button>
         </Link>
       </div>
     );
@@ -70,7 +68,8 @@ export default function ProductDetails() {
     category,
   } = product;
 
-  const hasDiscount = discountPrice && discountPrice < price;
+  const hasDiscount =
+    discountPrice && Number(discountPrice) < Number(price);
 
   const discountPercentage = hasDiscount
     ? Math.round(((price - discountPrice) / price) * 100)
@@ -79,11 +78,12 @@ export default function ProductDetails() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="grid gap-10 lg:grid-cols-2">
+        {/* Product Images */}
         <div>
           <img
             src={images?.[0]?.url}
             alt={title}
-            className="h-150 w-full rounded-2xl object-cover"
+            className="h-[600px] w-full rounded-2xl object-cover"
           />
 
           {images?.length > 1 && (
@@ -100,6 +100,7 @@ export default function ProductDetails() {
           )}
         </div>
 
+        {/* Product Info */}
         <div>
           <p className="mb-2 text-sm uppercase tracking-wider text-gray-500">
             {category?.title}
@@ -113,10 +114,10 @@ export default function ProductDetails() {
             </p>
           )}
 
-          <div className="mt-6 flex items-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             {hasDiscount ? (
               <>
-                <span className="text-3xl font-bold">
+                <span className="text-3xl font-bold text-pink-600">
                   ₹{discountPrice}
                 </span>
 
@@ -152,19 +153,20 @@ export default function ProductDetails() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
-            <button
-              className="rounded-xl bg-black px-8 py-4 font-semibold text-white transition hover:opacity-90"
+            <Button
+              size="lg"
               disabled={stock === 0}
             >
               Add to Cart
-            </button>
+            </Button>
 
-            <button
-              className="rounded-xl border px-8 py-4 font-semibold transition hover:bg-gray-100"
+            <Button
+              variant="outline"
+              size="lg"
               disabled={stock === 0}
             >
               Buy Now
-            </button>
+            </Button>
           </div>
         </div>
       </div>

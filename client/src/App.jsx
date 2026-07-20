@@ -6,7 +6,9 @@ import VerifyOtp from "./pages/VerifyOtp";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
-import ProductDetails from "./pages/ProductDetails";
+import Product from "./pages/Product";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export default function App() {
   // Backend Testing Code -
@@ -42,14 +44,19 @@ export default function App() {
     <BrowserRouter>
       <Toaster position="top-center" />
 
+      <Navbar/>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
-        <Route path="/products/:slug" element={<ProductDetails />} />
+        <Route path="/products/:slug" element={<Product />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+
+      <Footer />
+
     </BrowserRouter>
   );
 }

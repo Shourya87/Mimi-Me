@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-import useProductStore from "../store/productStore";
-import useCategoryStore from "../store/categoryStore";
+import Button from "../components/Button";
+import Input from "../components/Input";
 
 import ProductGrid from "../components/ProductGrid";
+
+import useProductStore from "../store/productStore";
+import useCategoryStore from "../store/categoryStore";
 
 export default function Shop() {
   const {
@@ -26,7 +29,7 @@ export default function Shop() {
   useEffect(() => {
     getProducts();
     getCategories();
-  }, []);
+  }, [getProducts, getCategories]);
 
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
@@ -75,33 +78,40 @@ export default function Shop() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-10">
+      {/* Heading */}
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-4xl font-bold">Shop</h1>
+
           <p className="mt-2 text-gray-500">
             Discover our latest collection.
           </p>
         </div>
 
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl border px-4 py-3 outline-none md:w-72"
-        />
+        <div className="w-full md:w-72">
+          <Input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
       </div>
 
+      {/* Filters */}
       <div className="mb-8 flex flex-col gap-4 md:flex-row">
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="rounded-xl border px-4 py-3"
+          className="rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
         >
           <option value="all">All Categories</option>
 
           {categories.map((category) => (
-            <option key={category._id} value={category.slug}>
+            <option
+              key={category._id}
+              value={category.slug}
+            >
               {category.title}
             </option>
           ))}
@@ -110,7 +120,7 @@ export default function Shop() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="rounded-xl border px-4 py-3"
+          className="rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
         >
           <option value="latest">Latest</option>
           <option value="price-low">Price: Low to High</option>
@@ -119,48 +129,50 @@ export default function Shop() {
         </select>
       </div>
 
+      {/* Category Pills */}
       <div className="mb-10 flex flex-wrap gap-3">
-        <button
+        <Button
+          size="sm"
+          variant={selectedCategory === "all" ? "primary" : "outline"}
           onClick={() => setSelectedCategory("all")}
-          className={`rounded-full px-5 py-2 ${
-            selectedCategory === "all"
-              ? "bg-black text-white"
-              : "border bg-white"
-          }`}
         >
           All
-        </button>
+        </Button>
 
         {categories.map((category) => (
-          <button
+          <Button
             key={category._id}
-            onClick={() => setSelectedCategory(category.slug)}
-            className={`rounded-full px-5 py-2 ${
+            size="sm"
+            variant={
               selectedCategory === category.slug
-                ? "bg-black text-white"
-                : "border bg-white"
-            }`}
+                ? "primary"
+                : "outline"
+            }
+            onClick={() => setSelectedCategory(category.slug)}
           >
             {category.title}
-          </button>
+          </Button>
         ))}
       </div>
 
+      {/* Products */}
       {filteredProducts.length > 0 ? (
         <ProductGrid products={filteredProducts} />
       ) : (
         <div className="py-20 text-center">
-          <h2 className="text-2xl font-semibold">No Products Found</h2>
+          <h2 className="text-2xl font-semibold">
+            No Products Found
+          </h2>
+
           <p className="mt-2 text-gray-500">
             Try another category or search keyword.
           </p>
 
-          <Link
-            to="/"
-            className="mt-6 inline-block rounded-xl bg-black px-6 py-3 text-white"
-          >
-            Back to Home
-          </Link>
+          <div className="mt-6">
+            <Link to="/">
+              <Button>Back to Home</Button>
+            </Link>
+          </div>
         </div>
       )}
     </section>
