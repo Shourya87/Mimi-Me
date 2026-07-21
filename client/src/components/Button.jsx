@@ -12,45 +12,56 @@ export default function Button({
   ...props
 }) {
   const baseStyles =
-    "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center rounded-2xl font-semibold tracking-wide transition-all duration-300 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98]";
 
   const variants = {
-    primary: "bg-pink-500 text-white hover:bg-pink-600 focus:ring-pink-400",
+    primary:
+      "bg-[#6F4E37] text-white shadow-lg shadow-[#6F4E37]/20 hover:bg-[#5A3F2D] hover:-translate-y-0.5 hover:shadow-xl focus:ring-[#DCC6AE]",
 
     secondary:
-      "bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-gray-400",
+      "bg-[#F5EEE5] text-[#5A4636] border border-[#E2D5C7] hover:bg-[#EFE5D8] hover:border-[#C8AF93] focus:ring-[#E8D8C6]",
 
     outline:
-      "border border-pink-500 text-pink-500 hover:bg-pink-50 focus:ring-pink-400",
+      "border border-[#B89674] bg-white text-[#6F4E37] hover:bg-[#F9F5EF] hover:border-[#8B6B4A] hover:text-[#5A3F2D] focus:ring-[#E8D8C6]",
 
-    ghost: "bg-transparent text-pink-500 hover:bg-pink-50 focus:ring-pink-400",
+    ghost:
+      "bg-transparent text-[#6F4E37] hover:bg-[#F7F1EA] hover:text-[#5A3F2D] focus:ring-[#E8D8C6]",
 
-    danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-400",
+    danger:
+      "bg-[#C84B4B] text-white hover:bg-[#AF3F3F] focus:ring-red-200",
 
-    success: "bg-green-500 text-white hover:bg-green-600 focus:ring-green-400",
+    success:
+      "bg-[#4F8A5B] text-white hover:bg-[#41724B] focus:ring-green-200",
   };
 
   const sizes = {
-    sm: "px-3 py-2 text-sm",
-    md: "px-5 py-2.5 text-base",
-    lg: "px-6 py-3 text-lg",
+    sm: "px-4 py-2 text-sm",
+    md: "px-6 py-3 text-base",
+    lg: "px-8 py-4 text-lg",
   };
 
   return (
     <button
-      aria-busy={loading}
       type={type}
+      aria-busy={loading}
       disabled={disabled || loading}
       className={clsx(
         baseStyles,
         variants[variant] || variants.primary,
         sizes[size] || sizes.md,
         fullWidth && "w-full",
-        className,
+        className
       )}
       {...props}
     >
-      {loading ? "Loading..." : children}
+      {loading ? (
+        <span className="flex items-center gap-2">
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+          Loading...
+        </span>
+      ) : (
+        children
+      )}
     </button>
   );
 }

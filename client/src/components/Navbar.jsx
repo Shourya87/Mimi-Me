@@ -1,5 +1,3 @@
-// src/components/layout/Navbar.jsx
-
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
@@ -26,7 +24,7 @@ export default function Navbar() {
     "relative flex h-11 w-11 items-center justify-center rounded-full border border-[#e6d7c9] bg-[#fffaf5] text-[#7d6a59] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dfc2b3] hover:bg-[#f8ebe3] hover:text-[#c98f84]";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#eadfd5] bg-[#fffaf7]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b  border-[#eadfd5] shadow-md bg-[#fffaf7]/90 backdrop-blur-xl">
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
         <Link
@@ -47,7 +45,7 @@ export default function Navbar() {
               <NavLink
                 to={link.path}
                 className={({ isActive }) =>
-                  `relative text-[15px] font-medium transition-all duration-300 after:absolute after:-bottom-2 after:left-0 after:h-[2px] after:rounded-full after:bg-[#c98f84] after:transition-all after:duration-300 ${
+                  `relative text-[15px] font-medium transition-all duration-300 after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:rounded-full after:bg-[#c98f84] after:transition-all after:duration-300 ${
                     isActive
                       ? "text-[#6d5b4d] after:w-full"
                       : "text-[#8d7968] after:w-0 hover:text-[#c98f84] hover:after:w-full"
@@ -62,27 +60,19 @@ export default function Navbar() {
 
         {/* Desktop Icons */}
         <div className="hidden items-center gap-3 md:flex">
-          <button className={iconButton}>
+          <button  aria-label="Search" className={iconButton}>
             <Search size={19} />
           </button>
 
-          <button className={iconButton}>
+          <button aria-label="Wishlist" className={iconButton}>
             <Heart size={19} />
-
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#c98f84] text-[10px] font-semibold text-white">
-              0
-            </span>
           </button>
 
-          <button className={iconButton}>
+          <button aria-label="Cart" className={iconButton}>
             <ShoppingBag size={19} />
-
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#c98f84] text-[10px] font-semibold text-white">
-              0
-            </span>
           </button>
 
-          <button className={iconButton}>
+          <button aria-label="User" className={iconButton}>
             <User size={19} />
           </button>
         </div>
@@ -99,7 +89,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div
         className={`overflow-hidden border-t border-[#eadfd5] bg-[#fffaf7] transition-all duration-300 md:hidden ${
-          isOpen ? "max-h-[500px]" : "max-h-0"
+          isOpen ? "max-h-125" : "max-h-0"
         }`}
       >
         <div className="space-y-2 px-6 py-6">
@@ -127,18 +117,10 @@ export default function Navbar() {
 
             <button className={iconButton}>
               <Heart size={18} />
-
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#c98f84] text-[10px] font-semibold text-white">
-                0
-              </span>
             </button>
 
             <button className={iconButton}>
               <ShoppingBag size={18} />
-
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#c98f84] text-[10px] font-semibold text-white">
-                0
-              </span>
             </button>
 
             <button className={iconButton}>

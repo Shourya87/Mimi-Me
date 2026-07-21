@@ -1,38 +1,32 @@
-// src/components/layout/Footer.jsx
-
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { Mail, Phone, MapPin, Heart } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   const socialLinks = [
     { icon: <FaInstagram />, href: "#" },
-    
     { icon: <FaFacebookF />, href: "#" },
     { icon: <FaXTwitter />, href: "#" },
     { icon: <FaWhatsapp />, href: "#" },
   ];
 
-  return (
-    <footer className="relative mt-24 overflow-hidden border-t border-[#e6d7c9] bg-gradient-to-b from-[#fdfaf6] via-[#faf6f1] to-[#f5eee7]">
-      {/* Decorative Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-28 -left-16 h-72 w-72 rounded-full bg-[#fff7f2] blur-3xl" />
-        <div className="absolute -bottom-20 right-0 h-80 w-80 rounded-full bg-[#f8ebe3] blur-3xl" />
-      </div>
+  const footerLink =
+  "transition-all duration-300 hover:pl-1 hover:font-semibold hover:text-[#c98f84]";
 
-      <div className="relative mx-auto max-w-7xl px-6 py-16">
+  return (
+    <footer className="relative mt-24 overflow-hidden border-t border-[#e6d7c9] bg-linear-to-b from-[#fdfaf6] via-[#faf6f1] to-[#f5eee7]">
+      <div className="relative mx-auto max-w-7xl px-6 py-6">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
-          <div className="lg:pr-6">
+          <section className="lg:pr-6">
             <Link to="/" className="inline-flex items-center">
               <img
                 src="/logo.png"
                 alt="Mimi & Me"
-                className="h-16 w-auto object-contain transition duration-300 hover:scale-105"
+                className="h-16 w-auto object-contain transition duration-300 coin hover:scale-105"
               />
             </Link>
 
@@ -53,10 +47,10 @@ export default function Footer() {
                 </a>
               ))}
             </div>
-          </div>
+          </section>
 
           {/* Shop */}
-          <div>
+          <section>
             <h3 className="mb-5 text-lg font-semibold tracking-wide text-[#6d5b4d]">
               Shop
             </h3>
@@ -65,7 +59,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/shop"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   All Products
                 </Link>
@@ -74,7 +68,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/categories"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   Categories
                 </Link>
@@ -83,7 +77,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/new-arrivals"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   New Arrivals
                 </Link>
@@ -92,16 +86,16 @@ export default function Footer() {
               <li>
                 <Link
                   to="/sale"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   Sale
                 </Link>
               </li>
             </ul>
-          </div>
+          </section>
 
           {/* Company */}
-          <div>
+          <section>
             <h3 className="mb-5 text-lg font-semibold tracking-wide text-[#6d5b4d]">
               Company
             </h3>
@@ -110,7 +104,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/about"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   About Us
                 </Link>
@@ -119,7 +113,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/contact"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   Contact
                 </Link>
@@ -128,7 +122,7 @@ export default function Footer() {
               <li>
                 <Link
                   to="/privacy-policy"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   Privacy Policy
                 </Link>
@@ -137,16 +131,16 @@ export default function Footer() {
               <li>
                 <Link
                   to="/terms"
-                  className="transition-all duration-300 hover:pl-1 hover:text-[#c98f84]"
+                  className={footerLink}
                 >
                   Terms & Conditions
                 </Link>
               </li>
             </ul>
-          </div>
+          </section>
 
           {/* Contact */}
-          <div>
+          <section>
             <h3 className="mb-5 text-lg font-semibold tracking-wide text-[#6d5b4d]">
               Get in Touch
             </h3>
@@ -184,26 +178,17 @@ export default function Footer() {
                 </span>
               </div>
             </div>
-          </div>
+          </section>
         </div>
 
         {/* Bottom */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-[#e6d7c9] pt-6 text-center text-sm text-[#9f8c7a] md:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-center gap-4 border-t border-[#e6d7c9] pt-6 text-center text-sm text-[#9f8c7a] md:flex-row">
           <p>
             © {year}{" "}
             <span className="font-medium text-[#6d5b4d]">
               Mimi & Me
             </span>
             . All rights reserved.
-          </p>
-
-          <p className="flex items-center gap-1">
-            Made with{" "}
-            <Heart
-              size={15}
-              className="fill-[#d89a8c] text-[#d89a8c]"
-            />{" "}
-            for little moments.
           </p>
         </div>
       </div>

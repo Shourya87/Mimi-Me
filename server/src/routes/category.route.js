@@ -8,6 +8,8 @@ const upload = require("../middleware/upload.middleware");
 
 const { getCategories, getCategoryBySlug, createCategory, updateCategory, deleteCategory } = require("../controllers/category.controller");
 
+
+
 // Public
 router.route("/").get(getCategories);
 router.route("/:slug").get(getCategoryBySlug);

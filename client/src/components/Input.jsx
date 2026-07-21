@@ -1,17 +1,19 @@
-// src/components/ui/Input.jsx
-
 import clsx from "clsx";
 
 export default function Input({
   label,
   error,
+  id,
   className = "",
   ...props
 }) {
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={id} className="mb-2 block text-sm font-medium text-gray-700">
+        <label
+          htmlFor={id}
+          className="mb-2 block text-sm font-semibold tracking-wide text-[#5F4A3A]"
+        >
           {label}
         </label>
       )}
@@ -20,17 +22,35 @@ export default function Input({
         id={id}
         aria-invalid={!!error}
         className={clsx(
-          "w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none transition-all duration-200",
-          "placeholder:text-gray-400",
-          "focus:border-pink-500 focus:ring-2 focus:ring-pink-200",
-          error && "border-red-500 focus:border-red-500 focus:ring-red-200",
+          // Base
+          "w-full rounded-2xl border bg-[#FFFCF8] px-5 py-3.5 text-[#3D2E22] shadow-sm transition-all duration-300 outline-none",
+
+          // Border
+          "border-[#E4D7C9]",
+
+          // Placeholder
+          "placeholder:text-[#A39384]",
+
+          // Premium Focus
+          "focus:border-[#A67C52] focus:bg-white focus:ring-4 focus:ring-[#EADCCB] focus:shadow-lg",
+
+          // Hover
+          "hover:border-[#C7AA88]",
+
+          // Disabled
+          "disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-[#F6F2EC]",
+
+          // Error
+          error &&
+            "border-red-400 focus:border-red-500 focus:ring-red-100",
+
           className
         )}
         {...props}
       />
 
       {error && (
-        <p className="mt-1 text-sm text-red-500">
+        <p className="mt-2 text-sm font-medium text-red-500">
           {error}
         </p>
       )}

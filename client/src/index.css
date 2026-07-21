@@ -5,3 +5,13 @@
 .logo-font {
   font-family: "Cormorant Garamond", serif;
 }
+
+
+.coin {
+  transition: transform 1s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+.coin:hover {
+  transform: perspective(1000px) rotateY(360deg);
+}

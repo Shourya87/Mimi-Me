@@ -67,7 +67,7 @@ export default function Home() {
             Loading Products...
           </div>
         ) : (
-          <ProductGrid products={products.slice(0, 8)} />
+          <ProductGrid products={products.filter(product => product.isFeatured)} />
         )}
       </section>
 
