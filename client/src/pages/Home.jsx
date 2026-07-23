@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+import Loader from "../components/Loader";
+
 import ProductGrid from "../components/ProductGrid";
 import CategoryCard from "../components/CategoryCard";
 
@@ -24,6 +26,11 @@ export default function Home() {
     getCategories();
   }, [getProducts, getCategories]);
 
+  // Show fullscreen loader while initial data is loading
+  if (productLoading || categoryLoading) {
+    return <Loader text="Loading Mimi & Me..." />;
+  }
+
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
@@ -41,13 +48,7 @@ export default function Home() {
           </p>
         </div>
 
-        {categoryLoading ? (
-          <div className="py-10 text-center">
-            Loading Categories...
-          </div>
-        ) : (
-          <CategoryCard categories={categories} />
-        )}
+        <CategoryCard categories={categories} />
       </section>
 
       {/* Featured Products */}
@@ -62,13 +63,9 @@ export default function Home() {
           </p>
         </div>
 
-        {productLoading ? (
-          <div className="py-10 text-center">
-            Loading Products...
-          </div>
-        ) : (
-          <ProductGrid products={products.filter(product => product.isFeatured)} />
-        )}
+        <ProductGrid
+          products={products.filter((product) => product.isFeatured)}
+        />
       </section>
 
       {/* Promo Banner */}
@@ -86,13 +83,7 @@ export default function Home() {
           </p>
         </div>
 
-        {productLoading ? (
-          <div className="py-10 text-center">
-            Loading Products...
-          </div>
-        ) : (
-          <ProductGrid products={products.slice(8, 16)} />
-        )}
+        <ProductGrid products={products.slice(8, 16)} />
       </section>
 
       {/* Why Choose Us */}

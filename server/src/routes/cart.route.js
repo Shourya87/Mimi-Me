@@ -3,7 +3,7 @@ const router = express.Router();
 
 const protect = require("../middleware/auth.middleware");
 
-const { getCart, addToCart, updateCartItem, removeCartItem, clearCart } = require("../controllers/cart.controller");
+const { getCart, addCart, updateCart, removeCart, clearCart } = require("../controllers/cart.controller");
 
 
 
@@ -12,10 +12,10 @@ const { getCart, addToCart, updateCartItem, removeCartItem, clearCart } = requir
 router.use(protect);
 
 // Get and Add Item
-router.route("/").get(getCart).post(addToCart);
+router.route("/").get(getCart).post(addCart);
 
 // Update and Delete Item
-router.route("/:cartItemId").patch(updateCartItem).delete(removeCartItem);
+router.route("/:cartItemId").patch(updateCart).delete(removeCart);
 
 // Clear entire cart
 router.delete("/", clearCart);

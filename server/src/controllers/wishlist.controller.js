@@ -9,7 +9,7 @@ const getWishlist = async (req, res) => {
   try {
     const wishlist = await wishlistModel.find({
       user: req.user._id,
-    }).populate("product", "title slug price discountPrice images stock");
+    }).populate("product", "title slug price discountPrice images stock category");
 
     res.status(200).json({
       count: wishlist.length,

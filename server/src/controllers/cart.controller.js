@@ -24,7 +24,7 @@ const getCart = async (req, res) => {
 
 
 // Add Item
-const addToCart = async (req, res) => {
+const addCart = async (req, res) => {
   try {
     const {
       product,
@@ -80,7 +80,7 @@ const addToCart = async (req, res) => {
 
 
 // Update Item
-const updateCartItem = async (req, res) => {
+const updateCart = async (req, res) => {
   try {
     const { cartItemId } = req.params;
     const { quantity, selectedSize, selectedColor } = req.body;
@@ -89,6 +89,8 @@ const updateCartItem = async (req, res) => {
       _id: cartItemId,
       user: req.user._id,
     });
+
+    console.log(cartItemId);
 
     if (!cartItem) {
       return res.status(404).json({
@@ -117,7 +119,7 @@ const updateCartItem = async (req, res) => {
 
 
 // Remove Item
-const removeCartItem = async (req, res) => {
+const removeCart = async (req, res) => {
   try {
     const { cartItemId } = req.params;
 
@@ -132,8 +134,13 @@ const removeCartItem = async (req, res) => {
       });
     }
 
+    const cart = await cartModel
+      .find({ user: req.user._id })
+      .populate("product");
+
     res.status(200).json({
       message: "Item removed from cart",
+      cart,
     });
   } catch (error) {
     res.status(500).json({
@@ -163,8 +170,8 @@ const clearCart = async (req, res) => {
 
 module.exports = {
   getCart,
-  addToCart,
-  updateCartItem,
-  removeCartItem,
+  addCart,
+  updateCart,
+  removeCart,
   clearCart,
 };

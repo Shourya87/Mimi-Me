@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import Button from "../components/Button";
 import Input from "../components/Input";
+import Loader from "../components/Loader";
 
 import ProductGrid from "../components/ProductGrid";
 
@@ -68,12 +69,9 @@ export default function Shop() {
     return filtered;
   }, [products, selectedCategory, search, sort]);
 
+  // Initial Loader
   if (productLoading || categoryLoading) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-lg font-medium">Loading...</p>
-      </div>
-    );
+    return <Loader text="Loading Products..." />;
   }
 
   return (
@@ -103,15 +101,12 @@ export default function Shop() {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+          className="rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
         >
           <option value="all">All Categories</option>
 
           {categories.map((category) => (
-            <option
-              key={category._id}
-              value={category.slug}
-            >
+            <option key={category._id} value={category.slug}>
               {category.title}
             </option>
           ))}
@@ -120,7 +115,7 @@ export default function Shop() {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
+          className="rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-pink-500 focus:ring-2 focus:ring-pink-200"
         >
           <option value="latest">Latest</option>
           <option value="price-low">Price: Low to High</option>
@@ -144,9 +139,7 @@ export default function Shop() {
             key={category._id}
             size="sm"
             variant={
-              selectedCategory === category.slug
-                ? "primary"
-                : "outline"
+              selectedCategory === category.slug ? "primary" : "outline"
             }
             onClick={() => setSelectedCategory(category.slug)}
           >
@@ -156,7 +149,7 @@ export default function Shop() {
       </div>
 
       {/* Products */}
-      {filteredProducts.length > 0 ? (
+      {filteredProducts.length ? (
         <ProductGrid products={filteredProducts} />
       ) : (
         <div className="py-20 text-center">
