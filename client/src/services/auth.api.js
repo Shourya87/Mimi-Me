@@ -28,9 +28,24 @@ const logOutApi = async () => {
   return response.data;
 };
 
+
 // Get Current User
 const getCurrentUserApi = async () => {
-  const response = await api.get("/auth/me");
+  const response = await api.get("/auth/user");
+  return response.data;
+};
+
+
+// Forgot Password
+const forgotPasswordApi = async (email) => {
+  const response = await api.post("/auth/forgot-password", { email });
+  return response.data;
+};
+
+
+// Reset Password
+const resetPasswordApi = async (token, password) => {
+  const response = await api.post(`/auth/reset-password/${token}`, { password });
   return response.data;
 };
 
@@ -41,4 +56,6 @@ export {
   logInApi,
   logOutApi,
   getCurrentUserApi,
- }
+  forgotPasswordApi,
+  resetPasswordApi,
+}

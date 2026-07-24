@@ -5,6 +5,8 @@ import {
   logInApi,
   logOutApi,
   getCurrentUserApi,
+  forgotPasswordApi,
+  resetPasswordApi,
 } from "../services/auth.api";
 
 const useAuthStore = create((set) => ({
@@ -117,6 +119,48 @@ const useAuthStore = create((set) => ({
         isAuthenticated: false,
         loading: false,
       });
+    }
+  },
+
+  // Forget Password
+  forgotPassword: async (email) => {
+    try {
+      set({ loading: true });
+
+      const data = await forgotPasswordApi(email);
+
+      set({
+        loading: false,
+      });
+
+      return data;
+    } catch (error) {
+      set({
+        loading: false,
+      });
+
+      throw error;
+    }
+  },
+
+  // Reset Password
+  resetPassword: async (token, password) => {
+    try {
+      set({ loading: true });
+
+      const data = await resetPasswordApi(token, password);
+
+      set({
+        loading: false,
+      });
+
+      return data;
+    } catch (error) {
+      set({
+        loading: false,
+      });
+
+      throw error;
     }
   },
 }));
