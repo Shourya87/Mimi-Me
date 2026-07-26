@@ -3,7 +3,7 @@ import api from "./api";
 
 // Get Wishlist
 const getWishlistApi = async () => {
-  const response = await api.get("/wishlist/");
+  const response = await api.get("/wishlist");
   return response.data;
 };
 
@@ -23,7 +23,7 @@ const removeWishlistApi = async (product) => {
 
 // Clear Wishlist
 const clearWishlistApi = async () => {
-  const response = await api.delete("/wishlist/");
+  const response = await api.delete("/wishlist");
   return response.data;
 };
 

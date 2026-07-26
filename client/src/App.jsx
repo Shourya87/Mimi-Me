@@ -13,6 +13,12 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
+import Checkout from "./pages/Checkout";
+import Order from "./pages/Order";
+import OrderDetails from "./pages/OrderDetails";
+import OrderSuccess from "./pages/OrderSuccess";
+
+
 
 export default function App() {
   // Backend Testing Code -
@@ -38,17 +44,17 @@ export default function App() {
     sizes: ["18+ year"],
     colors: ["Multicolor", "Purple"],
     stock: 18,
-    images:{
-        url: "https://res.cloudinary.com/dv3cubae4/image/upload/v1784233965/Mimi%20Me/Products/rnlaocwiud11cvkqaf8a.png",
-        public_id: "Mimi Me/Products/rnlaocwiud11cvkqaf8a",
-      }
+    images: {
+      url: "https://res.cloudinary.com/dv3cubae4/image/upload/v1784233965/Mimi%20Me/Products/rnlaocwiud11cvkqaf8a.png",
+      public_id: "Mimi Me/Products/rnlaocwiud11cvkqaf8a",
+    },
   };
 
   return (
     <BrowserRouter>
       <Toaster position="top-center" />
 
-      <Navbar/>
+      <Navbar />
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -56,6 +62,10 @@ export default function App() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/products/:slug" element={<Product />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Order />} />
+        <Route path="/orders/:id" element={<OrderDetails />} />
+        <Route path="/orders/order-success/:id" element={<OrderSuccess />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/login" element={<Login />} />
@@ -64,7 +74,6 @@ export default function App() {
       </Routes>
 
       <Footer />
-
     </BrowserRouter>
   );
 }

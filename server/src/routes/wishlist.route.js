@@ -13,7 +13,7 @@ router.use(protect);
 router.route("/").get(getWishlist).post(addToWishlist);
 
 // Remove Item
-router.route("/:wishlistItemId").delete(removeFromWishlist);
+router.route("/:id").delete(removeFromWishlist);
 
 // Clear wishlist
 router.delete("/", clearWishlist);

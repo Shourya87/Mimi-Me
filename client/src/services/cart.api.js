@@ -9,7 +9,7 @@ const getCartApi = async () => {
 
 // Add Cart
 const addCartApi = async (productId, quantity = 1) => {
-  const response = await api.post("/cart/", {
+  const response = await api.post("/cart", {
     product: productId,
     quantity,
   });
@@ -35,7 +35,7 @@ const removeCartApi = async (cartItemId) => {
 
 // Clear Cart
 const clearCartApi = async () => {
-  const response = await api.delete("/cart/");
+  const response = await api.delete("/cart");
   return response.data;
 };
 

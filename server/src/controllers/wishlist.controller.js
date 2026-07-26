@@ -67,10 +67,10 @@ const addToWishlist = async (req, res) => {
 // Remove Item
 const removeFromWishlist = async (req, res) => {
   try {
-    const { wishlistItemId } = req.params;
+    const { id } = req.params;
 
     const wishlist = await wishlistModel.findOneAndDelete({
-      _id: wishlistItemId,
+      _id: id,
       user: req.user._id,
     });
 

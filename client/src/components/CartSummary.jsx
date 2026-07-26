@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 
 import Button from "./Button";
+import { Link2 } from "lucide-react";
 
 export default function CartSummary({ cartItems }) {
   const subtotal = cartItems.reduce(
     (total, item) => total + item.product.price * item.quantity,
-    0
+    0,
   );
 
   const shipping = subtotal > 999 || subtotal === 0 ? 0 : 99;
@@ -13,9 +14,7 @@ export default function CartSummary({ cartItems }) {
 
   return (
     <div className="sticky top-24 rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-      <h2 className="mb-6 text-2xl font-bold text-stone-800">
-        Order Summary
-      </h2>
+      <h2 className="mb-6 text-2xl font-bold text-stone-800">Order Summary</h2>
 
       <div className="space-y-4">
         <div className="flex items-center justify-between text-stone-600">
@@ -42,9 +41,9 @@ export default function CartSummary({ cartItems }) {
         </div>
       </div>
 
-      <Button className="mt-6 w-full" >
-        Proceed to Checkout
-      </Button>
+      <Link to="/checkout">
+        <Button className="mt-6 w-full">Proceed to Checkout</Button>
+      </Link>
 
       <Link
         to="/products"

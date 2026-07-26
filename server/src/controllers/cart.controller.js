@@ -82,15 +82,13 @@ const addCart = async (req, res) => {
 // Update Item
 const updateCart = async (req, res) => {
   try {
-    const { cartItemId } = req.params;
+    const { id } = req.params;
     const { quantity, selectedSize, selectedColor } = req.body;
 
     const cartItem = await cartModel.findOne({
-      _id: cartItemId,
+      _id: id,
       user: req.user._id,
     });
-
-    console.log(cartItemId);
 
     if (!cartItem) {
       return res.status(404).json({
@@ -121,10 +119,10 @@ const updateCart = async (req, res) => {
 // Remove Item
 const removeCart = async (req, res) => {
   try {
-    const { cartItemId } = req.params;
+    const { id } = req.params;
 
     const cartItem = await cartModel.findOneAndDelete({
-      _id: cartItemId,
+      _id: id,
       user: req.user._id,
     });
 

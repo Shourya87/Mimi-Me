@@ -3,7 +3,7 @@ import api from "./api";
 
 // Get Products
 const getProductsApi = async () => {
-    const response = await api.get("/products/");
+    const response = await api.get("/products");
     return response.data;
 }
 
@@ -17,7 +17,7 @@ const getProductBySlugApi = async (slug) => {
 
 // Create Product
 const createProductApi = async (formData) => {
-    const response = await api.post("/products/", formData);
+    const response = await api.post("/products", formData);
     return response.data;
 }
 

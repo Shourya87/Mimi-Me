@@ -3,7 +3,7 @@ import api from "./api";
 
 // Get Categories
 const getCategoriesApi = async () => {
-    const response = await api.get("/categories/");
+    const response = await api.get("/categories");
     return response.data;
 }
 
@@ -17,7 +17,7 @@ const getCategoryBySlugApi = async (slug) => {
 
 // Create Category
 const createCategoryApi = async (formData) => {
-    const response = await api.post("/categories/", formData);
+    const response = await api.post("/categories", formData);
     return response.data;
 }
 

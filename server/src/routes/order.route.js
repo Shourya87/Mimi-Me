@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { createOrder, getMyOrders, cancelOrder, getAllOrders, getOrderById, updateOrderStatus  } = require("../controllers/order.controller.js");
+const { createOrder, getMyOrders, getAllOrders,  updateOrderStatus, getOrderById, cancelOrder } = require("../controllers/order.controller.js");
 
 const protect = require("../middleware/auth.middleware");
 const admin = require("../middleware/admin.middleware");
@@ -13,7 +13,7 @@ router.route("/")
   .post(protect, createOrder)
   .get(protect, getMyOrders);
 
-// Admin (move above :id)
+// Admin 
 router.route("/admin")
   .get(protect, admin, getAllOrders);
 
