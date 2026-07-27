@@ -7,6 +7,7 @@ const categoryRoutes = require("./routes/category.route");
 const wishlistRoutes = require("./routes/wishlist.route");
 const cartRoutes = require("./routes/cart.route");
 const orderRoutes = require("./routes/order.route");
+const adminRoutes = require("./routes/admin.route");
 
 
 
@@ -29,6 +30,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 module.exports = app;
