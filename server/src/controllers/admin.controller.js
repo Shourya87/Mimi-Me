@@ -7,8 +7,6 @@ const orderModel = require("../models/order.model");
 // Dashboard Stats
 const getDashboardStats = async (req, res) => {
 
-  console.log("Fetching dashboard statistics...");
-
   try {
     const [
       totalUsers,
