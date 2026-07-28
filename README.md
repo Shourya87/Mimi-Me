@@ -1,72 +1,74 @@
-# 🛍️ Mimi & Me
+# 🧸 Mimi & Me
 
-A modern full-stack e-commerce platform designed for mothers, babies, and girls. Built with a clean, minimal, and premium shopping experience inspired by modern fashion brands.
+A modern full-stack baby clothing e-commerce platform built with the **MERN Stack**. The application provides a smooth shopping experience for customers and a complete admin dashboard for managing products, orders, and users.
 
----
-
-## ✨ About
-
-**Mimi & Me** is an online fashion store focused on creating a beautiful shopping experience for mothers and their little ones. The project emphasizes simplicity, elegant design, responsive layouts, and scalable architecture.
-
-The goal is to build a production-ready application using modern web technologies while following professional development practices.
+> Built to practice production-level full-stack development using React, Node.js, Express, MongoDB, Zustand, JWT Authentication, and Cloudinary.
 
 ---
 
-## 🎯 Features
+## ✨ Features
 
-### User
+### 👤 User
 
-* Secure Authentication (JWT)
-* Browse Products
-* Product Details
-* Search & Filter
-* Shopping Cart
-* Wishlist
-* Checkout
-* Order History
-* User Profile
-* Responsive Design
-
-### Admin
-
-* Admin Dashboard
-* Manage Products
-* Upload Images
-* Manage Orders
-* Manage Users
+- User Registration & Login
+- Email OTP Verification
+- Secure JWT Authentication
+- Forgot Password & Reset Password
+- Protected Routes
+- User Profile
+- Browse Products
+- Search Products
+- Filter Products
+- Product Details Page
+- Add to Cart
+- Update Cart Quantity
+- Remove Cart Items
+- Checkout
+- Place Orders
+- View My Orders
+- Cancel Orders
 
 ---
 
-## 🛠️ Tech Stack
+### 👨‍💼 Admin
+
+- Admin Dashboard
+- Manage Products
+- Add Products
+- Edit Products
+- Delete Products
+- Manage Orders
+- Update Order Status
+- Manage Users
+- Role Based Authorization
+- Product Image Upload using Cloudinary
+
+---
+
+## 🚀 Tech Stack
 
 ### Frontend
 
-* React
-* Vite
-* JavaScript
-* Tailwind CSS
-* React Router
-* Zustand
-* Axios
-* shadcn/ui
+- React.js
+- React Router DOM
+- Tailwind CSS
+- Zustand
+- Axios
+- React Hot Toast
+- Lucide React
 
 ### Backend
 
-* Node.js
-* Express.js
-* MongoDB Atlas
-* Mongoose
-* JWT Authentication
-* bcrypt
-* Multer
-* Cloudinary
-
-### Deployment
-
-* Vercel
-* Railway
-* MongoDB Atlas
-* Cloudinary
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- bcrypt
+- Nodemailer
+- Cloudinary
+- Multer
+- Cookie Parser
 
 ---
 
@@ -74,101 +76,305 @@ The goal is to build a production-ready application using modern web technologie
 
 ```
 Mimi-Me/
-
-├── client/
-├── server/
-├── README.md
-└── .gitignore
+│
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── uploads/
+│   ├── server.js
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── store/
+│   │   ├── utils/
+│   │   └── App.jsx
+│   └── package.json
+│
+└── README.md
 ```
 
 ---
 
-## 🚀 Installation
+## 📸 Screenshots
+
+### Home Page
+
+```
+(Add Screenshot Here)
+```
+
+### Product Page
+
+```
+(Add Screenshot Here)
+```
+
+### Cart
+
+```
+(Add Screenshot Here)
+```
+
+### Checkout
+
+```
+(Add Screenshot Here)
+```
+
+### Admin Dashboard
+
+```
+(Add Screenshot Here)
+```
+
+---
+
+## ⚙️ Installation
 
 ### Clone Repository
 
 ```bash
-git clone <repository-url>
-cd Mimi-Me
+git clone https://github.com/your-username/mimi-me.git
+
+cd mimi-me
 ```
 
-### Frontend
-
-```bash
-cd client
-npm install
-npm run dev
-```
+---
 
 ### Backend
 
 ```bash
-cd server
+cd backend
+
 npm install
+```
+
+Create `.env`
+
+```env
+PORT=5000
+
+MONGO_URI=
+
+JWT_SECRET=
+
+CLIENT_URL=http://localhost:5173
+
+EMAIL_USER=
+EMAIL_PASS=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+NODE_ENV=development
+```
+
+Run Backend
+
+```bash
 npm run dev
 ```
 
 ---
 
-## ⚙️ Environment Variables
+### Frontend
 
-Create a `.env` file inside the `server` folder.
+```bash
+cd frontend
 
-```
-PORT=
+npm install
 
-MONGODB_URI=
-
-JWT_SECRET=
-
-CLOUDINARY_CLOUD_NAME=
-
-CLOUDINARY_API_KEY=
-
-CLOUDINARY_API_SECRET=
-
-CLIENT_URL=
+npm run dev
 ```
 
 ---
 
-## 📌 Development Principles
+## 🔐 Authentication Flow
 
-* Clean Folder Structure
-* Feature-Based Development
-* Reusable Components
-* RESTful APIs
-* Responsive UI
-* Secure Authentication
-* Production-Ready Code
-* Consistent Git Commits
+- Signup
+- Email OTP Verification
+- Login
+- JWT Token Generation
+- HTTP Only Cookie Authentication
+- Protected Routes
+- Role Based Authorization
+- Forgot Password
+- Reset Password
 
 ---
 
-## 📈 Project Status
+## 📦 API Modules
 
-🚧 Currently in Development
+### Authentication
 
-The project is being built feature by feature following a professional full-stack development workflow.
+- Signup
+- Login
+- Logout
+- Verify OTP
+- Forgot Password
+- Reset Password
+- Current User
+
+### Products
+
+- Get All Products
+- Get Single Product
+- Search Products
+- Filter Products
+
+### Cart
+
+- Add Item
+- Update Quantity
+- Remove Item
+- Get Cart
+
+### Orders
+
+- Create Order
+- My Orders
+- Order Details
+- Cancel Order
+
+### Admin
+
+- Manage Products
+- Manage Orders
+- Manage Users
+
+---
+
+## 🛡️ Security
+
+- JWT Authentication
+- HTTP Only Cookies
+- Password Hashing using bcrypt
+- Protected API Routes
+- Admin Middleware
+- Role Based Access Control
+- Environment Variables
+
+---
+
+## 🌩️ Image Storage
+
+- Cloudinary Integration
+- Secure Image Upload
+- Optimized Product Images
+
+---
+
+## 📈 Current Progress
+
+### Completed
+
+- Authentication
+- Authorization
+- OTP Verification
+- Password Reset
+- Products
+- Cart
+- Checkout
+- Orders
+- Admin Panel
+- Image Upload
+
+---
+
+### Upcoming Features
+
+- Razorpay Integration
+- Wishlist
+- Product Reviews
+- Coupons
+- Email Notifications
+- Dashboard Analytics
+- Sales Reports
+- Pagination
+- Advanced Filters
+- Product Recommendations
+
+---
+
+## 📚 What I Learned
+
+This project helped me understand:
+
+- MERN Architecture
+- REST APIs
+- Authentication
+- Authorization
+- MongoDB Relationships
+- Zustand State Management
+- File Uploads
+- Cloudinary Integration
+- Error Handling
+- Production Folder Structure
+- Admin Dashboard Development
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, suggestions, and feedback are welcome.
+Contributions are welcome.
 
-1. Fork the repository.
-2. Create a feature branch.
-3. Commit your changes.
-4. Push the branch.
-5. Open a Pull Request.
+1. Fork the repository
+
+2. Create a feature branch
+
+```bash
+git checkout -b feature/new-feature
+```
+
+3. Commit changes
+
+```bash
+git commit -m "Add new feature"
+```
+
+4. Push
+
+```bash
+git push origin feature/new-feature
+```
+
+5. Create a Pull Request
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
 
 ---
 
-### Built with ❤️ for Moms, Babies & Girls.
+## 👨‍💻 Developer
+
+**Shourya Gaur**
+
+B.Tech CSE Student
+
+MERN Stack Developer
+
+---
+
+Made with ❤️ using the MERN Stack.
