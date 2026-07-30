@@ -22,7 +22,7 @@ export default function ManageProducts() {
   }, [getProducts]);
 
   const handleEdit = (product) => {
-    navigate(`/admin/products/edit/${product._id}`);
+    navigate(`/admin/products/update/${product.slug}`);
   };
 
   const handleDelete = async (product) => {

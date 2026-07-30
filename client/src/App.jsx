@@ -23,6 +23,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ManageProducts from "./pages/ManageProducts";
 import ManageOrders from "./pages/ManageOrders";
 import ManageUsers from "./pages/ManageUsers";
+import CreateProduct from "./pages/CreateProduct";
+import UpdateProduct from "./pages/UpdateProduct";
 
 export default function App() {
   // Backend Testing Code -
@@ -84,6 +86,8 @@ export default function App() {
         <Route path="/admin/products" element={<ManageProducts />} />
         <Route path="/admin/orders" element={<ManageOrders />} />
         <Route path="/admin/users" element={<ManageUsers />} />
+        <Route path="/admin/products/create" element={<CreateProduct />} />
+        <Route path="/admin/products/update/:slug" element={<UpdateProduct />} />
       </Routes>
 
       <Footer />
