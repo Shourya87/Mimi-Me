@@ -1,9 +1,6 @@
 import toast from "react-hot-toast";
 
-/* ===========================
-   Success Toast
-=========================== */
-
+/* Success Toast */
 export const showSuccessToast = (title, message, id) => {
   toast.success(
     <div className="flex items-start gap-3">
@@ -47,10 +44,8 @@ export const showSuccessToast = (title, message, id) => {
   );
 };
 
-/* ===========================
-   Error Toast
-=========================== */
 
+/* Error Toast */
 export const showErrorToast = (title, message, id) => {
   toast.error(
     <div className="flex items-start gap-3">
@@ -94,20 +89,16 @@ export const showErrorToast = (title, message, id) => {
   );
 };
 
-/* ===========================
-   Info Toast (Future)
-=========================== */
 
+/* Info Toast (Future) */
 export const showInfoToast = (title, message, id) => {
   toast(title, {
     id,
   });
 };
 
-/* ===========================
-   Warning Toast (Future)
-=========================== */
 
+/* Warning Toast (Future) */
 export const showWarningToast = (title, message, id) => {
   toast(title, {
     id,

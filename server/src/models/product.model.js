@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Product title is required."],
       trim: true,
       minlength: 3,
       maxlength: 100,
@@ -40,7 +40,7 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["Women", "Girls", "Babies"],
+      enum: ["Women", "Girls", "Babies", "New Arrivals", "Accessories"],
     },
     sizes: {
       type: [String],

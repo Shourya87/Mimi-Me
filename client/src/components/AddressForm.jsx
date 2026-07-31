@@ -64,7 +64,7 @@ export default function AddressForm({ formData, setFormData }) {
           </label>
           <input
             autoComplete="pin-code"
-            type="numberic"
+            type="numeric"
             name="pincode"
             maxLength={6}
             value={formData.pincode}

@@ -28,5 +28,5 @@ wishlistSchema.index(
   { unique: true },
 );
 
-const wishlistModel = mongoose.model("wishlist", wishlistSchema);
+const wishlistModel = mongoose.model("Wishlist", wishlistSchema);
 module.exports = wishlistModel;
