@@ -3,7 +3,6 @@ const admin = (req, res, next) => {
     return next();
   }
   return res.status(403).json({
-    title: "Access Denied",
     message: "Only admin can perform this action.",
   });
 };

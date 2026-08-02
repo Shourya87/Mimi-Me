@@ -15,8 +15,7 @@ const uploadImage = async (filePath, folder = "Mimi Me/Products") => {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
-
-    throw error;
+    throw new Error("Image upload failed.");
   }
 };
 

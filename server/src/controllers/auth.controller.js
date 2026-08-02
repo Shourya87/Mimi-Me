@@ -9,7 +9,7 @@ const generateToken = require("../utils/generateToken");
 
 // SignUp Logic
 const signUp = async (req, res) => {
-  const { name, email, password, role = "user" } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     // Check if all fields are provided
@@ -68,8 +68,6 @@ const signUp = async (req, res) => {
 
 // Login Logic
 const logIn = async (req, res) => {
-  console.log(req.body);
-
   const { email, password } = req.body;
 
   try {
@@ -81,7 +79,7 @@ const logIn = async (req, res) => {
     }
 
     // Find User
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email }).select("+password");
 
     // Check User Exists
     if (!user) {
@@ -90,7 +88,7 @@ const logIn = async (req, res) => {
       });
     }
 
-    // Validate user
+    // Ensure email is verified
     if (!user.verified) {
       return res.status(403).json({
         message: "Please verify your account first.",
@@ -113,9 +111,9 @@ const logIn = async (req, res) => {
     // Store JWT in Cookie
     res.cookie("token", token, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 30 Days
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 Days
     });
 
     // Send Response
@@ -169,14 +167,13 @@ const verifyOtp = async (req, res) => {
       });
     }
 
-    // Verify User
+    // Ensure email is verified
     user.verified = true;
 
     // Clear OTP
     user.otp = undefined;
     user.otpExpiry = undefined;
 
-    // Save User
     await user.save();
 
     await sendEmail({
@@ -276,7 +273,7 @@ const forgotPassword = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: "Failed to process password reset request.",
     });
   }
 };
@@ -300,10 +297,7 @@ const resetPassword = async (req, res) => {
     }
 
     // Hash incoming token
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(token)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     // Find user with valid token
     const user = await userModel.findOne({
@@ -327,11 +321,12 @@ const resetPassword = async (req, res) => {
     await user.save();
 
     res.status(200).json({
-      message: "Password reset successful. You can now log in with your new password.",
+      message:
+        "Password reset successful. You can now log in with your new password.",
     });
   } catch (error) {
     res.status(500).json({
-      message: error.message,
+      message: "Failed to reset password.",
     });
   }
 };
