@@ -49,23 +49,19 @@ const createCategory = async (req, res) => {
     });
 
     return res.status(201).json({
-      title: "Category Created",
       message: "Category created successfully.",
       category,
     });
   } catch (error) {
     return res.status(500).json({
-      title: "Server Error",
-      message: error.message,
+      message: "Internal Server Error.",
     });
   }
 };
 
 const getCategories = async (req, res) => {
   try {
-    const categories = await categoryModel.find({}).sort({
-      order: 1,
-    });
+    const categories = await categoryModel.find({}).sort({ createdAt: -1 });
 
     return res.status(200).json({
       title: "Categories Fetched",

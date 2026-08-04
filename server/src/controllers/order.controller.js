@@ -30,7 +30,7 @@ const createOrder = async (req, res) => {
       });
     }
 
-    const validPaymentMethods = ["COD", "Online"];
+    const validPaymentMethods = ["COD", "Razorpay"];
 
     if (!validPaymentMethods.includes(paymentMethod)) {
       await session.abortTransaction();
@@ -137,11 +137,15 @@ const createOrder = async (req, res) => {
     await session.commitTransaction();
     session.endSession();
 
-    await sendEmail({
-      to: req.user.email,
-      subject: "Your Mimi & Me Order is Confirmed 🎉",
-      html: orderTemplate(order),
-    });
+    try {
+      await sendEmail({
+        to: req.user.email,
+        subject: "Your Mimi & Me Order is Confirmed 🎉",
+        html: orderTemplate(order),
+      });
+    } catch (error) {
+      console.error(error);
+    }
 
     return res.status(201).json({
       message: "Order placed successfully.",
@@ -208,13 +212,13 @@ const cancelOrder = async (req, res) => {
       });
     }
 
-    for (const item of order.items) {
-      await productModel.findByIdAndUpdate(item.product, {
-        $inc: {
-          stock: item.quantity,
-        },
-      });
-    }
+    await Promise.all(
+      order.items.map((item) =>
+        productModel.findByIdAndUpdate(item.product, {
+          $inc: { stock: item.quantity },
+        }),
+      ),
+    );
 
     order.orderStatus = "Cancelled";
     await order.save();

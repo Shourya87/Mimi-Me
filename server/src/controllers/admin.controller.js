@@ -22,7 +22,7 @@ const getDashboardStats = async (req, res) => {
       orderModel.countDocuments(),
       orderModel.countDocuments({ orderStatus: "Delivered" }),
       orderModel.countDocuments({
-        orderStatus: { $in: ["Pending", "Processing", "Shipped"] },
+        orderStatus: { $in: ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"] },
       }),
       orderModel.countDocuments({ orderStatus: "Cancelled" }),
       orderModel.aggregate([
@@ -71,7 +71,7 @@ const getDashboardStats = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await userModel.find()
-      .select("-password -otp -otpExpiry -resetPasswordToken -resetPasswordExpiry")
+      .select("-otp -otpExpiry -resetPasswordToken -resetPasswordExpire")
       .sort({ createdAt: -1 });
 
     return res.status(200).json({

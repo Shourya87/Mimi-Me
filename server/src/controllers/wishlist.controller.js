@@ -1,27 +1,30 @@
-const wishlistModel = require("../models/wishlist.model.js");
-const productModel = require("../models/product.model.js");
-
-
-
+const wishlistModel = require("../models/wishlist.model");
+const productModel = require("../models/wishlist.model");
 
 // Get Item
 const getWishlist = async (req, res) => {
   try {
-    const wishlist = await wishlistModel.find({
-      user: req.user._id,
-    }).populate("product", "title slug price discountPrice images stock category");
+    const wishlist = await wishlistModel
+      .find({
+        user: req.user._id,
+      })
+      .populate(
+        "product",
+        "title slug price discountPrice images stock category",
+      );
 
     res.status(200).json({
       count: wishlist.length,
       wishlist,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
-
 
 // Add Item
 const addToWishlist = async (req, res) => {
@@ -57,12 +60,13 @@ const addToWishlist = async (req, res) => {
       wishlist,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
-
 
 // Remove Item
 const removeFromWishlist = async (req, res) => {
@@ -84,12 +88,13 @@ const removeFromWishlist = async (req, res) => {
       message: "Product removed from wishlist",
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
-
 
 // Clear wishlist
 const clearWishlist = async (req, res) => {
@@ -102,17 +107,17 @@ const clearWishlist = async (req, res) => {
       message: "Wishlist cleared successfully",
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
-};  
-
-
+};
 
 module.exports = {
-    getWishlist,
-    addToWishlist,  
-    removeFromWishlist,
-    clearWishlist,
+  getWishlist,
+  addToWishlist,
+  removeFromWishlist,
+  clearWishlist,
 };

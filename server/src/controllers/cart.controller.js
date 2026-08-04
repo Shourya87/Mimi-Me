@@ -1,27 +1,25 @@
 const productModel = require("../models/product.model");
 const cartModel = require("../models/cart.model");
 
-
-
 // Get Item
 const getCart = async (req, res) => {
   try {
-    const cart = await cartModel.find({ user: req.user._id }).populate(
-      "product",
-      "title slug price discountPrice images stock"
-    );
+    const cart = await cartModel
+      .find({ user: req.user._id })
+      .populate("product", "title slug price discountPrice images stock");
 
     res.status(200).json({
       count: cart.length,
       cart,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       message: error.message,
     });
   }
 };
-
 
 // Add Item
 const addCart = async (req, res) => {
@@ -41,6 +39,12 @@ const addCart = async (req, res) => {
       });
     }
 
+    if (quantity > existingProduct.stock) {
+      return res.status(400).json({
+        message: `Only ${existingProduct.stock} item(s) are available in stock.`,
+      });
+    }
+
     const existingCartItem = await cartModel.findOne({
       user: req.user._id,
       product,
@@ -49,7 +53,15 @@ const addCart = async (req, res) => {
     });
 
     if (existingCartItem) {
-      existingCartItem.quantity += quantity;
+      const newQuantity = existingCartItem.quantity + quantity;
+
+      if (newQuantity > existingProduct.stock) {
+        return res.status(400).json({
+          message: `Only ${existingProduct.stock} item(s) are available in stock.`,
+        });
+      }
+
+      existingCartItem.quantity = newQuantity;
 
       await existingCartItem.save();
 
@@ -72,12 +84,13 @@ const addCart = async (req, res) => {
       cart,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
-
 
 // Update Item
 const updateCart = async (req, res) => {
@@ -97,10 +110,16 @@ const updateCart = async (req, res) => {
     }
 
     if (quantity !== undefined) cartItem.quantity = quantity;
-    if (selectedSize !== undefined)
-      cartItem.selectedSize = selectedSize;
-    if (selectedColor !== undefined)
-      cartItem.selectedColor = selectedColor;
+    if (selectedSize !== undefined) cartItem.selectedSize = selectedSize;
+    if (selectedColor !== undefined) cartItem.selectedColor = selectedColor;
+
+    const product = await productModel.findById(cartItem.product);
+
+    if (quantity > product.stock) {
+      return res.status(400).json({
+        message: `Only ${product.stock} item(s) are available in stock.`,
+      });
+    }
 
     await cartItem.save();
 
@@ -109,12 +128,13 @@ const updateCart = async (req, res) => {
       cart: cartItem,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
-
 
 // Remove Item
 const removeCart = async (req, res) => {
@@ -132,21 +152,17 @@ const removeCart = async (req, res) => {
       });
     }
 
-    const cart = await cartModel
-      .find({ user: req.user._id })
-      .populate("product");
-
     res.status(200).json({
       message: "Item removed from cart",
-      cart,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
-
 
 // Clear Cart
 const clearCart = async (req, res) => {
@@ -159,12 +175,13 @@ const clearCart = async (req, res) => {
       message: "Cart cleared successfully",
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
-      message: error.message,
+      message: "Internal Server Error",
     });
   }
 };
-
 
 module.exports = {
   getCart,

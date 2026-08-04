@@ -139,7 +139,7 @@ const verifyOtp = async (req, res) => {
     // Validate Input
     if (!email || !otp) {
       return res.status(400).json({
-        message: "Pease provide email and OTP.",
+        message: "Please provide email and OTP.",
       });
     }
 

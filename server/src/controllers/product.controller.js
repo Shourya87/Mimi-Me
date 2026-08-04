@@ -156,8 +156,6 @@ const updateProduct = async (req, res) => {
     isFeatured,
   } = req.body;
 
-  console.log(title);
-
   try {
     const product = await productModel.findById(id);
 
@@ -215,9 +213,7 @@ const updateProduct = async (req, res) => {
         }),
       );
 
-      for (const image of oldImages) {
-        await deleteImage(image.public_id);
-      }
+      await Promise.all(oldImages.map((image) => deleteImage(image.public_id)));
 
       product.images = newImages;
     }
@@ -253,9 +249,9 @@ const deleteProduct = async (req, res) => {
       });
     }
 
-    for (const image of product.images) {
-      await deleteImage(image.public_id);
-    }
+    await Promise.all(
+      product.images.map((image) => deleteImage(image.public_id)),
+    );
 
     await product.deleteOne();
 
