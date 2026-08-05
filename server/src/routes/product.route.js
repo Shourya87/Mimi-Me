@@ -12,13 +12,13 @@ const { createProduct, getProducts, getProductBySlug, updateProduct, deleteProdu
 
 
 
-// Public
+// User
 router.route("/").get(getProducts);
 router.route("/:slug").get(getProductBySlug);
 
 
 // Admin 
-router.route("/").post(protect, admin, upload.array('images', 5),  createProduct);
+router.route("/").post(protect, admin, upload.array("images", 5),  createProduct);
 router.route("/:id").patch(protect, admin, upload.array("images", 5), updateProduct).delete(protect, admin, deleteProduct);
 
 
