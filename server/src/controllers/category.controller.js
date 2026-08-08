@@ -7,13 +7,6 @@ const createCategory = async (req, res) => {
   try {
     const { name } = req.body;
 
-    if (!name) {
-      return res.status(400).json({
-        title: "Validation Error",
-        message: "Category name is required.",
-      });
-    }
-
     const slug = slugify(name, {
       lower: true,
       strict: true,

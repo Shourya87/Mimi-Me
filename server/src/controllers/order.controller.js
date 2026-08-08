@@ -13,34 +13,6 @@ const createOrder = async (req, res) => {
   try {
     const { shippingAddress, paymentMethod = "COD" } = req.body;
 
-    if (
-      !shippingAddress ||
-      !shippingAddress.fullName ||
-      !shippingAddress.phone ||
-      !shippingAddress.address ||
-      !shippingAddress.city ||
-      !shippingAddress.state ||
-      !shippingAddress.pincode
-    ) {
-      await session.abortTransaction();
-      session.endSession();
-
-      return res.status(400).json({
-        message: "Please provide complete shipping address.",
-      });
-    }
-
-    const validPaymentMethods = ["COD", "Razorpay"];
-
-    if (!validPaymentMethods.includes(paymentMethod)) {
-      await session.abortTransaction();
-      session.endSession();
-
-      return res.status(400).json({
-        message: "Invalid payment method.",
-      });
-    }
-
     const cart = await cartModel
       .find({ user: req.user._id })
       .populate("product")
@@ -313,20 +285,6 @@ const updateOrderStatus = async (req, res) => {
 
     // Update Order Status
     if (orderStatus) {
-      const validOrderStatus = [
-        "Pending",
-        "Confirmed",
-        "Shipped",
-        "Delivered",
-        "Cancelled",
-      ];
-
-      if (!validOrderStatus.includes(orderStatus)) {
-        return res.status(400).json({
-          message: "Invalid order status.",
-        });
-      }
-
       const allowedTransitions = {
         Pending: ["Confirmed", "Cancelled"],
         Confirmed: ["Shipped", "Cancelled"],
@@ -363,14 +321,6 @@ const updateOrderStatus = async (req, res) => {
 
     // Update Payment Status
     if (paymentStatus) {
-      const validPaymentStatus = ["Pending", "Paid", "Failed"];
-
-      if (!validPaymentStatus.includes(paymentStatus)) {
-        return res.status(400).json({
-          message: "Invalid payment status.",
-        });
-      }
-
       if (paymentStatus === "Paid" && order.paymentStatus !== "Paid") {
         order.paidAt = new Date();
       }

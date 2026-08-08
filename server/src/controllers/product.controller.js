@@ -1,4 +1,6 @@
 const productModel = require("../models/product.model");
+const cartModel = require("../models/cart.model");
+const wishlistModel = require("../models/wishlist.model");
 const uploadImage = require("../utils/uploadImage");
 const deleteImage = require("../utils/deleteImage");
 const slugify = require("slugify");
@@ -19,13 +21,6 @@ const createProduct = async (req, res) => {
   } = req.body;
 
   try {
-    if (!title || !description || !price || !brand || !category) {
-      return res.status(400).json({
-        title: "Missing Information",
-        message: "Pease fill all required fields.",
-      });
-    }
-
     const slug = slugify(title, {
       lower: true,
       strict: true,
@@ -252,6 +247,14 @@ const deleteProduct = async (req, res) => {
     await Promise.all(
       product.images.map((image) => deleteImage(image.public_id)),
     );
+
+    await cartModel.deleteMany({
+      product: id,
+    });
+
+    await wishlistModel.deleteMany({
+      product: id,
+    });
 
     await product.deleteOne();
 

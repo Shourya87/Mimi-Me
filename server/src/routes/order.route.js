@@ -13,13 +13,24 @@ const {
 const protect = require("../middleware/auth.middleware");
 const admin = require("../middleware/admin.middleware");
 
+const validate = require("../middleware/validate.middleware");
+const {
+  createOrderSchema,
+  updateOrderStatusSchema,
+} = require("../validators/order.validator");
+
 // User
-router.route("/").post(protect, createOrder).get(protect, getMyOrders);
+router
+  .route("/")
+  .post(protect, validate(createOrderSchema), createOrder)
+  .get(protect, getMyOrders);
 
 // Admin
 router.route("/admin").get(protect, admin, getAllOrders);
 
-router.route("/admin/:id").patch(protect, admin, updateOrderStatus);
+router
+  .route("/admin/:id")
+  .patch(protect, admin, validate(updateOrderStatusSchema), updateOrderStatus);
 
 // User
 router.route("/:id").get(protect, getOrderById);

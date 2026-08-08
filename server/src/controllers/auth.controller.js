@@ -12,13 +12,6 @@ const signUp = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // Check if all fields are provided
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        message: "Please fill all the fields.",
-      });
-    }
-
     // Check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -37,7 +30,6 @@ const signUp = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role,
       otp,
       otpExpiry: Date.now() + 10 * 60 * 1000,
     });
@@ -71,13 +63,6 @@ const logIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Validate Input
-    if (!email || !password) {
-      return res.status(400).json({
-        message: "Please fill all the fields.",
-      });
-    }
-
     // Find User
     const user = await userModel.findOne({ email }).select("+password");
 
@@ -135,13 +120,6 @@ const verifyOtp = async (req, res) => {
   try {
     // Get Data
     const { email, otp } = req.body;
-
-    // Validate Input
-    if (!email || !otp) {
-      return res.status(400).json({
-        message: "Please provide email and OTP.",
-      });
-    }
 
     // Find User
     const user = await userModel.findOne({ email });
@@ -232,12 +210,6 @@ const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    if (!email) {
-      return res.status(400).json({
-        message: "Email is required.",
-      });
-    }
-
     const user = await userModel.findOne({ email });
 
     if (!user) {
@@ -283,18 +255,6 @@ const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
     const { password } = req.body;
-
-    if (!password) {
-      return res.status(400).json({
-        message: "Password is required.",
-      });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({
-        message: "Password must be at least 6 characters long.",
-      });
-    }
 
     // Hash incoming token
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
