@@ -154,6 +154,15 @@ const verifyOtp = async (req, res) => {
 
     await user.save();
 
+    const token = generateToken(user._id);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+    });
+
     await sendEmail({
       to: user.email,
       subject: "Welcome to the Mimi & Me Family 🌸",
@@ -162,6 +171,7 @@ const verifyOtp = async (req, res) => {
 
     return res.status(200).json({
       message: "OTP verified successfully. 🎉",
+      user,
     });
   } catch (error) {
     console.error(error);

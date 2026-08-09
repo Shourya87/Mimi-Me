@@ -44,6 +44,8 @@ const useAuthStore = create((set) => ({
       const data = await verifyOtpApi(otpData);
 
       set({
+        user: data.user,
+        isAuthenticated: true,
         loading: false,
       });
 

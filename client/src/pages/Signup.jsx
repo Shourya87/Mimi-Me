@@ -67,7 +67,9 @@ export default function Signup() {
 
       showSuccessToast(data.title, data.message, "signup-success");
 
-      navigate("/verify-otp");
+      navigate("/verify-otp", {
+        state: { email: formData.email },
+      });
     } catch (error) {
       showErrorToast(
         "Signup Failed",

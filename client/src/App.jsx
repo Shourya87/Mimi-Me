@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect } from "react";
 import useAuthStore from "./store/authStore";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -27,39 +26,10 @@ import CreateProduct from "./pages/CreateProduct";
 import UpdateProduct from "./pages/UpdateProduct";
 
 export default function App() {
-  // Backend Testing Code -
-  // useEffect(() => {
-
-  //   axios
-  //   .get("http://localhost:3000/api/test")
-  //   .then((res) => console.log(res.data))
-  //   .catch(console.error);
-
-  // },[])
-
   const { checkAuth } = useAuthStore();
   useEffect(() => {
     checkAuth();
   }, []);
-
-  const product = {
-    _id: "6a593994fa9e2e24ddcc8065",
-    title: "Premium Party Gown",
-    slug: "premium-party-gown",
-    description:
-      "Premium elegant gown made with soft layered tulle for birthdays and special occasions.",
-    price: 2099,
-    discountPrice: 1799,
-    brand: "Mimi & Me",
-    category: "Girls",
-    sizes: ["18+ year"],
-    colors: ["Multicolor", "Purple"],
-    stock: 18,
-    images: {
-      url: "https://res.cloudinary.com/dv3cubae4/image/upload/v1784233965/Mimi%20Me/Products/rnlaocwiud11cvkqaf8a.png",
-      public_id: "Mimi Me/Products/rnlaocwiud11cvkqaf8a",
-    },
-  };
 
   return (
     <BrowserRouter>

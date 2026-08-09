@@ -1,19 +1,16 @@
 import api from "./api";
 
-
-
-
 // Create Order
 const createOrderApi = async (orderData) => {
-    const response = await api.post("/orders", orderData);
-    return response.data;
-}
+  const response = await api.post("/orders", orderData);
+  return response.data;
+};
 
 // Get My Order
 const getMyOrdersApi = async () => {
-    const response = await api.get('/orders');
-    return response.data;
-}
+  const response = await api.get("/orders");
+  return response.data;
+};
 
 // Get Order By Id
 const getOrderByIdApi = async (id) => {
@@ -27,24 +24,23 @@ const cancelOrderApi = async (id) => {
   return response.data;
 };
 
-// Get All Orders 
+// Get All Orders
 const getAllOrdersApi = async () => {
-    const response = await api.get("/orders/admin");
-    return response.data;
-}
+  const response = await api.get("/orders/admin");
+  return response.data;
+};
 
 // Update Order
 const updateOrderStatusApi = async (id, orderData) => {
-    const response = await api.patch(`/orders/admin/${id}`, orderData);
-    return response.data;
-}
-
+  const response = await api.patch(`/orders/admin/${id}`, orderData);
+  return response.data;
+};
 
 export {
-    getAllOrdersApi,
-    getOrderByIdApi,
-    getMyOrdersApi,
-    createOrderApi,
-    updateOrderStatusApi,
-    cancelOrderApi,
-}
+  getAllOrdersApi,
+  getOrderByIdApi,
+  getMyOrdersApi,
+  createOrderApi,
+  updateOrderStatusApi,
+  cancelOrderApi,
+};

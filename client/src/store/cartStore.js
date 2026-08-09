@@ -31,7 +31,7 @@ const useCartStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -59,7 +59,7 @@ const useCartStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -77,8 +77,6 @@ const useCartStore = create((set) => ({
         loading: true,
         error: null,
       });
-
-      console.log(cartItemId);
 
       const data = await updateCartApi(cartItemId, quantity);
 
@@ -98,10 +96,9 @@ const useCartStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
-      console.log(error);
       throw error;
     } finally {
       set({
@@ -127,7 +124,7 @@ const useCartStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -155,7 +152,7 @@ const useCartStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+       error: error.response?.data?.message || error.message,
       });
 
       throw error;

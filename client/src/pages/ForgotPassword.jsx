@@ -17,12 +17,17 @@ const ForgotPassword = () => {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const normalizedEmail = email.trim();
 
-    if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email");
+    if (!normalizedEmail) {
+      toast.error("Email is required");
       return false;
     }
 
+    if (!emailRegex.test(normalizedEmail)) {
+      toast.error("Please enter a valid email");
+      return false;
+    }
     return true;
   };
 
@@ -38,9 +43,7 @@ const ForgotPassword = () => {
 
       setEmail("");
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Something went wrong"
-      );
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -48,9 +51,7 @@ const ForgotPassword = () => {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-3xl border border-gray-200 bg-white p-8 shadow-xl">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Forgot Password
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">Forgot Password</h1>
 
           <p className="mt-2 text-sm text-gray-500">
             Enter your email address and we'll send you a password reset link.
@@ -59,7 +60,10 @@ const ForgotPassword = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
               Email Address
             </label>
 
@@ -70,6 +74,7 @@ const ForgotPassword = () => {
               />
 
               <input
+                id="email"
                 type="email"
                 placeholder="Enter your email"
                 value={email}

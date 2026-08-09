@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { showSuccessToast, showErrorToast } from "../utils/toast";
 import { Mail, ShieldCheck, Loader2 } from "lucide-react";
@@ -12,8 +12,10 @@ export default function VerifyOtp() {
   const verifyOtp = useAuthStore((state) => state.verifyOtp);
   const loading = useAuthStore((state) => state.loading);
 
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
-    email: "",
+    email: location.state?.email || "",
     otp: "",
   });
 
@@ -43,7 +45,9 @@ export default function VerifyOtp() {
       return false;
     }
 
-    if (formData.otp.length !== 6) {
+    const otpRegex = /^\d{6}$/;
+
+    if (!otpRegex.test(formData.otp)) {
       toast.error("OTP must be 6 digits.", {
         id: "verify-otp-length",
       });
@@ -63,7 +67,7 @@ export default function VerifyOtp() {
 
       showSuccessToast(data.title, data.message, "verify-otp-success");
 
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       showErrorToast(
         "Verification Failed",
@@ -148,6 +152,7 @@ export default function VerifyOtp() {
                   value={formData.otp}
                   onChange={handleChange}
                   maxLength={6}
+                  inputMode="numeric"
                   placeholder="Enter 6-digit OTP"
                   className="w-full rounded-xl border border-stone-300 bg-white py-3 pl-11 pr-4 outline-none transition-all focus:border-stone-600 focus:ring-4 focus:ring-stone-100"
                 />

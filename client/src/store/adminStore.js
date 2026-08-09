@@ -9,11 +9,15 @@ const useAdminStore = create((set) => ({
   stats: null,
   users: [],
   loading: false,
+  error: null,
 
   // Dashboard
   getDashboardStats: async () => {
     try {
-      set({ loading: true });
+      set({
+        loading: true,
+        error: null,
+      });
 
       const data = await getDashboardStatsApi();
 
@@ -23,18 +27,23 @@ const useAdminStore = create((set) => ({
 
       return data;
     } catch (error) {
-      console.error(error);
+      set({
+        error: error.response?.data?.message || error.message,
+      });
+
       throw error;
     } finally {
       set({ loading: false });
     }
   },
 
-
   // Users
   getAllUsers: async () => {
     try {
-      set({ loading: true });
+      set({
+        loading: true,
+        error: null,
+      });
 
       const data = await getAllUsersApi();
 
@@ -44,7 +53,10 @@ const useAdminStore = create((set) => ({
 
       return data;
     } catch (error) {
-      console.error(error);
+      set({
+        error: error.response?.data?.message || error.message,
+      });
+
       throw error;
     } finally {
       set({ loading: false });
@@ -54,7 +66,10 @@ const useAdminStore = create((set) => ({
   // Delete User
   deleteUser: async (id) => {
     try {
-      set({ loading: true });
+      set({
+        loading: true,
+        error: null,
+      });
 
       const data = await deleteUserApi(id);
 
@@ -64,12 +79,17 @@ const useAdminStore = create((set) => ({
 
       return data;
     } catch (error) {
-      console.error(error);
+      set({
+        error: error.response?.data?.message || error.message,
+      });
+
       throw error;
     } finally {
       set({ loading: false });
     }
   },
+
+  clearError: () => set({ error: null }),
 }));
 
 export default useAdminStore;

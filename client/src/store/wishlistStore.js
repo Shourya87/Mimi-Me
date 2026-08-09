@@ -30,7 +30,7 @@ const useWishlistStore = create((set, get) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -58,7 +58,7 @@ const useWishlistStore = create((set, get) => ({
       return data;
     } catch (error) {
       set({
-        error,
+       error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -86,7 +86,7 @@ const useWishlistStore = create((set, get) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -114,7 +114,7 @@ const useWishlistStore = create((set, get) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -127,9 +127,7 @@ const useWishlistStore = create((set, get) => ({
 
   // Check if Product Exists in Wishlist
   isInWishlist: (product) => {
-    return get().wishlist.some(
-      (item) => item.product._id === product
-    );
+    return get().wishlist.some((item) => item.product._id === product);
   },
 
   // Clear Error

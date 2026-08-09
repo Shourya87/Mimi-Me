@@ -6,7 +6,6 @@ const getCartApi = async () => {
   return response.data;
 };
 
-
 // Add Cart
 const addCartApi = async (productId, quantity = 1) => {
   const response = await api.post("/cart", {
@@ -16,8 +15,7 @@ const addCartApi = async (productId, quantity = 1) => {
   return response.data;
 };
 
-
-// Update Cart 
+// Update Cart
 const updateCartApi = async (cartItemId, quantity) => {
   const response = await api.patch(`/cart/${cartItemId}`, {
     quantity,
@@ -25,13 +23,11 @@ const updateCartApi = async (cartItemId, quantity) => {
   return response.data;
 };
 
-
 // Remove Cart
 const removeCartApi = async (cartItemId) => {
   const response = await api.delete(`/cart/${cartItemId}`);
   return response.data;
 };
-
 
 // Clear Cart
 const clearCartApi = async () => {
@@ -39,11 +35,4 @@ const clearCartApi = async () => {
   return response.data;
 };
 
-
-export { 
-    getCartApi,
-    addCartApi,
-    updateCartApi,
-    removeCartApi,
-    clearCartApi,
-}
+export { getCartApi, addCartApi, updateCartApi, removeCartApi, clearCartApi };

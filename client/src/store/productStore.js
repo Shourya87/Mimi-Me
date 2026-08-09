@@ -32,7 +32,7 @@ const useProductStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -60,7 +60,7 @@ const useProductStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+       error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -88,7 +88,7 @@ const useProductStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -119,7 +119,7 @@ const useProductStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+       error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -147,7 +147,7 @@ const useProductStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;

@@ -62,7 +62,7 @@ const useOrderStore = create((set) => ({
     }
   },
 
-   // Get Single Order
+  // Get Single Order
   getOrderById: async (id) => {
     set({ loading: true, error: null });
 
@@ -86,11 +86,11 @@ const useOrderStore = create((set) => ({
   },
 
   // Cancel Order
-  cancelOrder: async (id, orderData = {}) => {
+  cancelOrder: async (id) => {
     set({ loading: true, error: null });
 
     try {
-      const data = await cancelOrderApi(id, orderData);
+      const data = await cancelOrderApi(id);
 
       set((state) => ({
         orders: state.orders.map((order) =>

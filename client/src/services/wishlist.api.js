@@ -1,6 +1,5 @@
 import api from "./api";
 
-
 // Get Wishlist
 const getWishlistApi = async () => {
   const response = await api.get("/wishlist");
@@ -27,10 +26,4 @@ const clearWishlistApi = async () => {
   return response.data;
 };
 
-
-export {
-    getWishlistApi,
-    addWishlistApi,
-    removeWishlistApi,
-    clearWishlistApi,
-}
+export { getWishlistApi, addWishlistApi, removeWishlistApi, clearWishlistApi };
