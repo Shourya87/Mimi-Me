@@ -11,11 +11,7 @@ import useProductStore from "../store/productStore";
 import useCategoryStore from "../store/categoryStore";
 
 export default function Shop() {
-  const {
-    products,
-    loading: productLoading,
-    getProducts,
-  } = useProductStore();
+  const { products, loading: productLoading, getProducts } = useProductStore();
 
   const {
     categories,
@@ -39,13 +35,13 @@ export default function Shop() {
       filtered = filtered.filter(
         (product) =>
           product.category?.slug === selectedCategory ||
-          product.category === selectedCategory
+          product.category === selectedCategory,
       );
     }
 
     if (search.trim()) {
       filtered = filtered.filter((product) =>
-        product.title.toLowerCase().includes(search.toLowerCase())
+        product.title.toLowerCase().includes(search.toLowerCase()),
       );
     }
 
@@ -81,9 +77,7 @@ export default function Shop() {
         <div>
           <h1 className="text-4xl font-bold">Shop</h1>
 
-          <p className="mt-2 text-gray-500">
-            Discover our latest collection.
-          </p>
+          <p className="mt-2 text-gray-500">Discover our latest collection.</p>
         </div>
 
         <div className="w-full md:w-72">
@@ -138,9 +132,7 @@ export default function Shop() {
           <Button
             key={category._id}
             size="sm"
-            variant={
-              selectedCategory === category.slug ? "primary" : "outline"
-            }
+            variant={selectedCategory === category.slug ? "primary" : "outline"}
             onClick={() => setSelectedCategory(category.slug)}
           >
             {category.title}
@@ -153,9 +145,7 @@ export default function Shop() {
         <ProductGrid products={filteredProducts} />
       ) : (
         <div className="py-20 text-center">
-          <h2 className="text-2xl font-semibold">
-            No Products Found
-          </h2>
+          <h2 className="text-2xl font-semibold">No Products Found</h2>
 
           <p className="mt-2 text-gray-500">
             Try another category or search keyword.

@@ -9,11 +9,7 @@ import useProductStore from "../store/productStore";
 import useCategoryStore from "../store/categoryStore";
 
 export default function Home() {
-  const {
-    products,
-    getProducts,
-    loading: productLoading,
-  } = useProductStore();
+  const { products, getProducts, loading: productLoading } = useProductStore();
 
   const {
     categories,
@@ -26,10 +22,16 @@ export default function Home() {
     getCategories();
   }, [getProducts, getCategories]);
 
+  const featuredProducts = products
+  .filter((product) => product.isFeatured)
+  .slice(0, 8);
+
   // Show fullscreen loader while initial data is loading
   if (productLoading || categoryLoading) {
     return <Loader text="Loading Mimi & Me..." />;
   }
+
+  
 
   return (
     <main className="min-h-screen">
@@ -39,9 +41,7 @@ export default function Home() {
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold">
-            Shop by Category
-          </h2>
+          <h2 className="text-3xl font-bold">Shop by Category</h2>
 
           <p className="mt-2 text-gray-500">
             Find the perfect outfit for every occasion.
@@ -52,21 +52,17 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold">
-            Featured Products
-          </h2>
+      {featuredProducts.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-16">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold">Featured Products</h2>
 
-          <p className="mt-2 text-gray-500">
-            Our most loved styles.
-          </p>
-        </div>
+            <p className="mt-2 text-gray-500">Our most loved styles.</p>
+          </div>
 
-        <ProductGrid
-          products={products.filter((product) => product.isFeatured)}
-        />
-      </section>
+          <ProductGrid products={featuredProducts} />
+        </section>
+      )}
 
       {/* Promo Banner */}
       {/* <PromoBanner /> */}
@@ -74,13 +70,9 @@ export default function Home() {
       {/* New Arrivals */}
       <section className="mx-auto max-w-7xl px-4 py-16">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold">
-            New Arrivals
-          </h2>
+          <h2 className="text-3xl font-bold">New Arrivals</h2>
 
-          <p className="mt-2 text-gray-500">
-            Fresh styles added recently.
-          </p>
+          <p className="mt-2 text-gray-500">Fresh styles added recently.</p>
         </div>
 
         <ProductGrid products={products.slice(8, 16)} />
