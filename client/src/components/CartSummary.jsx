@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-
 import Button from "./Button";
-import { Link2 } from "lucide-react";
 
 export default function CartSummary({ cartItems }) {
   const subtotal = cartItems.reduce(
-    (total, item) => total + item.product.price * item.quantity,
+    (total, item) =>
+      total +
+      (item.product.discountPrice ?? item.product.price) * item.quantity,
     0,
   );
 
-  const shipping = subtotal > 999 || subtotal === 0 ? 0 : 99;
+  const shipping = subtotal >= 999 ? 0 : 99;
   const total = subtotal + shipping;
 
   return (
@@ -46,7 +46,7 @@ export default function CartSummary({ cartItems }) {
       </Link>
 
       <Link
-        to="/products"
+        to="shop"
         className="mt-4 block text-center text-sm font-medium text-amber-700 transition hover:text-amber-800"
       >
         Continue Shopping

@@ -1,10 +1,6 @@
 import { Minus, Plus } from "lucide-react";
 
-export default function QuantitySelector({
-  quantity,
-  onIncrease,
-  onDecrease,
-}) {
+export default function QuantitySelector({ quantity, onIncrease, onDecrease }) {
   return (
     <div className="flex w-fit items-center overflow-hidden rounded-xl border border-stone-300 bg-stone-50">
       <button

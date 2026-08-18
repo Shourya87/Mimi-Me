@@ -8,12 +8,7 @@ import Loader from "../components/Loader";
 import useCartStore from "../store/cartStore";
 
 export default function Cart() {
-  const {
-    cart,
-    loading,
-    error,
-    getCart,
-  } = useCartStore();
+  const { cart, loading, error, getCart } = useCartStore();
 
   useEffect(() => {
     getCart();
@@ -39,7 +34,7 @@ export default function Cart() {
         title="Your cart is empty"
         description="Looks like you haven't added any products yet."
         buttonText="Start Shopping"
-        buttonLink="/products"
+        buttonLink="/shop"
       />
     );
   }
@@ -55,10 +50,7 @@ export default function Cart() {
           {/* Cart Items */}
           <div className="space-y-6 lg:col-span-2">
             {cart.map((item) => (
-              <CartItem
-                key={item.product._id}
-                item={item}
-              />
+              <CartItem key={item._id} item={item} />
             ))}
           </div>
 
