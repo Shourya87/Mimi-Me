@@ -2,17 +2,12 @@ import React from "react";
 import CheckoutItem from "./CheckoutItem";
 
 const OrderSummary = ({ items = [] }) => {
-  const totalItems = items.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="mb-5 flex items-center justify-between border-b pb-3">
-        <h2 className="text-lg font-semibold text-gray-800">
-          Order Summary
-        </h2>
+        <h2 className="text-lg font-semibold text-gray-800">Order Summary</h2>
 
         <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-500">
           {totalItems} {totalItems === 1 ? "Item" : "Items"}
@@ -26,10 +21,7 @@ const OrderSummary = ({ items = [] }) => {
       ) : (
         <div className="space-y-4">
           {items.map((item) => (
-            <CheckoutItem
-              key={item._id}
-              item={item}
-            />
+            <CheckoutItem key={item._id} item={item} />
           ))}
         </div>
       )}

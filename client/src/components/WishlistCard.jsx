@@ -10,12 +10,17 @@ export default function WishlistCard({ item }) {
   const { removeWishlist } = useWishlistStore();
   const { addCart } = useCartStore();
 
-  const { product , _id: wishlist_id } = item;
+  const { product, _id: wishlist_id } = item;
 
-  const { title, slug, images, price, category, _id } = product;
+  const { title, slug, images, price, discountPrice, category, _id } = product;
+  const finalPrice = discountPrice ?? price;
 
   const handleAddCart = async () => {
-    await addCart(_id);
+    try {
+      await addCart(_id);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleRemove = async () => {
@@ -25,7 +30,7 @@ export default function WishlistCard({ item }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm transition hover:shadow-lg">
       {/* Product Image */}
-      <Link to={`/product/${slug}`}>
+      <Link to={`/products/${slug}`}>
         <img
           src={images?.[0]?.url}
           alt={title}
@@ -43,14 +48,10 @@ export default function WishlistCard({ item }) {
             {title}
           </Link>
 
-          <p className="mt-0.5 text-sm text-stone-500">
-            {category}
-          </p>
+          <p className="mt-0.5 text-sm text-stone-500">{category}</p>
         </div>
 
-        <p className="text-2xl font-bold text-amber-700">
-          ₹{price}
-        </p>
+        <p className="text-2xl font-bold text-amber-700">₹{finalPrice}</p>
 
         <div className="flex gap-3">
           <Button
@@ -61,15 +62,8 @@ export default function WishlistCard({ item }) {
             Add to Cart
           </Button>
 
-          <Button
-            variant="outline"
-            onClick={handleRemove}
-            className="px-4"
-          >
-            <Heart
-              size={18}
-              className="fill-red-500 text-red-500"
-            />
+          <Button variant="outline" onClick={handleRemove} className="px-4">
+            <Heart size={18} className="fill-red-500 text-red-500" />
           </Button>
         </div>
       </div>

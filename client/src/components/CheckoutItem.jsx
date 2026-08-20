@@ -6,13 +6,9 @@ export default function CheckoutItem({ item }) {
 
   const title = isCartItem ? item.product.title : item.title;
 
-  const image = isCartItem
-    ? item.product.images?.[0]?.url
-    : item.image;
+  const image = isCartItem ? item.product.images?.[0]?.url : item.image;
 
-  const originalPrice = isCartItem
-    ? item.product.price
-    : item.price;
+  const originalPrice = isCartItem ? item.product.price : item.price;
 
   const finalPrice = isCartItem
     ? item.product.discountPrice || item.product.price
@@ -54,18 +50,14 @@ export default function CheckoutItem({ item }) {
         <div>
           {originalPrice !== finalPrice ? (
             <>
-              <span className="font-semibold">
-                ₹{finalPrice}
-              </span>
+              <span className="font-semibold">₹{finalPrice}</span>
 
               <span className="ml-2 text-sm text-gray-400 line-through">
                 ₹{originalPrice}
               </span>
             </>
           ) : (
-            <span className="font-semibold">
-              ₹{finalPrice}
-            </span>
+            <span className="font-semibold">₹{finalPrice}</span>
           )}
         </div>
 

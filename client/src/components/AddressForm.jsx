@@ -2,6 +2,10 @@ export default function AddressForm({ formData, setFormData }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === "phone" || name === "pincode") {
+      if (!/^\d*$/.test(value)) return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -12,7 +16,6 @@ export default function AddressForm({ formData, setFormData }) {
       e.target.style.height = `${e.target.scrollHeight}px`;
     }
   };
-
   const inputClass =
     "w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-200";
 
@@ -64,7 +67,8 @@ export default function AddressForm({ formData, setFormData }) {
           </label>
           <input
             autoComplete="pin-code"
-            type="numeric"
+            type="text"
+            inputMode="numeric"
             name="pincode"
             maxLength={6}
             value={formData.pincode}

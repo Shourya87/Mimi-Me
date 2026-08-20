@@ -1,5 +1,4 @@
 export default function PriceDetails({ items = [] }) {
-  
   const totalMRP = items.reduce((total, item) => {
     const price = item.product ? item.product.price : item.price;
 
@@ -11,7 +10,7 @@ export default function PriceDetails({ items = [] }) {
 
     const discountPrice = item.product
       ? item.product.discountPrice || item.product.price
-      : item.discountPrice;
+      : item.discountPrice || item.price;
 
     return total + (price - discountPrice) * item.quantity;
   }, 0);
