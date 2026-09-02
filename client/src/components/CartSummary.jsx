@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import Button from "./Button";
 
+import formatCurrency from "../utils/formatCurrency";
+
 export default function CartSummary({ cartItems }) {
   const subtotal = cartItems.reduce(
     (total, item) =>
@@ -19,7 +21,7 @@ export default function CartSummary({ cartItems }) {
       <div className="space-y-4">
         <div className="flex items-center justify-between text-stone-600">
           <span>Subtotal</span>
-          <span>₹{subtotal.toLocaleString("en-IN")}</span>
+          <span>{formatCurrency(subtotal)}</span>
         </div>
 
         <div className="flex items-center justify-between text-stone-600">
@@ -28,7 +30,7 @@ export default function CartSummary({ cartItems }) {
             {shipping === 0 ? (
               <span className="font-medium text-green-600">Free</span>
             ) : (
-              `₹${shipping.toLocaleString("en-IN")}`
+              `${formatCurrency(shipping)}`
             )}
           </span>
         </div>
@@ -37,7 +39,7 @@ export default function CartSummary({ cartItems }) {
 
         <div className="flex items-center justify-between text-xl font-bold text-stone-900">
           <span>Total</span>
-          <span>₹{total.toLocaleString("en-IN")}</span>
+          <span>{formatCurrency(total)}</span>
         </div>
       </div>
 
@@ -46,7 +48,7 @@ export default function CartSummary({ cartItems }) {
       </Link>
 
       <Link
-        to="shop"
+        to="/shop"
         className="mt-4 block text-center text-sm font-medium text-amber-700 transition hover:text-amber-800"
       >
         Continue Shopping

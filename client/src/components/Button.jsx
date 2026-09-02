@@ -27,11 +27,9 @@ export default function Button({
     ghost:
       "bg-transparent text-[#6F4E37] hover:bg-[#F7F1EA] hover:text-[#5A3F2D] focus:ring-[#E8D8C6]",
 
-    danger:
-      "bg-[#C84B4B] text-white hover:bg-[#AF3F3F] focus:ring-red-200",
+    danger: "bg-[#C84B4B] text-white hover:bg-[#AF3F3F] focus:ring-red-200",
 
-    success:
-      "bg-[#4F8A5B] text-white hover:bg-[#41724B] focus:ring-green-200",
+    success: "bg-[#4F8A5B] text-white hover:bg-[#41724B] focus:ring-green-200",
   };
 
   const sizes = {
@@ -50,7 +48,7 @@ export default function Button({
         variants[variant] || variants.primary,
         sizes[size] || sizes.md,
         fullWidth && "w-full",
-        className
+        className,
       )}
       {...props}
     >

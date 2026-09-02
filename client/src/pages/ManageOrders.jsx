@@ -7,6 +7,8 @@ import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
 import OrderTable from "../components/OrderTable";
 
+import { ORDER_STATUSES } from "../constants/order";
+
 const ManageOrders = () => {
   const navigate = useNavigate();
 
@@ -26,43 +28,49 @@ const ManageOrders = () => {
   };
 
   const handleUpdateStatus = async (order) => {
-    const status = prompt(
-      "Enter New Status:\n\nPending\nProcessing\nShipped\nDelivered\nCancelled",
-      order.orderStatus
-    );
+  const status = prompt(
+    `Enter New Status:\n\n${ORDER_STATUSES.join("\n")}`,
+    order.orderStatus
+  );
 
-    if (!status) return;
+  if (!status) return;
 
-    try {
-      await updateOrderStatus(order._id, {
-        orderStatus: status,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  try {
+    await updateOrderStatus(order._id, {
+      orderStatus: status,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-lg font-semibold">
-        Loading Orders...
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <p className="text-lg font-semibold text-gray-700">
+          Loading Orders...
+        </p>
       </div>
     );
   }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <AdminSidebar />
 
-      {/* Main */}
-      <div className="flex-1">
-        <AdminNavbar />
+      <div className="min-w-0 flex-1">
+        <AdminNavbar title="Orders" />
 
         <main className="p-6">
-          <h2 className="text-3xl font-bold mb-6">
-            Manage Orders
-          </h2>
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-gray-800">
+              Manage Orders
+            </h2>
+
+            <p className="mt-1 text-gray-500">
+              View and manage customer orders.
+            </p>
+          </div>
 
           <OrderTable
             orders={orders}

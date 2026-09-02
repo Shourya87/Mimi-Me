@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import formatCurrency from "../utils/formatCurrency";
 
 export default function ProductCard({ product }) {
   const { title, slug, price, discountPrice, images } = product;
@@ -32,13 +33,11 @@ export default function ProductCard({ product }) {
         {/* Product Price */}
         <div className="flex items-center gap-2">
           <span className="text-xl font-bold text-pink-600">
-            ₹{hasDiscount ? discountPrice : price}
+            {formatCurrency(hasDiscount ? discountPrice : price)}
           </span>
 
           {hasDiscount && (
-            <span className="text-sm text-gray-500 line-through">
-              ₹{price}
-            </span>
+            <span className="text-sm text-gray-500 line-through">{formatCurrency(price)}</span>
           )}
         </div>
 

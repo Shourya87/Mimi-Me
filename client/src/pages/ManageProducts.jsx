@@ -27,7 +27,7 @@ export default function ManageProducts() {
 
   const handleDelete = async (product) => {
     const confirmDelete = window.confirm(
-      `Delete "${product.name}"?`
+      `Delete "${product.title}"?`
     );
 
     if (!confirmDelete) return;
@@ -54,7 +54,7 @@ export default function ManageProducts() {
 
       {/* Main */}
       <div className="flex-1">
-        <AdminNavbar />
+        <AdminNavbar title="Products" />
 
         <main className="p-6">
           <div className="flex items-center justify-between mb-6">

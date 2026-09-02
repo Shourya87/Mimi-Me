@@ -7,6 +7,10 @@ import CategoryCard from "../components/CategoryCard";
 
 import useProductStore from "../store/productStore";
 import useCategoryStore from "../store/categoryStore";
+import Hero from "../components/Hero";
+import PromoBanner from "../components/PromoBanner";
+import WhyChooseUs from "../components/WhyChooseUs";
+import Newsletter from "../components/Newsletter";
 
 export default function Home() {
   const { products, getProducts, loading: productLoading } = useProductStore();
@@ -23,20 +27,18 @@ export default function Home() {
   }, [getProducts, getCategories]);
 
   const featuredProducts = products
-  .filter((product) => product.isFeatured)
-  .slice(0, 8);
+    .filter((product) => product.isFeatured)
+    .slice(0, 8);
 
   // Show fullscreen loader while initial data is loading
   if (productLoading || categoryLoading) {
     return <Loader text="Loading Mimi & Me..." />;
   }
 
-  
-
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      {/* <Hero /> */}
+      <Hero />
 
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16">
@@ -48,7 +50,11 @@ export default function Home() {
           </p>
         </div>
 
-        <CategoryCard categories={categories} />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {categories.map((category) => (
+            <CategoryCard key={category._id} category={category} />
+          ))}
+        </div>
       </section>
 
       {/* Featured Products */}
@@ -65,7 +71,7 @@ export default function Home() {
       )}
 
       {/* Promo Banner */}
-      {/* <PromoBanner /> */}
+      <PromoBanner />
 
       {/* New Arrivals */}
       <section className="mx-auto max-w-7xl px-4 py-16">
@@ -79,10 +85,10 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      {/* <WhyChooseUs /> */}
+      <WhyChooseUs />
 
       {/* Newsletter */}
-      {/* <Newsletter /> */}
+      <Newsletter />
     </main>
   );
 }

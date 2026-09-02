@@ -1,15 +1,10 @@
 import { Link } from "react-router-dom";
 
-
-export default function OrderCard ({ order }) {
-  
-  if(!order) return null;
+export default function OrderCard({ order }) {
+  if (!order) return null;
 
   const itemCount =
-  order.items?.reduce(
-    (total, item) => total + item.quantity,
-    0
-  ) ?? 0;
+    order.items?.reduce((total, item) => total + item.quantity, 0) ?? 0;
 
   const statusColor = {
     Pending: "bg-yellow-100 text-yellow-700",
@@ -19,7 +14,7 @@ export default function OrderCard ({ order }) {
     Cancelled: "bg-red-100 text-red-700",
   };
 
-  return(
+  return (
     <Link
       to={`/orders/${order._id}`}
       className="block rounded-xl border-2 border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-orange-300 "
@@ -48,8 +43,7 @@ export default function OrderCard ({ order }) {
         <div className="text-left md:text-center">
           <span
             className={`rounded-full px-3 py-1 text-sm font-medium ${
-              statusColor[order.orderStatus] ||
-              "bg-gray-100 text-gray-700"
+              statusColor[order.orderStatus] || "bg-gray-100 text-gray-700"
             }`}
           >
             {order.orderStatus}
@@ -59,12 +53,10 @@ export default function OrderCard ({ order }) {
         {/* Right */}
         <div className="text-left md:text-right">
           <p className="text-lg font-semibold text-orange-600">
-            ₹{order.totalAmount.toLocaleString("en-IN")}
+            ₹{Number(order.totalAmount || 0).toLocaleString("en-IN")}
           </p>
 
-          <p className="text-sm text-gray-500">
-            {order.paymentMethod}
-          </p>
+          <p className="text-sm text-gray-500">{order.paymentMethod}</p>
         </div>
       </div>
     </Link>

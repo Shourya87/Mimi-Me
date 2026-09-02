@@ -13,6 +13,8 @@ import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
 import DashboardCard from "../components/DashboardCard";
 
+import formatCurrency from "../utils/formatCurrency";
+
 const AdminDashboard = () => {
   const { stats, loading, getDashboardStats } = useAdminStore();
 
@@ -22,8 +24,10 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-lg font-semibold">
-        Loading Dashboard...
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <p className="text-lg font-semibold text-gray-700">
+          Loading Dashboard...
+        </p>
       </div>
     );
   }
@@ -34,17 +38,24 @@ const AdminDashboard = () => {
       <AdminSidebar />
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="min-w-0 flex-1">
         {/* Navbar */}
-        <AdminNavbar />
+        <AdminNavbar title="Dashboard" />
 
-        {/* Dashboard */}
+        {/* Dashboard Content */}
         <main className="p-6">
-          <h2 className="text-3xl font-bold text-gray-800 mb-6">
-            Dashboard Overview
-          </h2>
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-gray-800">
+              Dashboard Overview
+            </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <p className="mt-1 text-gray-500">
+              Here's what's happening with your store.
+            </p>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             <DashboardCard
               title="Total Users"
               value={stats?.totalUsers || 0}
@@ -82,7 +93,7 @@ const AdminDashboard = () => {
 
             <DashboardCard
               title="Revenue"
-              value={`₹${stats?.totalRevenue || 0}`}
+              value={formatCurrency(stats?.totalRevenue)}
               icon={IndianRupee}
               color="bg-pink-500"
             />

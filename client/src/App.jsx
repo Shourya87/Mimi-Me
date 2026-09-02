@@ -20,10 +20,21 @@ import OrderDetails from "./pages/OrderDetails";
 import OrderSuccess from "./pages/OrderSuccess";
 import AdminDashboard from "./pages/AdminDashboard";
 import ManageProducts from "./pages/ManageProducts";
-import ManageOrders from "./pages/ManageOrders";
-import ManageUsers from "./pages/ManageUsers";
 import CreateProduct from "./pages/CreateProduct";
 import UpdateProduct from "./pages/UpdateProduct";
+import ManageOrders from "./pages/ManageOrders";
+import ManageUsers from "./pages/ManageUsers";
+import ManageCoupons from "./pages/ManageCoupon";
+import CreateCoupon from "./pages/CreateCoupon";
+import UpdateCoupon from "./pages/UpdateCoupon";
+import Categories from "./pages/Categories";
+import Category from "./pages/Category";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+
+
 
 export default function App() {
   const { checkAuth } = useAuthStore();
@@ -43,6 +54,12 @@ export default function App() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/products/:slug" element={<Product />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/categories/:slug" element={<Category />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<Order />} />
         <Route path="/orders/:id" element={<OrderDetails />} />
@@ -54,10 +71,14 @@ export default function App() {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/products" element={<ManageProducts />} />
-        <Route path="/admin/orders" element={<ManageOrders />} />
-        <Route path="/admin/users" element={<ManageUsers />} />
         <Route path="/admin/products/create" element={<CreateProduct />} />
         <Route path="/admin/products/update/:slug" element={<UpdateProduct />} />
+        <Route path="/admin/orders" element={<ManageOrders />} />
+        <Route path="/admin/users" element={<ManageUsers />} />
+        <Route path="/admin/coupons" element={<ManageCoupons />} />
+        <Route path="/admin/coupons/create" element={<CreateCoupon />} />
+        <Route path="/admin/coupons/update/:id" element={<UpdateCoupon />} />
+        
       </Routes>
 
       <Footer />

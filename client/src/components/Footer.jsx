@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { SHOP_LINKS, COMPANY_LINKS } from "../constants/navigation";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -14,7 +15,7 @@ export default function Footer() {
   ];
 
   const footerLink =
-  "transition-all duration-300 hover:pl-1 hover:font-semibold hover:text-[#c98f84]";
+    "transition-all duration-300 hover:pl-1 hover:font-semibold hover:text-[#c98f84]";
 
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-[#e6d7c9] bg-linear-to-b from-[#fdfaf6] via-[#faf6f1] to-[#f5eee7]">
@@ -56,41 +57,13 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-3 text-sm text-[#8d7968]">
-              <li>
-                <Link
-                  to="/shop"
-                  className={footerLink}
-                >
-                  All Products
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/categories"
-                  className={footerLink}
-                >
-                  Categories
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/new-arrivals"
-                  className={footerLink}
-                >
-                  New Arrivals
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/sale"
-                  className={footerLink}
-                >
-                  Sale
-                </Link>
-              </li>
+              {SHOP_LINKS.map((link) => (
+                <li key={link.path}>
+                  <Link to={link.path} className={footerLink}>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </section>
 
@@ -101,41 +74,13 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-3 text-sm text-[#8d7968]">
-              <li>
-                <Link
-                  to="/about"
-                  className={footerLink}
-                >
-                  About Us
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/contact"
-                  className={footerLink}
-                >
-                  Contact
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/privacy-policy"
-                  className={footerLink}
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/terms"
-                  className={footerLink}
-                >
-                  Terms & Conditions
-                </Link>
-              </li>
+              {COMPANY_LINKS.map((link) => (
+                <li key={link.path}>
+                  <Link to={link.path} className={footerLink}>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </section>
 
@@ -151,9 +96,7 @@ export default function Footer() {
                   <Mail size={16} />
                 </div>
 
-                <span className="leading-6">
-                  support@mimiandme.com
-                </span>
+                <span className="leading-6">support@mimiandme.com</span>
               </div>
 
               <div className="flex items-start gap-3">
@@ -161,9 +104,7 @@ export default function Footer() {
                   <Phone size={16} />
                 </div>
 
-                <span className="leading-6">
-                  +91 8791840787
-                </span>
+                <span className="leading-6">+91 8791840787</span>
               </div>
 
               <div className="flex items-start gap-3">
@@ -185,10 +126,8 @@ export default function Footer() {
         <div className="mt-8 flex flex-col items-center justify-center gap-4 border-t border-[#e6d7c9] pt-6 text-center text-sm text-[#9f8c7a] md:flex-row">
           <p>
             © {year}{" "}
-            <span className="font-medium text-[#6d5b4d]">
-              Mimi & Me
-            </span>
-            . All rights reserved.
+            <span className="font-medium text-[#6d5b4d]">Mimi & Me</span>. All
+            rights reserved.
           </p>
         </div>
       </div>

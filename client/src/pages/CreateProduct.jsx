@@ -4,16 +4,12 @@ import toast from "react-hot-toast";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
 import ProductForm from "../components/ProductForm";
-
 import useProductStore from "../store/productStore";
 
 const CreateProduct = () => {
   const navigate = useNavigate();
 
-  const {
-    createProduct,
-    loading,
-  } = useProductStore();
+  const { createProduct, loading } = useProductStore();
 
   const handleCreateProduct = async (formData) => {
     try {
@@ -33,29 +29,21 @@ const CreateProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      {/* Sidebar */}
-
+    <div className="flex min-h-screen bg-gray-100">
       <AdminSidebar />
 
-      {/* Main Content */}
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AdminNavbar title="Create Product" />
 
-      <div className="flex-1 flex flex-col">
-
-        <AdminNavbar />
-
-        <main className="flex-1 p-6 overflow-y-auto">
-
+        <main className="flex-1 overflow-y-auto p-6">
           <div className="mb-6">
-
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-3xl font-bold text-gray-800">
               Create Product
             </h1>
 
-            <p className="text-gray-500 mt-1">
+            <p className="mt-1 text-gray-500">
               Add a new product to your store.
             </p>
-
           </div>
 
           <ProductForm
@@ -63,9 +51,7 @@ const CreateProduct = () => {
             submitText="Create Product"
             onSubmit={handleCreateProduct}
           />
-
         </main>
-
       </div>
     </div>
   );

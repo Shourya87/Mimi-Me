@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 
-export default function CategoryCard({ categories }) {
-  const { title, slug, image } = categories;
+export default function CategoryCard({ category }) {
+
+  const { title, slug, image } = category;
 
   return (
     <Link
@@ -10,7 +11,7 @@ export default function CategoryCard({ categories }) {
     >
       <div className="overflow-hidden">
         <img
-          src={image?.url}
+          src={image?.url || "/placeholder.png"}
           alt={title}
           className="h-72 w-full object-cover transition duration-500 group-hover:scale-105"
         />

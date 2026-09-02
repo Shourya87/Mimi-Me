@@ -54,7 +54,7 @@ const useCategoryStore = create((set) => ({
       const data = await getCategoryBySlugApi(slug);
 
       set({
-        categories: data.category,
+        category: data.category,
       });
 
       return data;

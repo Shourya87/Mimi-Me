@@ -1,3 +1,5 @@
+import formatCurrency from "../utils/formatCurrency";
+
 export default function CheckoutItem({ item }) {
   if (!item) return null;
 
@@ -50,19 +52,19 @@ export default function CheckoutItem({ item }) {
         <div>
           {originalPrice !== finalPrice ? (
             <>
-              <span className="font-semibold">₹{finalPrice}</span>
+              <span className="font-semibold">{formatCurrency(finalPrice)}</span>
 
               <span className="ml-2 text-sm text-gray-400 line-through">
-                ₹{originalPrice}
+                {formatCurrency(originalPrice)}
               </span>
             </>
           ) : (
-            <span className="font-semibold">₹{finalPrice}</span>
+            <span className="font-semibold">{formatCurrency(finalPrice)}</span>
           )}
         </div>
 
         <p className="text-sm font-medium">
-          Total ₹{total.toLocaleString("en-IN")}
+          Total {formatCurrency(total)}
         </p>
       </div>
     </div>

@@ -198,6 +198,7 @@ const ProductForm = ({
 
           <input
             type="number"
+            min={0}
             name="price"
             value={formData.price}
             onChange={handleChange}
@@ -213,6 +214,7 @@ const ProductForm = ({
 
           <input
             type="number"
+            min={0}
             name="discountPrice"
             value={formData.discountPrice}
             onChange={handleChange}
@@ -245,6 +247,7 @@ const ProductForm = ({
           <input
             type="number"
             name="stock"
+            min={0}
             value={formData.stock}
             onChange={handleChange}
             className="w-full border rounded-lg px-4 py-3"
@@ -280,9 +283,6 @@ const ProductForm = ({
 
         <span className="font-medium">Featured Product</span>
       </label>
-
-      {/* Remaining UI (Sizes, Colors, Images, Submit Button)
-          will be added in Part 2 */}
 
       {/* Sizes */}
 

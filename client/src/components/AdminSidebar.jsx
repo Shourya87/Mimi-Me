@@ -1,4 +1,10 @@
-import { LayoutDashboard, Package, ShoppingCart, Users, Ticket } from "lucide-react";
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Users,
+  Ticket,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const menuItems = [

@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import useOrderStore from "../store/orderStore";
 
+import formatCurrency from "../utils/formatCurrency";
+
 const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,7 +18,7 @@ const OrderDetails = () => {
 
   useEffect(() => {
     getOrderById(id);
-  }, [id]);
+  }, [id, getOrderById]);
 
   const handleCancelOrder = async () => {
     const confirmCancel = window.confirm(
@@ -97,15 +99,15 @@ const OrderDetails = () => {
             </h2>
 
             <div className="space-y-1 text-gray-700">
-              <p>{order.shippingAddress.fullName}</p>
-              <p>{order.shippingAddress.phone}</p>
-              <p>{order.shippingAddress.address}</p>
+              <p>{order.shippingAddress?.fullName}</p>
+              <p>{order.shippingAddress?.phone}</p>
+              <p>{order.shippingAddress?.address}</p>
               <p>
-                {order.shippingAddress.city},{" "}
-                {order.shippingAddress.state}
+                {order.shippingAddress?.city},{" "}
+                {order.shippingAddress?.state}
               </p>
-              <p>{order.shippingAddress.pincode}</p>
-              <p>{order.shippingAddress.country}</p>
+              <p>{order.shippingAddress?.pincode}</p>
+              <p>{order.shippingAddress?.country}</p>
             </div>
           </div>
 
@@ -150,7 +152,7 @@ const OrderDetails = () => {
                     </div>
 
                     <p className="font-semibold">
-                      ₹{item.price}
+                      {formatCurrency(item.price)}
                     </p>
                   </div>
                 </div>
@@ -169,7 +171,7 @@ const OrderDetails = () => {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>₹{order.subtotal}</span>
+                <span>{formatCurrency(order.subtotal)}</span>
               </div>
 
               <div className="flex justify-between">
@@ -177,7 +179,7 @@ const OrderDetails = () => {
                 <span>
                   {order.shippingFee === 0
                     ? "FREE"
-                    : `₹${order.shippingFee}`}
+                    : `${formatCurrency(order.shippingFee)}`}
                 </span>
               </div>
 
@@ -185,7 +187,7 @@ const OrderDetails = () => {
 
               <div className="flex justify-between text-lg font-semibold">
                 <span>Total</span>
-                <span>₹{order.totalAmount}</span>
+                <span>{formatCurrency(order.totalAmount)}</span>
               </div>
             </div>
           </div>

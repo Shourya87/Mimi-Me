@@ -8,23 +8,19 @@ import {
   User,
   X,
 } from "lucide-react";
+import { NAV_LINKS } from "../constants/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "Categories", path: "/categories" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
-  ];
-
   const iconButton =
     "relative flex h-11 w-11 items-center justify-center rounded-full border border-[#e6d7c9] bg-[#fffaf5] text-[#7d6a59] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dfc2b3] hover:bg-[#f8ebe3] hover:text-[#c98f84]";
 
+  const mobileIconButton =
+    "relative flex h-11 w-11 items-center justify-center rounded-full border border-[#e6d7c9] bg-[#fffaf5] text-[#7d6a59] transition-all duration-300 hover:border-[#dfc2b3] hover:bg-[#f8ebe3] hover:text-[#c98f84]";
+
   return (
-    <header className="sticky top-0 z-50 border-b  border-[#eadfd5] shadow-md bg-[#fffaf7]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-[#eadfd5] bg-[#fffaf7]/90 shadow-md backdrop-blur-xl">
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
         <Link
@@ -40,7 +36,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <ul className="hidden items-center gap-10 md:flex">
-          {navLinks.map((link) => (
+          {NAV_LINKS.map((link) => (
             <li key={link.path}>
               <NavLink
                 to={link.path}
@@ -58,28 +54,51 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Desktop Icons */}
+        {/* Desktop Actions */}
         <div className="hidden items-center gap-3 md:flex">
-          <button  aria-label="Search" className={iconButton}>
+          <Link
+            to="/shop"
+            aria-label="Search"
+            title="Search"
+            className={iconButton}
+          >
             <Search size={19} />
-          </button>
+          </Link>
 
-          <button aria-label="Wishlist" className={iconButton}>
+          <Link
+            to="/wishlist"
+            aria-label="Wishlist"
+            title="Wishlist"
+            className={iconButton}
+          >
             <Heart size={19} />
-          </button>
+          </Link>
 
-          <button aria-label="Cart" className={iconButton}>
+          <Link
+            to="/cart"
+            aria-label="Cart"
+            title="Cart"
+            className={iconButton}
+          >
             <ShoppingBag size={19} />
-          </button>
+          </Link>
 
-          <button aria-label="User" className={iconButton}>
+          <Link
+            to="/login"
+            aria-label="Account"
+            title="Account"
+            className={iconButton}
+          >
             <User size={19} />
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
         <button
+          type="button"
           onClick={() => setIsOpen((prev) => !prev)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
           className="rounded-xl border border-[#e6d7c9] bg-[#fffaf5] p-2 text-[#7d6a59] transition hover:bg-[#f8ebe3] md:hidden"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -89,11 +108,12 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div
         className={`overflow-hidden border-t border-[#eadfd5] bg-[#fffaf7] transition-all duration-300 md:hidden ${
-          isOpen ? "max-h-125" : "max-h-0"
+          isOpen ? "max-h-150" : "max-h-0"
         }`}
       >
         <div className="space-y-2 px-6 py-6">
-          {navLinks.map((link) => (
+          {/* Mobile Navigation */}
+          {NAV_LINKS.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
@@ -110,22 +130,47 @@ export default function Navbar() {
             </NavLink>
           ))}
 
+          {/* Mobile Actions */}
           <div className="mt-6 flex items-center gap-3 border-t border-[#eadfd5] pt-6">
-            <button className={iconButton}>
+            <Link
+              to="/shop"
+              onClick={() => setIsOpen(false)}
+              aria-label="Search"
+              title="Search"
+              className={mobileIconButton}
+            >
               <Search size={18} />
-            </button>
+            </Link>
 
-            <button className={iconButton}>
+            <Link
+              to="/wishlist"
+              onClick={() => setIsOpen(false)}
+              aria-label="Wishlist"
+              title="Wishlist"
+              className={mobileIconButton}
+            >
               <Heart size={18} />
-            </button>
+            </Link>
 
-            <button className={iconButton}>
+            <Link
+              to="/cart"
+              onClick={() => setIsOpen(false)}
+              aria-label="Cart"
+              title="Cart"
+              className={mobileIconButton}
+            >
               <ShoppingBag size={18} />
-            </button>
+            </Link>
 
-            <button className={iconButton}>
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              aria-label="Account"
+              title="Account"
+              className={mobileIconButton}
+            >
               <User size={18} />
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -28,8 +28,8 @@ const OrderSuccess = () => {
         </h1>
 
         <p className="mt-3 text-gray-600">
-          Thank you for shopping with <strong>Mimi &amp; Me</strong>.
-          Your order has been received and is being processed.
+          Thank you for shopping with <strong>Mimi &amp; Me</strong>. Your order
+          has been received and is being processed.
         </p>
 
         <div className="mt-8 rounded-xl bg-pink-50 p-5">
@@ -38,8 +38,7 @@ const OrderSuccess = () => {
           </p>
 
           <p className="mt-2 text-sm text-gray-600">
-            We'll notify you when your order is packed, shipped, and
-            delivered.
+            We'll notify you when your order is packed, shipped, and delivered.
           </p>
         </div>
 
@@ -53,7 +52,7 @@ const OrderSuccess = () => {
           </Link>
 
           <Link
-            to="/products"
+            to="/shop"
             className="flex-1 rounded-lg border border-gray-300 px-6 py-3 text-center font-medium text-gray-700 transition hover:bg-gray-100"
           >
             Continue Shopping

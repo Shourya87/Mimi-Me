@@ -1,10 +1,7 @@
 import { Pencil, Trash2 } from "lucide-react";
+import formatCurrency from "../utils/formatCurrency";
 
-export default function ProductTable ({
-  products,
-  onEdit,
-  onDelete,
-}) {
+export default function ProductTable({ products, onEdit, onDelete }) {
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
       <table className="w-full">
@@ -22,38 +19,27 @@ export default function ProductTable ({
         <tbody>
           {products.length > 0 ? (
             products.map((product) => (
-              <tr
-                key={product._id}
-                className="border-t hover:bg-gray-50"
-              >
+              <tr key={product._id} className="border-t hover:bg-gray-50">
                 {/* Image */}
                 <td className="px-6 py-4">
                   <img
                     src={product.images[0].url || "/placeholder.png"}
-                    alt={product.name}
+                    alt={product.title}
                     className="w-16 h-16 rounded-lg object-cover"
                   />
                 </td>
 
                 {/* Name */}
-                <td className="px-6 py-4 font-medium">
-                  {product.name}
-                </td>
+                <td className="px-6 py-4 font-medium">{product.title}</td>
 
                 {/* Brand */}
-                <td className="px-6 py-4">
-                  {product.brand}
-                </td>
+                <td className="px-6 py-4">{product.brand}</td>
 
                 {/* Price */}
-                <td className="px-6 py-4">
-                  ₹{product.discountPrice}
-                </td>
+                <td className="px-6 py-4">{formatCurrency(product.discountPrice)}</td>
 
                 {/* Stock */}
-                <td className="px-6 py-4">
-                  {product.stock}
-                </td>
+                <td className="px-6 py-4">{product.stock}</td>
 
                 {/* Actions */}
                 <td className="px-6 py-4">
@@ -77,10 +63,7 @@ export default function ProductTable ({
             ))
           ) : (
             <tr>
-              <td
-                colSpan={6}
-                className="text-center py-8 text-gray-500"
-              >
+              <td colSpan={6} className="text-center py-8 text-gray-500">
                 No products found.
               </td>
             </tr>
@@ -89,4 +72,4 @@ export default function ProductTable ({
       </table>
     </div>
   );
-};
+}

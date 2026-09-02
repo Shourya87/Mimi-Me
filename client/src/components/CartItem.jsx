@@ -6,6 +6,8 @@ import QuantitySelector from "./QuantitySelector";
 
 import useCartStore from "../store/cartStore";
 
+import formatCurrency from "../utils/formatCurrency";
+
 export default function CartItem({ item }) {
   const { updateCart, removeCart } = useCartStore();
 
@@ -49,7 +51,7 @@ export default function CartItem({ item }) {
 
         <p className="text-sm text-stone-500">{category}</p>
 
-        <p className="text-xl font-bold text-amber-700">₹{discountPrice}</p>
+        <p className="text-xl font-bold text-amber-700">{formatCurrency(discountPrice)}</p>
 
         <QuantitySelector
           quantity={quantity}
@@ -61,7 +63,7 @@ export default function CartItem({ item }) {
       {/* Price & Remove */}
       <div className="flex flex-col items-end gap-4">
         <p className="text-lg font-bold text-stone-900">
-          ₹{discountPrice * quantity}
+          {formatCurrency(discountPrice * quantity)}
         </p>
 
         <Button

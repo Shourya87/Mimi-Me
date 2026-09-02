@@ -39,8 +39,6 @@ export default function Order() {
       </div>
 
       {orders.length === 0 ? (
-
-
         <div className="rounded-xl border border-dashed border-gray-300 py-16 text-center">
           <h2 className="text-2xl font-semibold text-gray-800">
             No Orders Yet
@@ -51,7 +49,7 @@ export default function Order() {
           </p>
 
           <Link
-            to="/products"
+            to="/shop"
             className="mt-6 inline-block rounded-lg bg-orange-600 px-6 py-3 font-medium text-white transition hover:bg-orange-700"
           >
             Continue Shopping
@@ -60,13 +58,10 @@ export default function Order() {
       ) : (
         <div className="space-y-3">
           {orders.map((order) => (
-            <OrderCard
-              key={order._id}
-              order={order}
-            />
+            <OrderCard key={order._id} order={order} />
           ))}
         </div>
       )}
     </section>
   );
-};
+}

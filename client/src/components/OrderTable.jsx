@@ -1,29 +1,8 @@
 import { Eye, SquarePen } from "lucide-react";
+import formatCurrency from "../utils/formatCurrency";
+import { ORDER_STATUS_STYLES } from "../constants/order";
 
-const OrderTable = ({
-  orders,
-  onView,
-  onUpdateStatus,
-}) => {
-
-  const getStatusColor = (status) => {
-  switch (status) {
-    case "Delivered":
-      return "bg-green-100 px-3 py-0.5 font-semibold rounded-full text-green-700";
-    case "Cancelled":
-      return "bg-red-100 px-3 py-0.5 font-semibold rounded-full text-red-700";
-    case "Confirmed":
-      return "bg-blue-100 px-3 py-0.5 font-semibold rounded-full text-blue-700";
-    case "Packed":
-      return "bg-indigo-100 px-3 py-0.5 font-semibold rounded-full px-4 text-indigo-700";
-    case "Shipped":
-      return "bg-purple-100 px-3 py-0.5 font-semibold rounded-full text-purple-700";
-    default:
-      return "bg-yellow-100 px-3 py-0.5 font-semibold rounded-full text-yellow-700";
-  }
-};
-
-
+const OrderTable = ({ orders, onView, onUpdateStatus }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
       <table className="w-full">
@@ -41,14 +20,9 @@ const OrderTable = ({
         <tbody>
           {orders.length > 0 ? (
             orders.map((order) => (
-              <tr
-                key={order._id}
-                className="border-t hover:bg-gray-50"
-              >
+              <tr key={order._id} className="border-t hover:bg-gray-50">
                 {/* Order Number */}
-                <td className="px-6 py-4 font-medium">
-                  {order.orderNumber}
-                </td>
+                <td className="px-6 py-4 font-medium">{order.orderNumber}</td>
 
                 {/* Customer */}
                 <td className="px-6 py-4">
@@ -57,27 +31,24 @@ const OrderTable = ({
 
                 {/* Total */}
                 <td className="px-6 py-4">
-                  ₹{order.totalAmount}
+                  {formatCurrency(order.totalAmount)}
                 </td>
 
                 {/* Payment */}
                 <td className="px-6 py-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      order.paymentStatus === "Paid"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
+                    className={`rounded-full px-3 py-1 text-sm font-semibold ${
+                      ORDER_STATUS_STYLES[order.orderStatus] ||
+                      "bg-gray-100 text-gray-700"
                     }`}
                   >
-                    {order.paymentStatus}
+                    {order.orderStatus}
                   </span>
                 </td>
 
                 {/* Order Status */}
                 <td className="px-6 py-4">
-                  <span
-                    className={getStatusColor(order.orderStatus)}
-                  >
+                  <span className={getStatusColor(order.orderStatus)}>
                     {order.orderStatus}
                   </span>
                 </td>
@@ -104,10 +75,7 @@ const OrderTable = ({
             ))
           ) : (
             <tr>
-              <td
-                colSpan={6}
-                className="text-center py-8 text-gray-500"
-              >
+              <td colSpan={6} className="text-center py-8 text-gray-500">
                 No Orders Found.
               </td>
             </tr>

@@ -1,3 +1,6 @@
+import formatCurrency from "../utils/formatCurrency";
+
+
 export default function PriceDetails({ items = [] }) {
   const totalMRP = items.reduce((total, item) => {
     const price = item.product ? item.product.price : item.price;
@@ -32,11 +35,11 @@ export default function PriceDetails({ items = [] }) {
           <span className="text-gray-600">
             Price ({items.length} {items.length === 1 ? "item" : "items"})
           </span>
-          <span>₹{totalMRP}</span>
+          <span>{formatCurrency(totalMRP)}</span>
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600">Discount</span>
-          <span className="text-green-600">- ₹{totalDiscount}</span>
+          <span className="text-green-600">- {formatCurrency(totalDiscount)}</span>
         </div>
 
         <div className="flex justify-between">
@@ -45,7 +48,7 @@ export default function PriceDetails({ items = [] }) {
           {shipping === 0 ? (
             <span className="font-medium text-green-600">FREE</span>
           ) : (
-            <span>₹{shipping}</span>
+            <span>{formatCurrency(shipping)}</span>
           )}
         </div>
 
@@ -53,12 +56,12 @@ export default function PriceDetails({ items = [] }) {
 
         <div className="flex justify-between text-base font-semibold">
           <span>Total Amount</span>
-          <span>₹{totalAmount.toLocaleString("en-IN")}</span>
+          <span>{formatCurrency(totalAmount)}</span>
         </div>
 
         {totalDiscount > 0 && (
           <p className="pt-2 text-sm font-medium text-green-500">
-            You saved ₹{totalDiscount} on this order.
+            You saved {formatCurrency(totalDiscount)} on this order.
           </p>
         )}
       </div>

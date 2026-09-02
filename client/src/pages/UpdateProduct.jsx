@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
 import ProductForm from "../components/ProductForm";
-
 import useProductStore from "../store/productStore";
 
 export default function UpdateProduct() {
@@ -39,9 +38,11 @@ export default function UpdateProduct() {
     return () => {
       clearProduct();
     };
-  }, [slug]);
+  }, [slug, getProductBySlug, navigate, clearProduct]);
 
   const handleUpdateProduct = async (formData) => {
+    if (!product?._id) return;
+
     try {
       const response = await updateProduct(
         product._id,
@@ -64,8 +65,8 @@ export default function UpdateProduct() {
 
   if (loading && !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg font-medium">
+      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+        <p className="text-lg font-medium text-gray-700">
           Loading Product...
         </p>
       </div>
@@ -73,19 +74,19 @@ export default function UpdateProduct() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="flex min-h-screen bg-gray-100">
       <AdminSidebar />
 
-      <div className="flex-1 flex flex-col">
-        <AdminNavbar />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AdminNavbar title="Edit Product" />
 
-        <main className="flex-1 p-6 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto p-6">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-3xl font-bold text-gray-800">
               Edit Product
             </h1>
 
-            <p className="text-gray-500 mt-1">
+            <p className="mt-1 text-gray-500">
               Update your product details.
             </p>
           </div>
@@ -102,4 +103,4 @@ export default function UpdateProduct() {
       </div>
     </div>
   );
-};
+}

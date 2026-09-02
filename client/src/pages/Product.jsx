@@ -209,8 +209,16 @@ export default function ProductDetails() {
     );
   }
 
-  const { title, description, price, discountPrice, images, stock, brand, category } =
-    displayProduct;
+  const {
+    title,
+    description,
+    price,
+    discountPrice,
+    images,
+    stock,
+    brand,
+    category,
+  } = displayProduct;
 
   const hasDiscount =
     discountPrice != null &&
@@ -218,7 +226,9 @@ export default function ProductDetails() {
     Number(discountPrice) < Number(price);
 
   const discountPercentage = hasDiscount
-    ? Math.round(((Number(price) - Number(discountPrice)) / Number(price)) * 100)
+    ? Math.round(
+        ((Number(price) - Number(discountPrice)) / Number(price)) * 100,
+      )
     : 0;
 
   const outOfStock = !stock || stock <= 0;
@@ -242,7 +252,9 @@ export default function ProductDetails() {
                 {imageBroken || !selectedImage ? (
                   <div className="flex h-full w-full flex-col items-center justify-center gap-3 text-[#B39E85]">
                     <ImageOff size={36} />
-                    <span className="text-sm font-medium">Image unavailable</span>
+                    <span className="text-sm font-medium">
+                      Image unavailable
+                    </span>
                   </div>
                 ) : (
                   <img
@@ -340,7 +352,8 @@ export default function ProductDetails() {
               </div>
 
               <span className="text-xs font-medium text-[#7A6755] sm:text-sm">
-                {ratingValue.toFixed(1)} ★ • {displayProduct.reviewCount || 0} Reviews
+                {ratingValue.toFixed(1)} ★ • {displayProduct.reviewCount || 0}{" "}
+                Reviews
               </span>
             </div>
 
@@ -365,7 +378,9 @@ export default function ProductDetails() {
               )}
             </div>
 
-            <p className="mt-2 text-xs text-[#9C8B7A]">Inclusive of all taxes</p>
+            <p className="mt-2 text-xs text-[#9C8B7A]">
+              Inclusive of all taxes
+            </p>
 
             {/* STOCK */}
             <div className="mt-6 sm:mt-8">
@@ -397,7 +412,10 @@ export default function ProductDetails() {
             {/* FEATURES */}
             <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-3 sm:gap-5">
               <div className="rounded-2xl border border-[#E8DDD0] bg-[#FCFAF7] p-4 transition hover:-translate-y-1 hover:shadow-xl sm:rounded-3xl sm:p-5">
-                <Truck size={24} className="mb-3 text-[#8B6B4A] sm:mb-4 sm:size-6.5" />
+                <Truck
+                  size={24}
+                  className="mb-3 text-[#8B6B4A] sm:mb-4 sm:size-6.5"
+                />
                 <h4 className="text-sm font-semibold text-[#3D2E22] sm:text-base">
                   Free Shipping
                 </h4>
@@ -407,7 +425,10 @@ export default function ProductDetails() {
               </div>
 
               <div className="rounded-2xl border border-[#E8DDD0] bg-[#FCFAF7] p-4 transition hover:-translate-y-1 hover:shadow-xl sm:rounded-3xl sm:p-5">
-                <ShieldCheck size={24} className="mb-3 text-[#8B6B4A] sm:mb-4 sm:size-6.5" />
+                <ShieldCheck
+                  size={24}
+                  className="mb-3 text-[#8B6B4A] sm:mb-4 sm:size-6.5"
+                />
                 <h4 className="text-sm font-semibold text-[#3D2E22] sm:text-base">
                   Secure Payment
                 </h4>
@@ -417,7 +438,10 @@ export default function ProductDetails() {
               </div>
 
               <div className="rounded-2xl border border-[#E8DDD0] bg-[#FCFAF7] p-4 transition hover:-translate-y-1 hover:shadow-xl sm:rounded-3xl sm:p-5">
-                <BadgeCheck size={24} className="mb-3 text-[#8B6B4A] sm:mb-4 sm:size-6.5" />
+                <BadgeCheck
+                  size={24}
+                  className="mb-3 text-[#8B6B4A] sm:mb-4 sm:size-6.5"
+                />
                 <h4 className="text-sm font-semibold text-[#3D2E22] sm:text-base">
                   Premium Quality
                 </h4>

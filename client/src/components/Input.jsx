@@ -1,12 +1,6 @@
 import clsx from "clsx";
 
-export default function Input({
-  label,
-  error,
-  id,
-  className = "",
-  ...props
-}) {
+export default function Input({ label, error, id, className = "", ...props }) {
   return (
     <div className="w-full">
       {label && (
@@ -41,18 +35,15 @@ export default function Input({
           "disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-[#F6F2EC]",
 
           // Error
-          error &&
-            "border-red-400 focus:border-red-500 focus:ring-red-100",
+          error && "border-red-400 focus:border-red-500 focus:ring-red-100",
 
-          className
+          className,
         )}
         {...props}
       />
 
       {error && (
-        <p className="mt-2 text-sm font-medium text-red-500">
-          {error}
-        </p>
+        <p className="mt-2 text-sm font-medium text-red-500">{error}</p>
       )}
     </div>
   );
