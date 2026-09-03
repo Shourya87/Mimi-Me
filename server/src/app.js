@@ -9,6 +9,7 @@ const cartRoutes = require("./routes/cart.route");
 const orderRoutes = require("./routes/order.route");
 const adminRoutes = require("./routes/admin.route");
 const couponRoutes = require("./routes/coupon.route");
+const paymentRoute = require("./routes/payment.route");
 
 const app = express();
 app.use(
@@ -30,6 +31,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/coupons", couponRoutes);
+app.use("/api/payments", paymentRoute);
 
 // 404 Handler
 app.use((req, res) => {
