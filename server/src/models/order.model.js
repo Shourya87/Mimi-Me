@@ -53,6 +53,8 @@ const orderItemSchema = new mongoose.Schema(
 
     razorpayOrderId: {
       type: String,
+      unique: true,
+      sparse: true,
       trim: true,
     },
 
