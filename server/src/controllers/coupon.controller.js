@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const couponModel = require("../models/coupon.model");
 
 // Create Coupon
@@ -7,10 +8,11 @@ const createCoupon = async (req, res) => {
       code,
       discountType,
       discountValue,
-      minOrderAmount,
+      minimumOrderValue,
       maxDiscount,
       expiresAt,
       usageLimit,
+      isActive,
     } = req.body;
 
     if (!code) {
@@ -37,10 +39,11 @@ const createCoupon = async (req, res) => {
       code: normalizedCode,
       discountType,
       discountValue,
-      minOrderAmount,
+      minimumOrderValue,
       maxDiscount,
       expiresAt,
       usageLimit,
+      isActive,
     });
 
     return res.status(201).json({
@@ -49,10 +52,18 @@ const createCoupon = async (req, res) => {
       coupon,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Create coupon error:", error);
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        title: "Coupon Exists",
+        message: "A coupon with this code already exists.",
+      });
+    }
+
     return res.status(500).json({
       title: "Server Error",
-      message: error.message,
+      message: "Unable to create coupon.",
     });
   }
 };
@@ -60,12 +71,9 @@ const createCoupon = async (req, res) => {
 // Get All Coupons
 const getAllCoupons = async (req, res) => {
   try {
-    // console.log("METHOD:", req.method);
-    // console.log("PARAMS:", req.params);
-    // console.log("BODY:", req.body);
-    // console.log("HEADERS:", req.headers);
-
-    const coupons = await couponModel.find().sort({ createdAt: -1 });
+    const coupons = await couponModel
+      .find()
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       title: "Coupons Fetched",
@@ -73,9 +81,11 @@ const getAllCoupons = async (req, res) => {
       coupons,
     });
   } catch (error) {
+    console.error("Get coupons error:", error);
+
     return res.status(500).json({
       title: "Server Error",
-      message: error.message,
+      message: "Unable to fetch coupons.",
     });
   }
 };
@@ -84,6 +94,13 @@ const getAllCoupons = async (req, res) => {
 const getCouponById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        title: "Invalid Coupon ID",
+        message: "Invalid coupon ID.",
+      });
+    }
 
     const coupon = await couponModel.findById(id);
 
@@ -100,9 +117,11 @@ const getCouponById = async (req, res) => {
       coupon,
     });
   } catch (error) {
+    console.error("Get coupon error:", error);
+
     return res.status(500).json({
       title: "Server Error",
-      message: error.message,
+      message: "Unable to fetch coupon.",
     });
   }
 };
@@ -112,7 +131,7 @@ const getCouponByCode = async (req, res) => {
   try {
     const { code } = req.params;
 
-    if (!code) {
+    if (!code?.trim()) {
       return res.status(400).json({
         title: "Invalid Coupon",
         message: "Coupon code is required.",
@@ -138,9 +157,11 @@ const getCouponByCode = async (req, res) => {
       coupon,
     });
   } catch (error) {
+    console.error("Get coupon by code error:", error);
+
     return res.status(500).json({
       title: "Server Error",
-      message: error.message,
+      message: "Unable to fetch coupon.",
     });
   }
 };
@@ -150,26 +171,27 @@ const validateCoupon = async (req, res) => {
   try {
     const { code, orderAmount } = req.body;
 
-    if (!code) {
+    if (!code?.trim()) {
       return res.status(400).json({
         title: "Invalid Coupon",
         message: "Coupon code is required.",
       });
     }
 
-    const normalizedCode = code.trim().toUpperCase();
-
     const amount = Number(orderAmount);
 
-    if (Number.isNaN(amount) || amount < 0) {
+    if (!Number.isFinite(amount) || amount < 0) {
       return res.status(400).json({
         title: "Invalid Order Amount",
         message: "Please provide a valid order amount.",
       });
     }
 
+    const normalizedCode = code.trim().toUpperCase();
+
     const coupon = await couponModel.findOne({
       code: normalizedCode,
+      isActive: true,
     });
 
     if (!coupon) {
@@ -180,7 +202,10 @@ const validateCoupon = async (req, res) => {
     }
 
     // Check expiry
-    if (coupon.expiresAt && new Date(coupon.expiresAt) <= new Date()) {
+    if (
+      coupon.expiresAt &&
+      new Date(coupon.expiresAt) <= new Date()
+    ) {
       return res.status(400).json({
         title: "Coupon Expired",
         message: "This coupon has expired.",
@@ -190,7 +215,6 @@ const validateCoupon = async (req, res) => {
     // Check usage limit
     if (
       coupon.usageLimit !== null &&
-      coupon.usageLimit !== undefined &&
       coupon.usedCount >= coupon.usageLimit
     ) {
       return res.status(400).json({
@@ -199,16 +223,12 @@ const validateCoupon = async (req, res) => {
       });
     }
 
-    // Check minimum order amount
-    if (
-      coupon.minOrderAmount !== null &&
-      coupon.minOrderAmount !== undefined &&
-      amount < coupon.minOrderAmount
-    ) {
+    // Check minimum order value
+    if (amount < coupon.minimumOrderValue) {
       return res.status(400).json({
         title: "Minimum Order Amount Required",
-        message: `Minimum order amount for this coupon is ₹${coupon.minOrderAmount}.`,
-        minOrderAmount: coupon.minOrderAmount,
+        message: `Minimum order amount for this coupon is ₹${coupon.minimumOrderValue}.`,
+        minimumOrderValue: coupon.minimumOrderValue,
       });
     }
 
@@ -216,53 +236,56 @@ const validateCoupon = async (req, res) => {
 
     // Percentage discount
     if (coupon.discountType === "percentage") {
-      discountAmount = (amount * coupon.discountValue) / 100;
+      discountAmount =
+        (amount * coupon.discountValue) / 100;
 
-      // Apply maximum discount limit
       if (
         coupon.maxDiscount !== null &&
-        coupon.maxDiscount !== undefined &&
-        discountAmount > coupon.maxDiscount
+        coupon.maxDiscount !== undefined
       ) {
-        discountAmount = coupon.maxDiscount;
+        discountAmount = Math.min(
+          discountAmount,
+          coupon.maxDiscount,
+        );
       }
     }
 
     // Fixed discount
     else if (coupon.discountType === "fixed") {
       discountAmount = coupon.discountValue;
-    } else {
-      return res.status(400).json({
-        title: "Invalid Coupon",
-        message: "Invalid discount type.",
-      });
     }
 
-    // Discount can never be greater than order amount
+    // Prevent discount from exceeding order amount
     discountAmount = Math.min(discountAmount, amount);
 
     // Avoid floating point issues
     discountAmount = Number(discountAmount.toFixed(2));
 
-    const finalAmount = Number(Math.max(amount - discountAmount, 0).toFixed(2));
+    const finalAmount = Number(
+      Math.max(amount - discountAmount, 0).toFixed(2),
+    );
 
     return res.status(200).json({
       title: "Coupon Valid",
       message: "Coupon applied successfully.",
+
       coupon: {
         id: coupon._id,
         code: coupon.code,
         discountType: coupon.discountType,
         discountValue: coupon.discountValue,
       },
+
       orderAmount: amount,
       discountAmount,
       finalAmount,
     });
   } catch (error) {
+    console.error("Validate coupon error:", error);
+
     return res.status(500).json({
       title: "Server Error",
-      message: error.message,
+      message: "Unable to validate coupon.",
     });
   }
 };
@@ -272,11 +295,22 @@ const updateCoupon = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Normalize coupon code if it is being updated
-    const updateData = { ...req.body };
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        title: "Invalid Coupon ID",
+        message: "Invalid coupon ID.",
+      });
+    }
 
+    const updateData = {
+      ...req.body,
+    };
+
+    // Normalize code
     if (updateData.code) {
-      updateData.code = updateData.code.trim().toUpperCase();
+      updateData.code = updateData.code
+        .trim()
+        .toUpperCase();
 
       const existingCoupon = await couponModel.findOne({
         code: updateData.code,
@@ -291,10 +325,14 @@ const updateCoupon = async (req, res) => {
       }
     }
 
-    const coupon = await couponModel.findByIdAndUpdate(id, updateData, {
-      returnDocument: "after",
-      runValidators: true,
-    });
+    const coupon = await couponModel.findByIdAndUpdate(
+      id,
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
 
     if (!coupon) {
       return res.status(404).json({
@@ -309,9 +347,18 @@ const updateCoupon = async (req, res) => {
       coupon,
     });
   } catch (error) {
+    console.error("Update coupon error:", error);
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        title: "Coupon Exists",
+        message: "A coupon with this code already exists.",
+      });
+    }
+
     return res.status(500).json({
       title: "Server Error",
-      message: error.message,
+      message: "Unable to update coupon.",
     });
   }
 };
@@ -320,6 +367,13 @@ const updateCoupon = async (req, res) => {
 const deleteCoupon = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        title: "Invalid Coupon ID",
+        message: "Invalid coupon ID.",
+      });
+    }
 
     const coupon = await couponModel.findByIdAndDelete(id);
 
@@ -335,9 +389,11 @@ const deleteCoupon = async (req, res) => {
       message: "Coupon deleted successfully.",
     });
   } catch (error) {
+    console.error("Delete coupon error:", error);
+
     return res.status(500).json({
       title: "Server Error",
-      message: error.message,
+      message: "Unable to delete coupon.",
     });
   }
 };

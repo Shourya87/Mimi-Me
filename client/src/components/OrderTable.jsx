@@ -48,7 +48,7 @@ const OrderTable = ({ orders, onView, onUpdateStatus }) => {
 
                 {/* Order Status */}
                 <td className="px-6 py-4">
-                  <span className={getStatusColor(order.orderStatus)}>
+                  <span className={ORDER_STATUS_STYLES[order.orderStatus]}>
                     {order.orderStatus}
                   </span>
                 </td>

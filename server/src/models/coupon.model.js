@@ -30,6 +30,12 @@ const couponSchema = new mongoose.Schema(
       min: 0,
     },
 
+    maxDiscount: {
+      type: Number,
+      default: null,
+      min: 0,
+    },
+
     usageLimit: {
       type: Number,
       default: null,
@@ -59,14 +65,10 @@ const couponSchema = new mongoose.Schema(
 
 // Validate percentage discounts
 couponSchema.pre("validate", function () {
-  if (
-    this.discountType === "percentage" &&
-    this.discountValue > 100
-  ) {
+  if (this.discountType === "percentage" && this.discountValue > 100) {
     throw new Error("Percentage discount cannot exceed 100%.");
   }
 });
-
 
 const couponModel = mongoose.model("Coupon", couponSchema);
 module.exports = couponModel;

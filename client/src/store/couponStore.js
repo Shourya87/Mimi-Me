@@ -20,22 +20,24 @@ const useCouponStore = create((set) => ({
 
   // Get All Coupons
   getCoupons: async () => {
-    try {
-      set({
-        loading: true,
-        error: null,
-      });
+    set({
+      loading: true,
+      error: null,
+    });
 
+    try {
       const data = await getCouponsApi();
 
       set({
-        coupons: data.coupons,
+        coupons: data.coupons || [],
       });
 
       return data;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message,
+        error:
+          error.response?.data?.message ||
+          error.message,
       });
 
       throw error;
@@ -48,12 +50,12 @@ const useCouponStore = create((set) => ({
 
   // Get Coupon By ID
   getCouponById: async (id) => {
-    try {
-      set({
-        loading: true,
-        error: null,
-      });
+    set({
+      loading: true,
+      error: null,
+    });
 
+    try {
       const data = await getCouponByIdApi(id);
 
       set({
@@ -63,7 +65,9 @@ const useCouponStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message,
+        error:
+          error.response?.data?.message ||
+          error.message,
       });
 
       throw error;
@@ -76,12 +80,12 @@ const useCouponStore = create((set) => ({
 
   // Get Coupon By Code
   getCouponByCode: async (code) => {
-    try {
-      set({
-        loading: true,
-        error: null,
-      });
+    set({
+      loading: true,
+      error: null,
+    });
 
+    try {
       const data = await getCouponByCodeApi(code);
 
       set({
@@ -91,7 +95,9 @@ const useCouponStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message,
+        error:
+          error.response?.data?.message ||
+          error.message,
       });
 
       throw error;
@@ -104,23 +110,25 @@ const useCouponStore = create((set) => ({
 
   // Validate Coupon
   validateCoupon: async (couponData) => {
-    try {
-      set({
-        loading: true,
-        error: null,
-        validatedCoupon: null,
-      });
+    set({
+      loading: true,
+      error: null,
+      validatedCoupon: null,
+    });
 
+    try {
       const data = await validateCouponApi(couponData);
 
       set({
-        validatedCoupon: data.coupon,
+        validatedCoupon: data,
       });
 
       return data;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message,
+        error:
+          error.response?.data?.message ||
+          error.message,
         validatedCoupon: null,
       });
 
@@ -134,22 +142,27 @@ const useCouponStore = create((set) => ({
 
   // Create Coupon
   createCoupon: async (couponData) => {
-    try {
-      set({
-        loading: true,
-        error: null,
-      });
+    set({
+      loading: true,
+      error: null,
+    });
 
+    try {
       const data = await createCouponApi(couponData);
 
       set((state) => ({
-        coupons: [data.coupon, ...state.coupons],
+        coupons: [
+          data.coupon,
+          ...state.coupons,
+        ],
       }));
 
       return data;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message,
+        error:
+          error.response?.data?.message ||
+          error.message,
       });
 
       throw error;
@@ -162,17 +175,22 @@ const useCouponStore = create((set) => ({
 
   // Update Coupon
   updateCoupon: async (id, couponData) => {
-    try {
-      set({
-        loading: true,
-        error: null,
-      });
+    set({
+      loading: true,
+      error: null,
+    });
 
-      const data = await updateCouponApi(id, couponData);
+    try {
+      const data = await updateCouponApi(
+        id,
+        couponData,
+      );
 
       set((state) => ({
         coupons: state.coupons.map((coupon) =>
-          coupon._id === id ? data.coupon : coupon
+          coupon._id === id
+            ? data.coupon
+            : coupon,
         ),
 
         coupon:
@@ -184,7 +202,9 @@ const useCouponStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message,
+        error:
+          error.response?.data?.message ||
+          error.message,
       });
 
       throw error;
@@ -197,17 +217,17 @@ const useCouponStore = create((set) => ({
 
   // Delete Coupon
   deleteCoupon: async (id) => {
-    try {
-      set({
-        loading: true,
-        error: null,
-      });
+    set({
+      loading: true,
+      error: null,
+    });
 
+    try {
       const data = await deleteCouponApi(id);
 
       set((state) => ({
         coupons: state.coupons.filter(
-          (coupon) => coupon._id !== id
+          (coupon) => coupon._id !== id,
         ),
 
         coupon:
@@ -219,7 +239,9 @@ const useCouponStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-        error: error.response?.data?.message || error.message,
+        error:
+          error.response?.data?.message ||
+          error.message,
       });
 
       throw error;

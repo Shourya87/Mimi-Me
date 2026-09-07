@@ -1,6 +1,6 @@
 const { z } = require("zod");
 
-const createCouponValidator = z.object({
+const couponSchema = z.object({
   code: z
     .string()
     .trim()
@@ -12,32 +12,38 @@ const createCouponValidator = z.object({
     message: "Discount type must be percentage or fixed.",
   }),
 
-  discountValue: z
+  discountValue: z.coerce
     .number()
     .min(0, "Discount value cannot be negative."),
 
-  minimumOrderValue: z
+  minimumOrderValue: z.coerce
     .number()
     .min(0, "Minimum order value cannot be negative.")
     .optional(),
 
-  usageLimit: z
+  maxDiscount: z.coerce
+    .number()
+    .min(0, "Maximum discount cannot be negative.")
+    .nullable()
+    .optional(),
+
+  usageLimit: z.coerce
     .number()
     .int("Usage limit must be a whole number.")
     .min(1, "Usage limit must be at least 1.")
     .nullable()
     .optional(),
 
-  expiryDate: z
+  expiresAt: z
     .string()
     .datetime()
     .nullable()
     .optional(),
 
-  isActive: z
-    .boolean()
-    .optional(),
-}).superRefine((data, ctx) => {
+  isActive: z.boolean().optional(),
+});
+
+const validateCouponRules = (data, ctx) => {
   if (
     data.discountType === "percentage" &&
     data.discountValue > 100
@@ -48,9 +54,26 @@ const createCouponValidator = z.object({
       message: "Percentage discount cannot exceed 100%.",
     });
   }
-});
 
-const updateCouponValidator = createCouponValidator.partial();
+  if (
+    data.discountType === "fixed" &&
+    data.maxDiscount !== null &&
+    data.maxDiscount !== undefined
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["maxDiscount"],
+      message:
+        "Maximum discount is only applicable to percentage discounts.",
+    });
+  }
+};
+
+const createCouponValidator = couponSchema.superRefine(validateCouponRules);
+
+const updateCouponValidator = couponSchema
+  .partial()
+  .superRefine(validateCouponRules);
 
 module.exports = {
   createCouponValidator,

@@ -20,19 +20,31 @@ const getCouponByCodeApi = async (code) => {
 
 // Validate Coupon
 const validateCouponApi = async (couponData) => {
-  const response = await api.post("/coupons/validate", couponData);
+  const response = await api.post(
+    "/coupons/validate",
+    couponData,
+  );
+
   return response.data;
 };
 
 // Create Coupon
 const createCouponApi = async (couponData) => {
-  const response = await api.post("/coupons", couponData);
+  const response = await api.post(
+    "/coupons",
+    couponData,
+  );
+
   return response.data;
 };
 
 // Update Coupon
 const updateCouponApi = async (id, couponData) => {
-  const response = await api.patch(`/coupons/${id}`, couponData);
+  const response = await api.patch(
+    `/coupons/${id}`,
+    couponData,
+  );
+
   return response.data;
 };
 

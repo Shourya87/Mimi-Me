@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import toast from "react-hot-toast";
 
 import useCartStore from "../store/cartStore";
 import useOrderStore from "../store/orderStore";
 import usePaymentStore from "../store/paymentStore";
+import useCouponStore from "../store/couponStore";
 
 import AddressForm from "../components/AddressForm";
 import OrderSummary from "../components/OrderSummary";
@@ -23,6 +23,8 @@ const Checkout = () => {
     verifyRazorpayPayment,
     loading: paymentLoading,
   } = usePaymentStore();
+
+  const { validatedCoupon } = useCouponStore();
 
   const cartItems = cart?.items || cart || [];
 
@@ -42,9 +44,55 @@ const Checkout = () => {
     getCart();
   }, [getCart]);
 
+  /*
+   * Calculate the same amount used by PriceDetails.
+   */
+  const calculateOrderAmount = () => {
+    const totalMRP = cartItems.reduce((total, item) => {
+      const price = item.product ? item.product.price : item.price;
+
+      return total + price * item.quantity;
+    }, 0);
+
+    const totalDiscount = cartItems.reduce((total, item) => {
+      const price = item.product ? item.product.price : item.price;
+
+      const discountPrice = item.product
+        ? item.product.discountPrice || item.product.price
+        : item.discountPrice || item.price;
+
+      return total + (price - discountPrice) * item.quantity;
+    }, 0);
+
+    const subtotal = totalMRP - totalDiscount;
+
+    const shipping = subtotal >= 999 ? 0 : 99;
+
+    const couponDiscount = validatedCoupon?.discountAmount || 0;
+
+    const totalAmount = Math.max(
+      subtotal + shipping - couponDiscount,
+      0,
+    );
+
+    return {
+      subtotal,
+      shipping,
+      couponDiscount,
+      totalAmount,
+    };
+  };
+
   const handlePlaceOrder = async () => {
-    const { fullName, phone, address, city, state, pincode, country } =
-      formData;
+    const {
+      fullName,
+      phone,
+      address,
+      city,
+      state,
+      pincode,
+      country,
+    } = formData;
 
     if (
       !fullName.trim() ||
@@ -61,16 +109,27 @@ const Checkout = () => {
     }
 
     try {
-      /*
-       * Create Mimi & Me order first.
-       */
+      const {
+        totalAmount,
+        couponDiscount,
+      } = calculateOrderAmount();
 
+      /*
+       * Create Mimi & Me order.
+       */
       const data = await createOrder({
         shippingAddress: formData,
         paymentMethod,
+        couponCode: validatedCoupon?.code || null,
+        couponDiscount,
+        totalAmount,
       });
 
       const order = data.order;
+
+      if (!order) {
+        throw new Error("Unable to create order.");
+      }
 
       /*
        * COD
@@ -122,7 +181,8 @@ const Checkout = () => {
             console.error(error);
 
             toast.error(
-              error?.response?.data?.message || "Payment verification failed.",
+              error?.response?.data?.message ||
+                "Payment verification failed.",
             );
           }
         },
@@ -161,7 +221,9 @@ const Checkout = () => {
   if (!cartItems.length) {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
-        <h2 className="text-2xl font-semibold">Your cart is empty.</h2>
+        <h2 className="text-2xl font-semibold">
+          Your cart is empty.
+        </h2>
       </div>
     );
   }
@@ -173,13 +235,18 @@ const Checkout = () => {
       <div className="grid gap-16 lg:grid-cols-3">
         {/* LEFT SIDE */}
         <div className="space-y-4 lg:col-span-2">
-          <AddressForm formData={formData} setFormData={setFormData} />
+          <AddressForm
+            formData={formData}
+            setFormData={setFormData}
+          />
 
           <OrderSummary items={cartItems} />
 
-          {/* Payment Method */}
+          {/* PAYMENT METHOD */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-lg font-semibold">Payment Method</h2>
+            <h2 className="mb-4 text-lg font-semibold">
+              Payment Method
+            </h2>
 
             <div className="space-y-3">
               {/* COD */}
@@ -195,11 +262,15 @@ const Checkout = () => {
                   name="paymentMethod"
                   value="COD"
                   checked={paymentMethod === "COD"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  onChange={(e) =>
+                    setPaymentMethod(e.target.value)
+                  }
                 />
 
                 <div>
-                  <p className="font-medium">Cash on Delivery</p>
+                  <p className="font-medium">
+                    Cash on Delivery
+                  </p>
 
                   <p className="text-sm text-gray-500">
                     Pay when your order is delivered.
@@ -207,7 +278,7 @@ const Checkout = () => {
                 </div>
               </label>
 
-              {/* Razorpay */}
+              {/* RAZORPAY */}
               <label
                 className={`flex cursor-pointer items-center gap-3 rounded-lg border p-4 transition ${
                   paymentMethod === "Razorpay"
@@ -220,11 +291,15 @@ const Checkout = () => {
                   name="paymentMethod"
                   value="Razorpay"
                   checked={paymentMethod === "Razorpay"}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  onChange={(e) =>
+                    setPaymentMethod(e.target.value)
+                  }
                 />
 
                 <div>
-                  <p className="font-medium">Online Payment</p>
+                  <p className="font-medium">
+                    Online Payment
+                  </p>
 
                   <p className="text-sm text-gray-500">
                     Pay securely using Razorpay.
