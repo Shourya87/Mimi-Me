@@ -215,6 +215,129 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+// Update Profile
+const updateProfile = async (req, res) => {
+  try {
+    const { name, phone } = req.body;
+
+    if (!name?.trim()) {
+      return res.status(400).json({
+        title: "Invalid Name",
+        message: "Name is required.",
+      });
+    }
+
+    if (phone && !/^\d{10}$/.test(phone)) {
+      return res.status(400).json({
+        title: "Invalid Phone",
+        message: "Phone number must be 10 digits.",
+      });
+    }
+
+    const user = await userModel.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        title: "User Not Found",
+        message: "User account not found.",
+      });
+    }
+
+    user.name = name.trim();
+
+    if (phone !== undefined) {
+      user.phone = phone.trim();
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      title: "Profile Updated",
+      message: "Profile updated successfully.",
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      title: "Server Error",
+      message: "Unable to update profile.",
+    });
+  }
+};
+
+// Change Password
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        title: "Invalid Password",
+        message: "Current and new passwords are required.",
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        title: "Invalid Password",
+        message: "New password must be at least 6 characters.",
+      });
+    }
+
+    const user = await userModel
+      .findById(req.user._id)
+      .select("+password");
+
+    if (!user) {
+      return res.status(404).json({
+        title: "User Not Found",
+        message: "User account not found.",
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        title: "Incorrect Password",
+        message: "Current password is incorrect.",
+      });
+    }
+
+    const isSamePassword = await bcrypt.compare(
+      newPassword,
+      user.password,
+    );
+
+    if (isSamePassword) {
+      return res.status(400).json({
+        title: "Invalid Password",
+        message: "New password must be different from your current password.",
+      });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+
+    await user.save();
+
+    return res.status(200).json({
+      title: "Password Updated",
+      message: "Password changed successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      title: "Server Error",
+      message: "Unable to change password.",
+    });
+  }
+};
+
 // Forgot Password Logic
 const forgotPassword = async (req, res) => {
   try {
@@ -307,6 +430,8 @@ module.exports = {
   verifyOtp,
   logOut,
   getCurrentUser,
+  updateProfile,
+  changePassword,
   forgotPassword,
   resetPassword,
 };

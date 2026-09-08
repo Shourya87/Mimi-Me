@@ -5,6 +5,8 @@ import {
   logInApi,
   logOutApi,
   getCurrentUserApi,
+  updateProfileApi,
+  changePasswordApi,
   forgotPasswordApi,
   resetPasswordApi,
 } from "../services/auth.api";
@@ -119,6 +121,57 @@ const useAuthStore = create((set) => ({
       set({
         user: null,
         isAuthenticated: false,
+        loading: false,
+      });
+    }
+  },
+  // Update Profile
+  updateProfile: async (profileData) => {
+    set({
+      loading: true,
+      error: null,
+    });
+
+    try {
+      const data = await updateProfileApi(profileData);
+
+      set({
+        user: data.user,
+      });
+
+      return data;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || error.message,
+      });
+
+      throw error;
+    } finally {
+      set({
+        loading: false,
+      });
+    }
+  },
+
+  // Change Password
+  changePassword: async (passwordData) => {
+    set({
+      loading: true,
+      error: null,
+    });
+
+    try {
+      const data = await changePasswordApi(passwordData);
+
+      return data;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || error.message,
+      });
+
+      throw error;
+    } finally {
+      set({
         loading: false,
       });
     }

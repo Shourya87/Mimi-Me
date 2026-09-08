@@ -30,6 +30,18 @@ const getCurrentUserApi = async () => {
   return response.data;
 };
 
+// Update Profile
+const updateProfileApi = async (profileData) => {
+  const response = await api.patch("/auth/profile", profileData);
+  return response.data;
+};
+
+// Change Password
+const changePasswordApi = async (passwordData) => {
+  const response = await api.patch("/auth/change-password", passwordData);
+  return response.data;
+};
+
 // Forgot Password
 const forgotPasswordApi = async (email) => {
   const response = await api.post("/auth/forgot-password", { email });
@@ -50,6 +62,8 @@ export {
   logInApi,
   logOutApi,
   getCurrentUserApi,
+  updateProfileApi,
+  changePasswordApi,
   forgotPasswordApi,
   resetPasswordApi,
 };

@@ -10,6 +10,7 @@ const orderRoutes = require("./routes/order.route");
 const adminRoutes = require("./routes/admin.route");
 const couponRoutes = require("./routes/coupon.route");
 const paymentRoute = require("./routes/payment.route");
+const addressRoutes = require("./routes/address.route");
 
 const app = express();
 app.use(
@@ -32,6 +33,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoute);
+app.use("/api/addresses",addressRoutes);
 
 // 404 Handler
 app.use((req, res) => {

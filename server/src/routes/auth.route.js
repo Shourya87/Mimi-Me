@@ -6,6 +6,8 @@ const {
   verifyOtp,
   logOut,
   getCurrentUser,
+  updateProfile,
+  changePassword,
   forgotPassword,
   resetPassword,
 } = require("../controllers/auth.controller");
@@ -24,6 +26,8 @@ router.post("/login", validate(logInSchema), logIn);
 router.post("/verify-otp", validate(verifyOtpSchema), verifyOtp);
 router.post("/logout", protect, logOut);
 router.get("/user", protect, getCurrentUser);
+router.patch("/profile", protect, updateProfile);
+router.patch("/change-password", protect, changePassword);
 router.post("/forgot-password", validate(forgotPasswordSchema), forgotPassword);
 router.post(
   "/reset-password/:token",
