@@ -17,6 +17,7 @@ const validate = require("../middleware/validate.middleware");
 const {
   addressSchema,
   updateAddressSchema,
+  addressIdSchema,
 } = require("../validators/auth.validator");
 
 // Get All Addresses

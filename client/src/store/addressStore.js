@@ -14,24 +14,29 @@ const useAddressStore = create((set) => ({
   loading: false,
   error: null,
 
-  // Get Addresses
+  // Get All Addresses
   getAddresses: async () => {
-    set({
-      loading: true,
-      error: null,
-    });
-
     try {
+      set({
+        loading: true,
+        error: null,
+      });
+
       const data = await getAddressesApi();
 
       set({
-        addresses: data.addresses,
+        addresses: data.addresses || [],
       });
 
       return data;
     } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Unable to fetch addresses.";
+
       set({
-        error: error.response?.data?.message || error.message,
+        error: message,
       });
 
       throw error;
@@ -44,12 +49,12 @@ const useAddressStore = create((set) => ({
 
   // Add Address
   addAddress: async (addressData) => {
-    set({
-      loading: true,
-      error: null,
-    });
-
     try {
+      set({
+        loading: true,
+        error: null,
+      });
+
       const data = await addAddressApi(addressData);
 
       set((state) => ({
@@ -58,8 +63,13 @@ const useAddressStore = create((set) => ({
 
       return data;
     } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Unable to add address.";
+
       set({
-        error: error.response?.data?.message || error.message,
+        error: message,
       });
 
       throw error;
@@ -72,12 +82,12 @@ const useAddressStore = create((set) => ({
 
   // Update Address
   updateAddress: async (id, addressData) => {
-    set({
-      loading: true,
-      error: null,
-    });
-
     try {
+      set({
+        loading: true,
+        error: null,
+      });
+
       const data = await updateAddressApi(id, addressData);
 
       set((state) => ({
@@ -88,8 +98,13 @@ const useAddressStore = create((set) => ({
 
       return data;
     } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Unable to update address.";
+
       set({
-        error: error.response?.data?.message || error.message,
+        error: message,
       });
 
       throw error;
@@ -102,12 +117,12 @@ const useAddressStore = create((set) => ({
 
   // Delete Address
   deleteAddress: async (id) => {
-    set({
-      loading: true,
-      error: null,
-    });
-
     try {
+      set({
+        loading: true,
+        error: null,
+      });
+
       const data = await deleteAddressApi(id);
 
       set((state) => ({
@@ -118,8 +133,13 @@ const useAddressStore = create((set) => ({
 
       return data;
     } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Unable to delete address.";
+
       set({
-        error: error.response?.data?.message || error.message,
+        error: message,
       });
 
       throw error;
@@ -132,12 +152,12 @@ const useAddressStore = create((set) => ({
 
   // Set Default Address
   setDefaultAddress: async (id) => {
-    set({
-      loading: true,
-      error: null,
-    });
-
     try {
+      set({
+        loading: true,
+        error: null,
+      });
+
       const data = await setDefaultAddressApi(id);
 
       set((state) => ({
@@ -149,8 +169,13 @@ const useAddressStore = create((set) => ({
 
       return data;
     } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Unable to update default address.";
+
       set({
-        error: error.response?.data?.message || error.message,
+        error: message,
       });
 
       throw error;
@@ -159,13 +184,6 @@ const useAddressStore = create((set) => ({
         loading: false,
       });
     }
-  },
-
-  // Clear Addresses
-  clearAddresses: () => {
-    set({
-      addresses: [],
-    });
   },
 
   // Clear Error
