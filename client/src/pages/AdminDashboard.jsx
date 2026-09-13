@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import {
   Users,
   Package,
@@ -9,6 +10,7 @@ import {
 } from "lucide-react";
 
 import useAdminStore from "../store/adminStore";
+
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
 import DashboardCard from "../components/DashboardCard";
@@ -24,16 +26,20 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
-        <p className="text-lg font-semibold text-gray-700">
-          Loading Dashboard...
-        </p>
+      <div className="flex min-h-screen items-center justify-center bg-[#F8F5F1]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#eadfd5] border-t-[#c98f84]" />
+
+          <p className="text-sm font-medium text-[#6d5b4d]">
+            Loading Dashboard...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[#F8F5F1]">
       {/* Sidebar */}
       <AdminSidebar />
 
@@ -43,19 +49,28 @@ const AdminDashboard = () => {
         <AdminNavbar title="Dashboard" />
 
         {/* Dashboard Content */}
-        <main className="p-6">
-          <div className="mb-6">
-            <h2 className="text-3xl font-bold text-gray-800">
-              Dashboard Overview
-            </h2>
+        <main className="p-5 sm:p-6 lg:p-8">
+          {/* Page Heading */}
+          <div className="mb-7">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="h-px w-6 bg-[#dfc2b3]" />
 
-            <p className="mt-1 text-gray-500">
+              <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#9a8879]">
+                Overview
+              </span>
+            </div>
+
+            <h1 className="text-2xl font-semibold tracking-tight text-[#6d5b4d] sm:text-3xl">
+              Dashboard Overview
+            </h1>
+
+            <p className="mt-1.5 text-sm text-[#9a8879]">
               Here's what's happening with your store.
             </p>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <DashboardCard
               title="Total Users"
               value={stats?.totalUsers || 0}

@@ -8,7 +8,6 @@ import useProductStore from "../store/productStore";
 
 const CreateProduct = () => {
   const navigate = useNavigate();
-
   const { createProduct, loading } = useProductStore();
 
   const handleCreateProduct = async (formData) => {
@@ -29,28 +28,40 @@ const CreateProduct = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[#F8F5F1]">
       <AdminSidebar />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <AdminNavbar title="Create Product" />
 
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-800">
+        <main className="flex-1 overflow-y-auto p-5 sm:p-6 lg:p-8">
+          {/* Page Header */}
+          <div className="mb-7">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="h-px w-6 bg-[#c98f84]" />
+
+              <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#9a8879]">
+                Product Management
+              </span>
+            </div>
+
+            <h1 className="text-2xl font-semibold tracking-tight text-[#6d5b4d] sm:text-3xl">
               Create Product
             </h1>
 
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1.5 text-sm text-[#9a8879]">
               Add a new product to your store.
             </p>
           </div>
 
-          <ProductForm
-            loading={loading}
-            submitText="Create Product"
-            onSubmit={handleCreateProduct}
-          />
+          {/* Product Form */}
+          <div className="rounded-2xl border border-[#eadfd5] bg-[#fffaf7] p-5 shadow-[0_8px_30px_rgba(109,91,77,0.05)] sm:p-6">
+            <ProductForm
+              loading={loading}
+              submitText="Create Product"
+              onSubmit={handleCreateProduct}
+            />
+          </div>
         </main>
       </div>
     </div>

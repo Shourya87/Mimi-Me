@@ -34,10 +34,8 @@ const UpdateCoupon = () => {
         await getCouponById(id);
       } catch (error) {
         toast.error(
-          error?.response?.data?.message ||
-            "Failed to fetch coupon."
+          error?.response?.data?.message || "Failed to fetch coupon.",
         );
-
         navigate("/admin/coupons");
       }
     };
@@ -56,11 +54,11 @@ const UpdateCoupon = () => {
       code: coupon.code || "",
       discountType: coupon.discountType || "percentage",
       discountValue: coupon.discountValue ?? "",
-      maxDiscount: coupon.maxDiscount ?? "",
       minimumOrderValue: coupon.minimumOrderValue ?? "",
-expiresAt: coupon.expiresAt
-  ? new Date(coupon.expiresAt).toISOString().slice(0, 16)
-  : "",
+      maxDiscount: coupon.maxDiscount ?? "",
+      expiresAt: coupon.expiresAt
+        ? new Date(coupon.expiresAt).toISOString().slice(0, 16)
+        : "",
       usageLimit: coupon.usageLimit ?? "",
     });
   }, [coupon]);
@@ -75,80 +73,86 @@ expiresAt: coupon.expiresAt
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  console.log("🔥 HANDLE SUBMIT CALLED");
-  console.log("ID:", id);
-  console.log("FORM DATA:", formData);
+    try {
+      const payload = {
+        code: formData.code.trim().toUpperCase(),
+        discountType: formData.discountType,
+        discountValue: Number(formData.discountValue),
+        minimumOrderValue: Number(formData.minimumOrderValue) || 0,
+        maxDiscount: Number(formData.maxDiscount) || undefined,
+        expiresAt: formData.expiresAt || undefined,
+        usageLimit: Number(formData.usageLimit) || undefined,
+      };
 
-  // validations...
+      const response = await updateCoupon(id, payload);
 
-  try {
-    const payload = {
-      code: formData.code.trim().toUpperCase(),
-      discountType: formData.discountType,
-      discountValue: Number(formData.discountValue),
-      minimumOrderValue: Number(formData.minimumOrderValue) || 0,
-      maxDiscount: Number(formData.maxDiscount) || undefined,
-      expiresAt: formData.expiresAt || undefined,
-      usageLimit: Number(formData.usageLimit) || undefined,
-    };
+      toast.success(
+        response?.message || "Coupon updated successfully.",
+      );
 
-    console.log("🔥 UPDATE PAYLOAD:", payload);
+      navigate("/admin/coupons");
+    } catch (error) {
+      console.error("Update Coupon Error:", error);
 
-    const response = await updateCoupon(id, payload);
-
-    console.log("🔥 UPDATE RESPONSE:", response);
-
-    toast.success(
-      response?.message || "Coupon updated successfully."
-    );
-
-    navigate("/admin/coupons");
-  } catch (error) {
-    console.error("🔥 UPDATE ERROR:", error);
-
-    toast.error(
-      error?.response?.data?.message ||
-        "Failed to update coupon."
-    );
-  }
-};
+      toast.error(
+        error?.response?.data?.message || "Failed to update coupon.",
+      );
+    }
+  };
 
   if (loading && !coupon) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-lg font-semibold">
-        Loading Coupon...
+      <div className="flex min-h-screen items-center justify-center bg-[#F8F5F1]">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#eadfd5] border-t-[#c98f84]" />
+          <p className="text-sm font-medium text-[#6d5b4d]">
+            Loading Coupon...
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[#F8F5F1]">
+      {/* Sidebar */}
       <AdminSidebar />
 
-      <div className="flex flex-1 flex-col">
-        <AdminNavbar />
+      {/* Main Content */}
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AdminNavbar title="Edit Coupon" />
 
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-800">
+        <main className="flex-1 overflow-y-auto p-5 sm:p-6 lg:p-8">
+          {/* Page Header */}
+          <div className="mb-7">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="h-px w-6 bg-[#dfc2b3]" />
+
+              <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#9a8879]">
+                Coupon Management
+              </span>
+            </div>
+
+            <h1 className="text-2xl font-semibold tracking-tight text-[#6d5b4d] sm:text-3xl">
               Update Coupon
             </h1>
 
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1.5 text-sm text-[#9a8879]">
               Update the details of your discount coupon.
             </p>
           </div>
 
+          {/* Form */}
           <form
             onSubmit={handleSubmit}
-            className="max-w-4xl rounded-xl bg-white p-6 shadow-sm"
+            className="max-w-4xl rounded-2xl border border-[#eadfd5] bg-[#fffaf7] p-5 shadow-[0_8px_30px_rgba(109,91,77,0.05)] sm:p-6"
           >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Coupon Code */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Coupon Code
                 </label>
 
@@ -158,13 +162,13 @@ expiresAt: coupon.expiresAt
                   value={formData.code}
                   onChange={handleChange}
                   placeholder="e.g. WELCOME20"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 uppercase outline-none transition focus:border-orange-500"
+                  className="w-full rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-4 py-3 uppercase text-[#6d5b4d] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#eadfd5]"
                 />
               </div>
 
               {/* Discount Type */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Discount Type
                 </label>
 
@@ -172,21 +176,16 @@ expiresAt: coupon.expiresAt
                   name="discountType"
                   value={formData.discountType}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-4 py-3 text-[#6d5b4d] outline-none transition focus:border-[#c98f84] focus:ring-2 focus:ring-[#eadfd5]"
                 >
-                  <option value="percentage">
-                    Percentage (%)
-                  </option>
-
-                  <option value="fixed">
-                    Fixed Amount (₹)
-                  </option>
+                  <option value="percentage">Percentage (%)</option>
+                  <option value="fixed">Fixed Amount (₹)</option>
                 </select>
               </div>
 
               {/* Discount Value */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Discount Value
                 </label>
 
@@ -196,13 +195,14 @@ expiresAt: coupon.expiresAt
                   value={formData.discountValue}
                   onChange={handleChange}
                   min="0"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  placeholder="20"
+                  className="w-full rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-4 py-3 text-[#6d5b4d] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#eadfd5]"
                 />
               </div>
 
               {/* Minimum Order */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Minimum Order Amount
                 </label>
 
@@ -213,13 +213,13 @@ expiresAt: coupon.expiresAt
                   onChange={handleChange}
                   min="0"
                   placeholder="999"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-4 py-3 text-[#6d5b4d] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#eadfd5]"
                 />
               </div>
 
               {/* Maximum Discount */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Maximum Discount
                 </label>
 
@@ -230,17 +230,17 @@ expiresAt: coupon.expiresAt
                   onChange={handleChange}
                   min="0"
                   placeholder="500"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-4 py-3 text-[#6d5b4d] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#eadfd5]"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1.5 text-xs text-[#9a8879]">
                   Mainly useful for percentage coupons.
                 </p>
               </div>
 
               {/* Usage Limit */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Usage Limit
                 </label>
 
@@ -251,17 +251,17 @@ expiresAt: coupon.expiresAt
                   onChange={handleChange}
                   min="1"
                   placeholder="100"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-4 py-3 text-[#6d5b4d] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#eadfd5]"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1.5 text-xs text-[#9a8879]">
                   Leave empty for unlimited usage.
                 </p>
               </div>
 
               {/* Expiry */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Expiry Date
                 </label>
 
@@ -270,22 +270,22 @@ expiresAt: coupon.expiresAt
                   name="expiresAt"
                   value={formData.expiresAt}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-4 py-3 text-[#6d5b4d] outline-none transition focus:border-[#c98f84] focus:ring-2 focus:ring-[#eadfd5]"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1.5 text-xs text-[#9a8879]">
                   Leave empty if the coupon should not expire.
                 </p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="mt-8 flex justify-end gap-3 border-t pt-6">
+            <div className="mt-8 flex justify-end gap-3 border-t border-[#eadfd5] pt-6">
               <button
                 type="button"
                 onClick={() => navigate("/admin/coupons")}
                 disabled={loading}
-                className="rounded-lg border border-gray-300 px-5 py-2.5 font-medium text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl border border-[#dfcfc4] bg-[#fffdfb] px-5 py-2.5 font-medium text-[#756457] transition hover:bg-[#f5eee8] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -293,7 +293,7 @@ expiresAt: coupon.expiresAt
               <button
                 type="submit"
                 disabled={loading}
-                className="rounded-lg bg-orange-500 px-6 py-2.5 font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl bg-[#b9786d] px-6 py-2.5 font-medium text-white shadow-sm transition hover:bg-[#a9685e] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? "Updating..." : "Update Coupon"}
               </button>

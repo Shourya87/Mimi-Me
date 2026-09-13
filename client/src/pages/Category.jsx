@@ -49,7 +49,7 @@ export default function Category() {
   }
 
   const categoryProducts = products.filter(
-    (product) => product.category === category.title
+    (product) => product.category === category.name
   );
 
   return (
@@ -61,7 +61,7 @@ export default function Category() {
         </h1>
 
         <p className="mx-auto mt-4 max-w-2xl text-[#8d7968]">
-          Explore our {category.title.toLowerCase()} collection.
+          Explore our {category.title} collection.
         </p>
       </section>
 

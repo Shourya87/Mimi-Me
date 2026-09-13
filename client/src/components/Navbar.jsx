@@ -1,17 +1,13 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import {
-  Heart,
-  Menu,
-  Search,
-  ShoppingBag,
-  User,
-  X,
-} from "lucide-react";
+import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
 import { NAV_LINKS } from "../constants/navigation";
+import useAuthStore from "../store/authStore";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { user, isAuthenticated } = useAuthStore();
 
   const iconButton =
     "relative flex h-11 w-11 items-center justify-center rounded-full border border-[#e6d7c9] bg-[#fffaf5] text-[#7d6a59] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dfc2b3] hover:bg-[#f8ebe3] hover:text-[#c98f84]";
@@ -84,9 +80,9 @@ export default function Navbar() {
           </Link>
 
           <Link
-            to="/login"
+            to={isAuthenticated ? "/profile" : "/login"}
             aria-label="Account"
-            title="Account"
+            title={isAuthenticated ? "Profile" : "Login"}
             className={iconButton}
           >
             <User size={19} />
@@ -163,10 +159,10 @@ export default function Navbar() {
             </Link>
 
             <Link
-              to="/login"
+              to={isAuthenticated ? "/profile" : "/login"}
               onClick={() => setIsOpen(false)}
               aria-label="Account"
-              title="Account"
+              title={isAuthenticated ? "Profile" : "Login"}
               className={mobileIconButton}
             >
               <User size={18} />

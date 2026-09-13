@@ -1,70 +1,114 @@
-import { Trash2 } from "lucide-react";
+import { Trash2, ShieldCheck } from "lucide-react";
 
-const UserTable = ({ users, onDelete }) => {
+const UserTable = ({ users = [], onDelete }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
-      <table className="w-full">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="text-left px-6 py-4">Name</th>
-            <th className="text-left px-6 py-4">Email</th>
-            <th className="text-left px-6 py-4">Role</th>
-            <th className="text-left px-6 py-4">Joined</th>
-            <th className="text-center px-6 py-4">Action</th>
-          </tr>
-        </thead>
+    <div className="overflow-hidden rounded-2xl border border-[#eadfd5] bg-[#fffaf7] shadow-[0_8px_30px_rgba(109,91,77,0.05)]">
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[700px]">
+          <thead className="border-b border-[#eadfd5] bg-[#f5eee9]">
+            <tr>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-[#806e60]">
+                Name
+              </th>
 
-        <tbody>
-          {users.length > 0 ? (
-            users.map((user) => (
-              <tr key={user._id} className="border-t hover:bg-gray-50">
-                {/* Name */}
-                <td className="px-6 py-4 font-medium">{user.name}</td>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-[#806e60]">
+                Email
+              </th>
 
-                {/* Email */}
-                <td className="px-6 py-4">{user.email}</td>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-[#806e60]">
+                Role
+              </th>
 
-                {/* Role */}
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      user.role === "admin"
-                        ? "bg-purple-100 text-orange-700"
-                        : "bg-blue-100 text-blue-700"
-                    }`}
-                  >
-                    {user.role}
-                  </span>
-                </td>
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-[#806e60]">
+                Joined
+              </th>
 
-                {/* Joined Date */}
-                <td className="px-6 py-4">
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </td>
+              <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wider text-[#806e60]">
+                Action
+              </th>
+            </tr>
+          </thead>
 
-                {/* Delete */}
-                <td className="px-6 py-4">
-                  <div className="flex justify-center">
-                    <button
-                      disabled={user.role === "admin"}
-                      onClick={() => onDelete(user)}
-                      className="p-2 rounded-lg bg-red-500 hover:bg-red-600 text-white"
+          <tbody className="divide-y divide-[#eadfd5]">
+            {users.length > 0 ? (
+              users.map((user) => (
+                <tr
+                  key={user._id}
+                  className="transition-colors hover:bg-[#fcf6f2]"
+                >
+                  {/* Name */}
+                  <td className="px-6 py-4">
+                    <p className="font-medium text-[#6d5b4d]">
+                      {user.name}
+                    </p>
+                  </td>
+
+                  {/* Email */}
+                  <td className="px-6 py-4">
+                    <p className="text-sm text-[#8f7d70]">{user.email}</p>
+                  </td>
+
+                  {/* Role */}
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
+                        user.role === "admin"
+                          ? "bg-[#f3e1dc] text-[#9a6259]"
+                          : "bg-[#eee7e1] text-[#806e60]"
+                      }`}
                     >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
+                      {user.role === "admin" && <ShieldCheck size={13} />}
+                      {user.role}
+                    </span>
+                  </td>
+
+                  {/* Joined Date */}
+                  <td className="px-6 py-4 text-sm text-[#8f7d70]">
+                    {new Date(user.createdAt).toLocaleDateString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </td>
+
+                  {/* Delete */}
+                  <td className="px-6 py-4">
+                    <div className="flex justify-center">
+                      <button
+                        type="button"
+                        disabled={user.role === "admin"}
+                        onClick={() => onDelete(user)}
+                        title={
+                          user.role === "admin"
+                            ? "Admin users cannot be deleted"
+                            : "Delete user"
+                        }
+                        className={`flex h-9 w-9 items-center justify-center rounded-lg border transition ${
+                          user.role === "admin"
+                            ? "cursor-not-allowed border-[#eadfd5] bg-[#f5eee9] text-[#c8b9ae]"
+                            : "border-[#ecd5d0] bg-[#fff4f2] text-[#b56f67] hover:border-[#dfb9b2] hover:bg-[#fce9e6]"
+                        }`}
+                      >
+                        <Trash2 size={17} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="px-6 py-12 text-center text-sm text-[#9a8879]"
+                >
+                  No Users Found.
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={5} className="text-center py-8 text-gray-500">
-                No Users Found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

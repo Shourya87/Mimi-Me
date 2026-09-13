@@ -20,10 +20,8 @@ const {
   addressIdSchema,
 } = require("../validators/auth.validator");
 
-// Get All Addresses
 router.get("/", protect, getAddresses);
 
-// Add Address
 router.post(
   "/",
   protect,
@@ -31,7 +29,6 @@ router.post(
   addAddress,
 );
 
-// Update Address
 router.patch(
   "/:id",
   protect,
@@ -39,13 +36,17 @@ router.patch(
   updateAddress,
 );
 
-// Delete Address
-router.delete("/:id", protect, deleteAddress);
+router.delete(
+  "/:id",
+  protect,
+  validate(addressIdSchema),
+  deleteAddress,
+);
 
-// Set Default Address
 router.patch(
   "/:id/default",
   protect,
+  validate(addressIdSchema),
   setDefaultAddress,
 );
 

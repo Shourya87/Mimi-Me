@@ -34,6 +34,7 @@ import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import Profile from "./pages/Profile";
+import Addresses from "./pages/Addresses";
 
 
 
@@ -69,6 +70,7 @@ export default function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile/addresses" element={<Addresses />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/admin" element={<AdminDashboard />} />

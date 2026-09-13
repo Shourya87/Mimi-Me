@@ -11,6 +11,8 @@ import Hero from "../components/Hero";
 import PromoBanner from "../components/PromoBanner";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Newsletter from "../components/Newsletter";
+import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const { products, getProducts, loading: productLoading } = useProductStore();
@@ -41,16 +43,41 @@ export default function Home() {
       <Hero />
 
       {/* Categories */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold">Shop by Category</h2>
+      <section className="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-10 lg:py-14">
+        {/* Section Header */}
+        <div className="mb-6 flex items-end justify-between gap-6">
+          <div>
+            <div className="mb-3 flex items-center gap-3">
+              <span className="h-px w-8 bg-[#dfc2b3]" />
 
-          <p className="mt-2 text-gray-500">
-            Find the perfect outfit for every occasion.
-          </p>
+              <span className="text-xs font-medium uppercase tracking-[0.2em] text-[#9a8879]">
+                Discover More
+              </span>
+            </div>
+
+            <h2 className="text-3xl font-semibold tracking-tight text-[#6d5b4d] sm:text-4xl">
+              Shop by Category
+            </h2>
+
+            <p className="mt-2 max-w-xl text-sm leading-6 text-[#9a8879] sm:text-base">
+              Find the perfect outfit for every occasion.
+            </p>
+          </div>
+
+          <Link
+            to="/categories"
+            className="group hidden items-center gap-2 text-sm font-medium text-[#7d6a59] transition-colors hover:text-[#c98f84] sm:flex"
+          >
+            Explore All
+            <ArrowUpRight
+              size={16}
+              className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {/* Categories */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {categories.map((category) => (
             <CategoryCard key={category._id} category={category} />
           ))}
@@ -59,28 +86,83 @@ export default function Home() {
 
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-16">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold">Featured Products</h2>
+        <section className="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-10 lg:py-14">
+          {/* Section Header */}
+          <div className="mb-6 flex items-end justify-between gap-6">
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <span className="h-px w-8 bg-[#dfc2b3]" />
 
-            <p className="mt-2 text-gray-500">Our most loved styles.</p>
+                <span className="text-xs font-medium uppercase tracking-[0.2em] text-[#9a8879]">
+                  Our Selection
+                </span>
+              </div>
+
+              <h2 className="text-3xl font-semibold tracking-tight text-[#6d5b4d] sm:text-4xl">
+                Featured Products
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-[#9a8879] sm:text-base">
+                Our most loved styles.
+              </p>
+            </div>
+
+            {/* View All */}
+            <Link
+              to="/shop"
+              className="group hidden items-center gap-2 text-sm font-medium text-[#7d6a59] transition-colors hover:text-[#c98f84] sm:flex"
+            >
+              View All
+              <ArrowUpRight
+                size={16}
+                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </Link>
           </div>
 
+          {/* Products */}
           <ProductGrid products={featuredProducts} />
         </section>
       )}
-
       {/* Promo Banner */}
       <PromoBanner />
 
       {/* New Arrivals */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold">New Arrivals</h2>
+      <section className="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-10 lg:py-14">
+        {/* Section Header */}
+        <div className="mb-6 flex items-end justify-between gap-6">
+          <div>
+            <div className="mb-3 flex items-center gap-3">
+              <span className="h-px w-8 bg-[#dfc2b3]" />
 
-          <p className="mt-2 text-gray-500">Fresh styles added recently.</p>
+              <span className="text-xs font-medium uppercase tracking-[0.2em] text-[#9a8879]">
+                The Latest
+              </span>
+            </div>
+
+            <h2 className="text-3xl font-semibold tracking-tight text-[#6d5b4d] sm:text-4xl">
+              New Arrivals
+            </h2>
+
+            <p className="mt-2 text-sm leading-6 text-[#9a8879] sm:text-base">
+              Fresh styles added recently.
+            </p>
+          </div>
+
+          {/* View All */}
+          <Link
+            to="/shop"
+            className="group hidden items-center gap-2 text-sm font-medium text-[#7d6a59] sm:flex"
+          >
+            View All
+            <ArrowUpRight
+              size={16}
+              className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </Link>
         </div>
 
+        {/* Products */}
         <ProductGrid products={products.slice(8, 16)} />
       </section>
 

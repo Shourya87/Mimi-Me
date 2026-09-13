@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import useAuthStore from "../store/authStore";
-
 import AddressManager from "../components/AddressManager";
 
 const Profile = () => {
@@ -13,6 +12,7 @@ const Profile = () => {
     updateProfile,
     changePassword,
     loading,
+    logOut,
   } = useAuthStore();
 
   const [profileData, setProfileData] = useState({
@@ -90,20 +90,14 @@ const Profile = () => {
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
 
-    const {
-      currentPassword,
-      newPassword,
-      confirmPassword,
-    } = passwordData;
+    const { currentPassword, newPassword, confirmPassword } = passwordData;
 
     if (!currentPassword || !newPassword || !confirmPassword) {
       return toast.error("Please fill all password fields.");
     }
 
     if (newPassword.length < 6) {
-      return toast.error(
-        "New password must be at least 6 characters.",
-      );
+      return toast.error("New password must be at least 6 characters.");
     }
 
     if (newPassword !== confirmPassword) {
@@ -125,8 +119,18 @@ const Profile = () => {
       toast.success("Password changed successfully.");
     } catch (error) {
       toast.error(
-        error?.response?.data?.message ||
-          "Failed to change password.",
+        error?.response?.data?.message || "Failed to change password.",
+      );
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast.success("Logged out successfully.");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Failed to logout.",
       );
     }
   };
@@ -140,16 +144,57 @@ const Profile = () => {
   }
 
   return (
-    <section className="container mx-auto max-w-5xl px-4 py-8 md:px-8">
+    <section className="container mx-auto max-w-6xl px-4 py-8 md:px-8">
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">
-          My Profile
+          My Account
         </h1>
 
         <p className="mt-2 text-sm text-gray-500">
-          Manage your personal information, password, and addresses.
+          Manage your profile, password, addresses and account.
         </p>
+      </div>
+
+      {/* Account Navigation */}
+      <div className="mb-8 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="grid grid-cols-2 divide-x divide-gray-200 md:grid-cols-5">
+          <Link
+            to="/profile"
+            className="bg-orange-50 px-4 py-4 text-center text-sm font-medium text-orange-500"
+          >
+            Profile
+          </Link>
+
+          <Link
+            to="/orders"
+            className="px-4 py-4 text-center text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-orange-500"
+          >
+            My Orders
+          </Link>
+
+          <Link
+            to="/wishlist"
+            className="px-4 py-4 text-center text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-orange-500"
+          >
+            Wishlist
+          </Link>
+
+          <Link
+            to="/cart"
+            className="px-4 py-4 text-center text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:text-orange-500"
+          >
+            Cart
+          </Link>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="px-4 py-4 text-center text-sm font-medium text-red-500 transition hover:bg-red-50"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Profile + Password */}
@@ -318,15 +363,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Address Management */}
-      <div className="mt-6">
-        <AddressManager />
-      </div>
-
       {/* Account Summary */}
       <div className="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-xl font-semibold text-gray-800">
-          Account
+          Account Summary
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -350,6 +390,11 @@ const Profile = () => {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* Address Management */}
+      <div className="mt-6">
+        <AddressManager />
       </div>
     </section>
   );

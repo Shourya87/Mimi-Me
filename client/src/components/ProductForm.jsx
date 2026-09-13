@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Upload, X } from "lucide-react";
-import { toast } from "react-hot-toast";
 
 const SIZE_OPTIONS = [
   "0-3M",
@@ -25,6 +24,14 @@ const COLOR_OPTIONS = [
   "Purple",
   "Grey",
   "Brown",
+];
+
+const CATEGORY_OPTIONS = [
+  "Women",
+  "Girls",
+  "Babies",
+  "New Arrivals",
+  "Accessories",
 ];
 
 const ProductForm = ({
@@ -69,6 +76,12 @@ const ProductForm = ({
     setExistingImages(initialData.images || []);
   }, [initialData]);
 
+  useEffect(() => {
+    return () => {
+      previewImages.forEach((image) => URL.revokeObjectURL(image.url));
+    };
+  }, [previewImages]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -82,7 +95,7 @@ const ProductForm = ({
     setFormData((prev) => ({
       ...prev,
       sizes: prev.sizes.includes(size)
-        ? prev.sizes.filter((s) => s !== size)
+        ? prev.sizes.filter((item) => item !== size)
         : [...prev.sizes, size],
     }));
   };
@@ -91,13 +104,21 @@ const ProductForm = ({
     setFormData((prev) => ({
       ...prev,
       colors: prev.colors.includes(color)
-        ? prev.colors.filter((c) => c !== color)
+        ? prev.colors.filter((item) => item !== color)
         : [...prev.colors, color],
     }));
   };
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
+
+    const totalImages =
+      existingImages.length + newImages.length + files.length;
+
+    if (totalImages > 5) {
+      e.target.value = "";
+      return;
+    }
 
     setNewImages((prev) => [...prev, ...files]);
 
@@ -107,23 +128,64 @@ const ProductForm = ({
     }));
 
     setPreviewImages((prev) => [...prev, ...previews]);
+
+    e.target.value = "";
   };
 
   const removeNewImage = (index) => {
-    const updatedFiles = [...newImages];
-    const updatedPreview = [...previewImages];
+    const image = previewImages[index];
 
-    URL.revokeObjectURL(updatedPreview[index].url);
+    if (image?.url) {
+      URL.revokeObjectURL(image.url);
+    }
 
-    updatedFiles.splice(index, 1);
-    updatedPreview.splice(index, 1);
-
-    setNewImages(updatedFiles);
-    setPreviewImages(updatedPreview);
+    setNewImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const removeExistingImage = (index) => {
     setExistingImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleReset = () => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || "",
+        description: initialData.description || "",
+        price: initialData.price || "",
+        discountPrice: initialData.discountPrice || "",
+        brand: initialData.brand || "Mimi & Me",
+        category: initialData.category || "Babies",
+        stock: initialData.stock || 0,
+        isFeatured: initialData.isFeatured || false,
+        sizes: initialData.sizes || [],
+        colors: initialData.colors || [],
+      });
+
+      setExistingImages(initialData.images || []);
+    } else {
+      setFormData({
+        title: "",
+        description: "",
+        price: "",
+        discountPrice: "",
+        brand: "Mimi & Me",
+        category: "Babies",
+        stock: 0,
+        isFeatured: false,
+        sizes: [],
+        colors: [],
+      });
+
+      setExistingImages([]);
+    }
+
+    previewImages.forEach((image) => {
+      if (image?.url) URL.revokeObjectURL(image.url);
+    });
+
+    setNewImages([]);
+    setPreviewImages([]);
   };
 
   const handleSubmit = (e) => {
@@ -131,228 +193,278 @@ const ProductForm = ({
 
     const data = new FormData();
 
-    data.append("title", formData.title);
-    data.append("description", formData.description);
+    data.append("title", formData.title.trim());
+    data.append("description", formData.description.trim());
     data.append("price", formData.price);
     data.append("discountPrice", formData.discountPrice);
-    data.append("brand", formData.brand);
+    data.append("brand", formData.brand.trim());
     data.append("category", formData.category);
     data.append("stock", formData.stock);
     data.append("isFeatured", formData.isFeatured);
 
-    formData.sizes.forEach((size) => data.append("sizes", size));
+    formData.sizes.forEach((size) => {
+      data.append("sizes", size);
+    });
 
-    formData.colors.forEach((color) => data.append("colors", color));
+    formData.colors.forEach((color) => {
+      data.append("colors", color);
+    });
 
-    newImages.forEach((image) => data.append("images", image));
+    newImages.forEach((image) => {
+      data.append("images", image);
+    });
 
     if (onSubmit) {
       onSubmit(data, existingImages);
     }
   };
 
+  const inputClass =
+    "w-full rounded-xl border border-[#eadfd5] bg-[#fffaf7] px-4 py-3 text-sm text-[#6d5b4d] outline-none transition placeholder:text-[#b5a69a] focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10";
+
+  const labelClass =
+    "mb-2 block text-sm font-medium text-[#6d5b4d]";
+
+  const sectionClass =
+    "rounded-2xl border border-[#eadfd5] bg-white p-5 shadow-[0_6px_24px_rgba(109,91,77,0.04)] sm:p-6";
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-8 bg-white rounded-xl shadow p-8"
-    >
-      <div>
-        <h2 className="text-2xl font-bold">Product Information</h2>
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Product Information */}
+      <section className={sectionClass}>
+        <div className="mb-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c98f84]">
+            Product Details
+          </p>
+          <h2 className="mt-1 text-xl font-semibold text-[#6d5b4d]">
+            Product Information
+          </h2>
+          <p className="mt-1 text-sm text-[#9a8879]">
+            Add the basic information for your product.
+          </p>
+        </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Title */}
+        <div className="grid gap-5 md:grid-cols-2">
+          <div>
+            <label className={labelClass}>Product Title</label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="Cute Baby Dress"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block mb-2 font-medium">Product Title</label>
+          <div>
+            <label className={labelClass}>Brand</label>
+            <input
+              type="text"
+              name="brand"
+              value={formData.brand}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="Mimi & Me"
+            />
+          </div>
 
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
+          <div>
+            <label className={labelClass}>Price</label>
+            <input
+              type="number"
+              min={0}
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="999"
+              required
+            />
+          </div>
+
+          <div>
+            <label className={labelClass}>Discount Price</label>
+            <input
+              type="number"
+              min={0}
+              name="discountPrice"
+              value={formData.discountPrice}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="799"
+            />
+          </div>
+
+          <div>
+            <label className={labelClass}>Category</label>
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className={inputClass}
+            >
+              {CATEGORY_OPTIONS.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className={labelClass}>Stock</label>
+            <input
+              type="number"
+              name="stock"
+              min={0}
+              value={formData.stock}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="0"
+            />
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <label className={labelClass}>Description</label>
+          <textarea
+            rows={5}
+            name="description"
+            value={formData.description}
             onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-400"
-            placeholder="Cute Baby Dress"
+            className={`${inputClass} resize-none`}
+            placeholder="Write a clear description for your product..."
             required
           />
         </div>
+      </section>
 
-        {/* Brand */}
+      {/* Product Options */}
+      <section className={sectionClass}>
+        <div className="mb-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c98f84]">
+            Product Options
+          </p>
+          <h2 className="mt-1 text-xl font-semibold text-[#6d5b4d]">
+            Sizes & Colors
+          </h2>
+        </div>
 
-        <div>
-          <label className="block mb-2 font-medium">Brand</label>
-
+        {/* Featured */}
+        <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-[#eadfd5] bg-[#fffaf7] px-4 py-3">
           <input
-            type="text"
-            name="brand"
-            value={formData.brand}
+            type="checkbox"
+            name="isFeatured"
+            checked={formData.isFeatured}
             onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
+            className="h-4 w-4 accent-[#c98f84]"
           />
+
+          <div>
+            <p className="text-sm font-medium text-[#6d5b4d]">
+              Featured Product
+            </p>
+            <p className="text-xs text-[#9a8879]">
+              Show this product in the featured collection.
+            </p>
+          </div>
+        </label>
+
+        {/* Sizes */}
+        <div className="mt-6">
+          <h3 className="mb-3 text-sm font-semibold text-[#6d5b4d]">
+            Available Sizes
+          </h3>
+
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+            {SIZE_OPTIONS.map((size) => {
+              const selected = formData.sizes.includes(size);
+
+              return (
+                <label
+                  key={size}
+                  className={`cursor-pointer rounded-xl border px-3 py-2.5 text-center text-sm font-medium transition ${
+                    selected
+                      ? "border-[#c98f84] bg-[#c98f84] text-white shadow-sm"
+                      : "border-[#eadfd5] bg-[#fffaf7] text-[#7d6a59] hover:border-[#dfc2b3] hover:bg-[#f8ebe3]"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    onChange={() => toggleSize(size)}
+                    className="hidden"
+                  />
+
+                  {size}
+                </label>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Price */}
+        {/* Colors */}
+        <div className="mt-6">
+          <h3 className="mb-3 text-sm font-semibold text-[#6d5b4d]">
+            Available Colors
+          </h3>
 
-        <div>
-          <label className="block mb-2 font-medium">Price</label>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
+            {COLOR_OPTIONS.map((color) => {
+              const selected = formData.colors.includes(color);
 
-          <input
-            type="number"
-            min={0}
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
-            required
-          />
+              return (
+                <label
+                  key={color}
+                  className={`cursor-pointer rounded-xl border px-3 py-2.5 text-center text-sm font-medium transition ${
+                    selected
+                      ? "border-[#c98f84] bg-[#c98f84] text-white shadow-sm"
+                      : "border-[#eadfd5] bg-[#fffaf7] text-[#7d6a59] hover:border-[#dfc2b3] hover:bg-[#f8ebe3]"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    onChange={() => toggleColor(color)}
+                    className="hidden"
+                  />
+
+                  {color}
+                </label>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Images */}
+      <section className={sectionClass}>
+        <div className="mb-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c98f84]">
+            Visuals
+          </p>
+          <h2 className="mt-1 text-xl font-semibold text-[#6d5b4d]">
+            Product Images
+          </h2>
+          <p className="mt-1 text-sm text-[#9a8879]">
+            Add up to 5 product images.
+          </p>
         </div>
 
-        {/* Discount */}
+        <label className="flex min-h-44 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#dfc2b3] bg-[#fffaf7] px-6 text-center transition hover:border-[#c98f84] hover:bg-[#fdf3ed]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f8ebe3] text-[#c98f84]">
+            <Upload size={22} />
+          </div>
 
-        <div>
-          <label className="block mb-2 font-medium">Discount Price</label>
+          <p className="mt-4 text-sm font-medium text-[#6d5b4d]">
+            Click to upload product images
+          </p>
 
-          <input
-            type="number"
-            min={0}
-            name="discountPrice"
-            value={formData.discountPrice}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
-          />
-        </div>
-
-        {/* Category */}
-
-        <div>
-          <label className="block mb-2 font-medium">Category</label>
-
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
-          >
-            <option>Babies</option>
-            <option>Girls</option>
-            <option>Women</option>
-          </select>
-        </div>
-
-        {/* Stock */}
-
-        <div>
-          <label className="block mb-2 font-medium">Stock</label>
-
-          <input
-            type="number"
-            name="stock"
-            min={0}
-            value={formData.stock}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-4 py-3"
-          />
-        </div>
-      </div>
-
-      {/* Description */}
-
-      <div>
-        <label className="block mb-2 font-medium">Description</label>
-
-        <textarea
-          rows={6}
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          className="w-full border rounded-lg px-4 py-3 resize-none"
-          placeholder="Write product description..."
-          required
-        />
-      </div>
-
-      {/* Featured */}
-
-      <label className="flex items-center gap-3 cursor-pointer">
-        <input
-          type="checkbox"
-          name="isFeatured"
-          checked={formData.isFeatured}
-          onChange={handleChange}
-        />
-
-        <span className="font-medium">Featured Product</span>
-      </label>
-
-      {/* Sizes */}
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Available Sizes</h3>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          {SIZE_OPTIONS.map((size) => (
-            <label
-              key={size}
-              className={`border rounded-lg px-4 py-3 text-center cursor-pointer transition
-                ${
-                  formData.sizes.includes(size)
-                    ? "bg-pink-500 text-white border-pink-500"
-                    : "hover:border-pink-400"
-                }`}
-            >
-              <input
-                type="checkbox"
-                checked={formData.sizes.includes(size)}
-                onChange={() => toggleSize(size)}
-                className="hidden"
-              />
-
-              {size}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Colors */}
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Available Colors</h3>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          {COLOR_OPTIONS.map((color) => (
-            <label
-              key={color}
-              className={`border rounded-lg px-4 py-3 text-center cursor-pointer transition
-                ${
-                  formData.colors.includes(color)
-                    ? "bg-pink-500 text-white border-pink-500"
-                    : "hover:border-pink-400"
-                }`}
-            >
-              <input
-                type="checkbox"
-                checked={formData.colors.includes(color)}
-                onChange={() => toggleColor(color)}
-                className="hidden"
-              />
-
-              {color}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Upload Images */}
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Product Images</h3>
-
-        <label className="border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer hover:border-pink-400 transition">
-          <Upload size={42} />
-
-          <p className="mt-3 text-gray-600">Click to upload product images</p>
-
-          <p className="text-sm text-gray-400">Maximum 5 images</p>
+          <p className="mt-1 text-xs text-[#9a8879]">
+            PNG, JPG or WEBP · Maximum 5 images
+          </p>
 
           <input
             type="file"
@@ -362,88 +474,105 @@ const ProductForm = ({
             className="hidden"
           />
         </label>
-      </div>
 
-      {/* Existing Images (Edit Mode) */}
+        {/* Existing Images */}
+        {existingImages.length > 0 && (
+          <div className="mt-6">
+            <h3 className="mb-3 text-sm font-semibold text-[#6d5b4d]">
+              Existing Images
+            </h3>
 
-      {existingImages.length > 0 && (
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Existing Images</h3>
-
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {existingImages.map((image, index) => (
-              <div
-                key={index}
-                className="relative rounded-xl overflow-hidden border"
-              >
-                <img
-                  src={image.url}
-                  alt=""
-                  className="w-full h-40 object-cover"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => removeExistingImage(index)}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+              {existingImages.map((image, index) => (
+                <div
+                  key={`${image.url}-${index}`}
+                  className="group relative overflow-hidden rounded-xl border border-[#eadfd5] bg-[#fffaf7]"
                 >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
+                  <img
+                    src={image.url}
+                    alt={`Product ${index + 1}`}
+                    className="h-36 w-full object-cover"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => removeExistingImage(index)}
+                    className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-[#9a665e] shadow-sm transition hover:bg-[#c98f84] hover:text-white"
+                    aria-label="Remove existing image"
+                  >
+                    <X size={15} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Newly Selected Images */}
+        {/* New Images */}
+        {previewImages.length > 0 && (
+          <div className="mt-6">
+            <h3 className="mb-3 text-sm font-semibold text-[#6d5b4d]">
+              New Images
+            </h3>
 
-      {previewImages.length > 0 && (
-        <div>
-          <h3 className="text-lg font-semibold mb-4">New Images</h3>
-
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {previewImages.map((image, index) => (
-              <div
-                key={index}
-                className="relative rounded-xl overflow-hidden border"
-              >
-                <img
-                  src={image.url}
-                  alt=""
-                  className="w-full h-40 object-cover"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => removeNewImage(index)}
-                  className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+              {previewImages.map((image, index) => (
+                <div
+                  key={`${image.url}-${index}`}
+                  className="relative overflow-hidden rounded-xl border border-[#eadfd5] bg-[#fffaf7]"
                 >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+                  <img
+                    src={image.url}
+                    alt={`New product ${index + 1}`}
+                    className="h-36 w-full object-cover"
+                  />
 
-      <div className="border-t pt-6">
-        <p className="text-sm text-gray-500">
-          Selected Sizes:{" "}
-          <span className="font-medium">{formData.sizes.length || 0}</span>
-          <span className="mx-4">|</span>
-          Selected Colors:{" "}
-          <span className="font-medium">{formData.colors.length || 0}</span>
-          <span className="mx-4">|</span>
-          Images:{" "}
-          <span className="font-medium">
-            {existingImages.length + previewImages.length}
+                  <button
+                    type="button"
+                    onClick={() => removeNewImage(index)}
+                    className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-[#9a665e] shadow-sm transition hover:bg-[#c98f84] hover:text-white"
+                    aria-label="Remove new image"
+                  >
+                    <X size={15} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Summary */}
+        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-[#eadfd5] pt-5 text-xs text-[#9a8879]">
+          <span>
+            Sizes:{" "}
+            <strong className="font-semibold text-[#6d5b4d]">
+              {formData.sizes.length}
+            </strong>
           </span>
-        </p>
-      </div>
-      <div className="flex justify-end gap-4 border-t pt-6">
+
+          <span>
+            Colors:{" "}
+            <strong className="font-semibold text-[#6d5b4d]">
+              {formData.colors.length}
+            </strong>
+          </span>
+
+          <span>
+            Images:{" "}
+            <strong className="font-semibold text-[#6d5b4d]">
+              {existingImages.length + previewImages.length}
+            </strong>
+          </span>
+        </div>
+      </section>
+
+      {/* Actions */}
+      <div className="flex flex-col-reverse gap-3 border-t border-[#eadfd5] pt-6 sm:flex-row sm:justify-end">
         <button
-          type="reset"
-          className="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+          type="button"
+          onClick={handleReset}
+          disabled={loading}
+          className="rounded-xl border border-[#dfc2b3] bg-[#fffaf7] px-6 py-3 text-sm font-medium text-[#7d6a59] transition hover:border-[#c98f84] hover:bg-[#f8ebe3] disabled:cursor-not-allowed disabled:opacity-50"
         >
           Reset
         </button>
@@ -451,7 +580,7 @@ const ProductForm = ({
         <button
           type="submit"
           disabled={loading}
-          className="bg-pink-500 hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-3 rounded-lg transition"
+          className="rounded-xl bg-[#c98f84] px-7 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#b97d73] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? "Please wait..." : submitText}
         </button>

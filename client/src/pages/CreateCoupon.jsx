@@ -8,7 +8,6 @@ import useCouponStore from "../store/couponStore";
 
 const CreateCoupon = () => {
   const navigate = useNavigate();
-
   const { createCoupon, loading } = useCouponStore();
 
   const [formData, setFormData] = useState({
@@ -56,7 +55,7 @@ const CreateCoupon = () => {
         code: formData.code.trim().toUpperCase(),
         discountType: formData.discountType,
         discountValue: Number(formData.discountValue),
-        minOrderAmount: Number(formData.minOrderAmount) || 0,
+        minimumOrderValue: Number(formData.minimumOrderValue) || 0,
         maxDiscount: Number(formData.maxDiscount) || undefined,
         expiresAt: formData.expiresAt || undefined,
         usageLimit: Number(formData.usageLimit) || undefined,
@@ -78,31 +77,41 @@ const CreateCoupon = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-[#F8F5F1]">
       <AdminSidebar />
 
-      <div className="flex flex-1 flex-col">
-        <AdminNavbar />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AdminNavbar title="Create Coupon" />
 
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-800">
+        <main className="flex-1 overflow-y-auto p-5 sm:p-6 lg:p-8">
+          {/* Page Header */}
+          <div className="mb-7">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="h-px w-6 bg-[#c98f84]" />
+
+              <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#9a8879]">
+                Coupon Management
+              </span>
+            </div>
+
+            <h1 className="text-2xl font-semibold tracking-tight text-[#6d5b4d] sm:text-3xl">
               Create Coupon
             </h1>
 
-            <p className="mt-1 text-gray-500">
+            <p className="mt-1.5 text-sm text-[#9a8879]">
               Create a new discount coupon for your customers.
             </p>
           </div>
 
+          {/* Form */}
           <form
             onSubmit={handleSubmit}
-            className="max-w-4xl rounded-xl bg-white p-6 shadow-sm"
+            className="max-w-4xl rounded-2xl border border-[#eadfd5] bg-[#fffaf7] p-5 shadow-[0_8px_30px_rgba(109,91,77,0.05)] sm:p-6"
           >
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Coupon Code */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Coupon Code
                 </label>
 
@@ -112,13 +121,13 @@ const CreateCoupon = () => {
                   value={formData.code}
                   onChange={handleChange}
                   placeholder="e.g. WELCOME20"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 uppercase outline-none transition focus:border-orange-500"
+                  className="w-full rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-4 py-3 uppercase text-[#5f5045] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10"
                 />
               </div>
 
               {/* Discount Type */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Discount Type
                 </label>
 
@@ -126,7 +135,7 @@ const CreateCoupon = () => {
                   name="discountType"
                   value={formData.discountType}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-4 py-3 text-[#5f5045] outline-none transition focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10"
                 >
                   <option value="percentage">
                     Percentage (%)
@@ -140,7 +149,7 @@ const CreateCoupon = () => {
 
               {/* Discount Value */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Discount Value
                 </label>
 
@@ -155,30 +164,30 @@ const CreateCoupon = () => {
                       ? "20"
                       : "200"
                   }
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-4 py-3 text-[#5f5045] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10"
                 />
               </div>
 
               {/* Minimum Order */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Minimum Order Amount
                 </label>
 
                 <input
                   type="number"
-                  name="minOrderAmount"
+                  name="minimumOrderValue"
                   value={formData.minimumOrderValue}
                   onChange={handleChange}
                   min="0"
                   placeholder="999"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-4 py-3 text-[#5f5045] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10"
                 />
               </div>
 
               {/* Maximum Discount */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Maximum Discount
                 </label>
 
@@ -189,17 +198,17 @@ const CreateCoupon = () => {
                   onChange={handleChange}
                   min="0"
                   placeholder="500"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-4 py-3 text-[#5f5045] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1.5 text-xs text-[#9a8879]">
                   Mainly useful for percentage coupons.
                 </p>
               </div>
 
               {/* Usage Limit */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Usage Limit
                 </label>
 
@@ -210,17 +219,17 @@ const CreateCoupon = () => {
                   onChange={handleChange}
                   min="1"
                   placeholder="100"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-4 py-3 text-[#5f5045] outline-none transition placeholder:text-[#b5a69b] focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1.5 text-xs text-[#9a8879]">
                   Leave empty for unlimited usage.
                 </p>
               </div>
 
               {/* Expiry */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
+                <label className="mb-2 block text-sm font-medium text-[#6d5b4d]">
                   Expiry Date
                 </label>
 
@@ -229,22 +238,22 @@ const CreateCoupon = () => {
                   name="expiresAt"
                   value={formData.expiresAt}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-orange-500"
+                  className="w-full rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-4 py-3 text-[#5f5045] outline-none transition focus:border-[#c98f84] focus:ring-2 focus:ring-[#c98f84]/10"
                 />
 
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1.5 text-xs text-[#9a8879]">
                   Leave empty if the coupon should not expire.
                 </p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="mt-8 flex justify-end gap-3 border-t pt-6">
+            <div className="mt-8 flex justify-end gap-3 border-t border-[#eadfd5] pt-6">
               <button
                 type="button"
                 onClick={() => navigate("/admin/coupons")}
                 disabled={loading}
-                className="rounded-lg border border-gray-300 px-5 py-2.5 font-medium text-gray-700 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-lg border border-[#dfd0c5] bg-[#fffdfb] px-5 py-2.5 font-medium text-[#6d5b4d] transition hover:bg-[#f5eee9] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -252,7 +261,7 @@ const CreateCoupon = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="rounded-lg bg-orange-500 px-6 py-2.5 font-medium text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-lg bg-[#a8756c] px-6 py-2.5 font-medium text-white shadow-sm transition hover:bg-[#8f625a] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? "Creating..." : "Create Coupon"}
               </button>

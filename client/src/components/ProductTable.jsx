@@ -1,61 +1,106 @@
 import { Pencil, Trash2 } from "lucide-react";
+
 import formatCurrency from "../utils/formatCurrency";
 
 export default function ProductTable({ products, onEdit, onDelete }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-x-auto">
-      <table className="w-full">
-        <thead className="bg-gray-100">
+    <div className="overflow-x-auto rounded-2xl border border-[#eadfd5] bg-[#fffaf7] shadow-[0_8px_30px_rgba(109,91,77,0.05)]">
+      <table className="w-full min-w-[850px]">
+        <thead className="border-b border-[#eadfd5] bg-[#f5eee8]">
           <tr>
-            <th className="text-left px-6 py-4 font-semibold">Image</th>
-            <th className="text-left px-6 py-4 font-semibold">Name</th>
-            <th className="text-left px-6 py-4 font-semibold">Brand</th>
-            <th className="text-left px-6 py-4 font-semibold">Price</th>
-            <th className="text-left px-6 py-4 font-semibold">Stock</th>
-            <th className="text-center px-6 py-4 font-semibold">Actions</th>
+            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#7d6b5d]">
+              Image
+            </th>
+
+            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#7d6b5d]">
+              Name
+            </th>
+
+            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#7d6b5d]">
+              Brand
+            </th>
+
+            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#7d6b5d]">
+              Price
+            </th>
+
+            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-[#7d6b5d]">
+              Stock
+            </th>
+
+            <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wide text-[#7d6b5d]">
+              Actions
+            </th>
           </tr>
         </thead>
 
-        <tbody>
-          {products.length > 0 ? (
+        <tbody className="divide-y divide-[#eee3db]">
+          {products?.length > 0 ? (
             products.map((product) => (
-              <tr key={product._id} className="border-t hover:bg-gray-50">
+              <tr
+                key={product._id}
+                className="transition-colors hover:bg-[#fcf5f1]"
+              >
                 {/* Image */}
                 <td className="px-6 py-4">
                   <img
-                    src={product.images[0].url || "/placeholder.png"}
+                    src={product.images?.[0]?.url || "/placeholder.png"}
                     alt={product.title}
-                    className="w-16 h-16 rounded-lg object-cover"
+                    className="h-16 w-16 rounded-xl border border-[#eadfd5] object-cover"
                   />
                 </td>
 
                 {/* Name */}
-                <td className="px-6 py-4 font-medium">{product.title}</td>
+                <td className="px-6 py-4">
+                  <span className="font-semibold text-[#6d5b4d]">
+                    {product.title}
+                  </span>
+                </td>
 
                 {/* Brand */}
-                <td className="px-6 py-4">{product.brand}</td>
+                <td className="px-6 py-4 text-sm text-[#756457]">
+                  {product.brand || "—"}
+                </td>
 
                 {/* Price */}
-                <td className="px-6 py-4">{formatCurrency(product.discountPrice)}</td>
+                <td className="px-6 py-4 font-medium text-[#b9786d]">
+                  {formatCurrency(
+                    product.discountPrice ?? product.price ?? 0,
+                  )}
+                </td>
 
                 {/* Stock */}
-                <td className="px-6 py-4">{product.stock}</td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`font-medium ${
+                      product.stock > 0
+                        ? "text-[#527762]"
+                        : "text-[#ad6258]"
+                    }`}
+                  >
+                    {product.stock}
+                  </span>
+                </td>
 
                 {/* Actions */}
                 <td className="px-6 py-4">
-                  <div className="flex justify-center gap-3">
+                  <div className="flex justify-center gap-2">
                     <button
+                      type="button"
                       onClick={() => onEdit(product)}
-                      className="p-2 rounded-lg bg-blue-500 transition-colors text-white hover:bg-blue-600"
+                      aria-label={`Edit ${product.title}`}
+                      className="rounded-lg border border-[#dfc2b3] bg-[#f8eee9] p-2 text-[#a66f63] transition hover:bg-[#eeddd5] hover:text-[#8e5b50]"
                     >
-                      <Pencil size={18} />
+                      <Pencil size={17} />
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => onDelete(product)}
-                      className="p-2 rounded-lg bg-red-500 transition-colors text-white hover:bg-red-600"
+                      aria-label={`Delete ${product.title}`}
+                      className="rounded-lg border border-[#e5c8c4] bg-[#f7e7e4] p-2 text-[#ad6258] transition hover:bg-[#eed4d0] hover:text-[#944d44]"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={17} />
                     </button>
                   </div>
                 </td>
@@ -63,7 +108,10 @@ export default function ProductTable({ products, onEdit, onDelete }) {
             ))
           ) : (
             <tr>
-              <td colSpan={6} className="text-center py-8 text-gray-500">
+              <td
+                colSpan={6}
+                className="py-12 text-center text-sm text-[#9a8879]"
+              >
                 No products found.
               </td>
             </tr>
