@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 
 import Button from "../components/Button";
@@ -19,14 +19,28 @@ export default function Shop() {
     getCategories,
   } = useCategoryStore();
 
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || "all",
+  );
+
+  const [search, setSearch] = useState(
+    searchParams.get("search") || "",
+  );
+
   const [sort, setSort] = useState("latest");
 
   useEffect(() => {
     getProducts();
     getCategories();
   }, [getProducts, getCategories]);
+
+  // Sync search and category with URL
+  useEffect(() => {
+    setSearch(searchParams.get("search") || "");
+    setSelectedCategory(searchParams.get("category") || "all");
+  }, [searchParams]);
 
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
@@ -60,10 +74,13 @@ export default function Shop() {
         break;
 
       case "name":
-        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        filtered.sort((a, b) =>
+          (a.title || "").localeCompare(b.title || ""),
+        );
         break;
 
       default:
+        // Latest products are kept in API order.
         break;
     }
 
@@ -74,19 +91,49 @@ export default function Shop() {
     return <Loader text="Loading Products..." />;
   }
 
-  const hasActiveFilters = selectedCategory !== "all" || search.trim() !== "";
+  const hasActiveFilters =
+    selectedCategory !== "all" || search.trim() !== "";
+
+  const updateSearchParams = (updates) => {
+    const params = new URLSearchParams(searchParams);
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (!value || value === "all") {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+    });
+
+    setSearchParams(params);
+  };
+
+  const handleSearchChange = (value) => {
+    setSearch(value);
+
+    updateSearchParams({
+      search: value.trim(),
+    });
+  };
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+
+    updateSearchParams({
+      category,
+    });
+  };
 
   const clearFilters = () => {
     setSelectedCategory("all");
     setSearch("");
     setSort("latest");
+    setSearchParams({});
   };
 
   return (
     <main className="min-h-screen bg-[#F8F5F1]">
-      {/* =====================================================
-    SHOP HEADER
-====================================================== */}
+      {/* Shop Header */}
       <section className="border-b border-[#eadfd5] bg-[#fffaf7]">
         <div className="mx-auto max-w-7xl px-6 py-7 sm:px-8 lg:px-10">
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
@@ -122,14 +169,14 @@ export default function Shop() {
                   type="text"
                   placeholder="Search products..."
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   className="!h-11 !rounded-full !border-[#dfd1c5] !bg-[#F8F5F1] !pl-11 !pr-10 !text-sm !text-[#6d5b4d] focus:!border-[#c98f84] focus:!ring-4 focus:!ring-[#c98f84]/10"
                 />
 
                 {search && (
                   <button
                     type="button"
-                    onClick={() => setSearch("")}
+                    onClick={() => handleSearchChange("")}
                     className="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-[#9a8879] transition hover:bg-[#f8ebe3] hover:text-[#c98f84]"
                     aria-label="Clear search"
                   >
@@ -142,9 +189,7 @@ export default function Shop() {
         </div>
       </section>
 
-      {/* =====================================================
-          FILTERS
-      ====================================================== */}
+      {/* Filters */}
       <section className="mx-auto max-w-7xl px-6 py-6 sm:px-8 lg:px-10">
         <div className="flex flex-col gap-5">
           {/* Category Pills */}
@@ -155,7 +200,7 @@ export default function Shop() {
 
             <button
               type="button"
-              onClick={() => setSelectedCategory("all")}
+              onClick={() => handleCategoryChange("all")}
               className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                 selectedCategory === "all"
                   ? "border-[#6d5b4d] bg-[#6d5b4d] text-white shadow-sm"
@@ -169,7 +214,7 @@ export default function Shop() {
               <button
                 key={category._id}
                 type="button"
-                onClick={() => setSelectedCategory(category.slug)}
+                onClick={() => handleCategoryChange(category.slug)}
                 className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category.slug
                     ? "border-[#6d5b4d] bg-[#6d5b4d] text-white shadow-sm"
@@ -196,7 +241,10 @@ export default function Shop() {
             </div>
 
             <div className="flex items-center gap-3">
-              <label htmlFor="sort" className="text-sm text-[#9a8879]">
+              <label
+                htmlFor="sort"
+                className="text-sm text-[#9a8879]"
+              >
                 Sort by
               </label>
 
@@ -227,14 +275,17 @@ export default function Shop() {
                   </>
                 )}
 
-                {search.trim() && selectedCategory !== "all" && " · "}
+                {search.trim() &&
+                  selectedCategory !== "all" &&
+                  " · "}
 
                 {selectedCategory !== "all" && (
                   <>
                     Category:{" "}
                     <span className="font-medium text-[#6d5b4d]">
                       {categories.find(
-                        (category) => category.slug === selectedCategory,
+                        (category) =>
+                          category.slug === selectedCategory,
                       )?.title || selectedCategory}
                     </span>
                   </>
@@ -253,9 +304,7 @@ export default function Shop() {
         </div>
       </section>
 
-      {/* =====================================================
-          PRODUCTS
-      ====================================================== */}
+      {/* Products */}
       <section className="mx-auto max-w-7xl px-6 pb-14 sm:px-8 lg:px-10">
         {filteredProducts.length > 0 ? (
           <ProductGrid products={filteredProducts} />
@@ -274,7 +323,10 @@ export default function Shop() {
             </p>
 
             <div className="mt-6">
-              <Button onClick={clearFilters} variant="primary">
+              <Button
+                onClick={clearFilters}
+                variant="primary"
+              >
                 Clear Filters
               </Button>
             </div>

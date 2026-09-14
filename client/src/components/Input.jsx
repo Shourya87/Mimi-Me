@@ -1,12 +1,18 @@
 import clsx from "clsx";
 
-export default function Input({ label, error, id, className = "", ...props }) {
+export default function Input({
+  label,
+  error,
+  id,
+  className = "",
+  ...props
+}) {
   return (
     <div className="w-full">
       {label && (
         <label
           htmlFor={id}
-          className="mb-2 block text-sm font-semibold tracking-wide text-[#5F4A3A]"
+          className="mb-2 block text-sm font-semibold tracking-wide text-[#4F3C30]"
         >
           {label}
         </label>
@@ -16,26 +22,26 @@ export default function Input({ label, error, id, className = "", ...props }) {
         id={id}
         aria-invalid={!!error}
         className={clsx(
-          // Base
-          "w-full rounded-2xl border bg-[#FFFCF8] px-5 py-3.5 text-[#3D2E22] shadow-sm transition-all duration-300 outline-none",
+          "w-full rounded-xl border bg-[#FAF7F3] px-4 py-3 text-sm text-[#4F3C30] shadow-sm outline-none transition-all duration-300",
 
           // Border
-          "border-[#E4D7C9]",
+          "border-[#E2D5C9]",
 
           // Placeholder
           "placeholder:text-[#A39384]",
 
-          // Premium Focus
-          "focus:border-[#A67C52] focus:bg-white focus:ring-4 focus:ring-[#EADCCB] focus:shadow-lg",
-
           // Hover
-          "hover:border-[#C7AA88]",
+          "hover:border-[#D3B8A3]",
+
+          // Focus
+          "focus:border-[#B8957C] focus:bg-[#FFFCF9] focus:ring-4 focus:ring-[#F1E5DB] focus:shadow-md",
 
           // Disabled
-          "disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-[#F6F2EC]",
+          "disabled:cursor-not-allowed disabled:bg-[#F1ECE6] disabled:opacity-60",
 
           // Error
-          error && "border-red-400 focus:border-red-500 focus:ring-red-100",
+          error &&
+            "border-[#C58A82] bg-[#FDF7F6] focus:border-[#A96860] focus:ring-[#F1DDDA]",
 
           className,
         )}
@@ -43,7 +49,9 @@ export default function Input({ label, error, id, className = "", ...props }) {
       />
 
       {error && (
-        <p className="mt-2 text-sm font-medium text-red-500">{error}</p>
+        <p className="mt-1.5 text-xs font-medium text-[#A96860]">
+          {error}
+        </p>
       )}
     </div>
   );

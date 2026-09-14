@@ -1,19 +1,25 @@
 export default function About() {
   return (
-    <main className="min-h-screen bg-[#fffaf7] text-[#5f4a3a]">
+    <main className="min-h-screen bg-[#F8F5F1] text-[#6d5b4d]">
       {/* Hero */}
-      <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-[#c98f84]">
-            About Mimi & Me
-          </p>
+      <section className="border-b border-[#E7DBD0] bg-[#FFFCF9]">
+        <div className="mx-auto max-w-6xl px-4 py-12 text-center sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+          <div className="mb-4 flex items-center justify-center gap-3">
+            <span className="h-px w-8 bg-[#D8BBA6]" />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#9A7660] sm:text-xs">
+              About Mimi & Me
+            </span>
+            <span className="h-px w-8 bg-[#D8BBA6]" />
+          </div>
 
-          <h1 className="text-4xl font-bold leading-tight text-[#5f4a3a] md:text-6xl">
+          <h1 className="text-3xl font-semibold leading-tight tracking-tight text-[#4F3C30] sm:text-4xl lg:text-5xl">
             Little moments deserve
-            <span className="block text-[#c98f84]">beautiful things.</span>
+            <span className="block text-[#B77D73]">
+              beautiful things.
+            </span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-[#8d7968] md:text-lg">
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#8D7968] sm:text-base">
             Mimi & Me is a thoughtfully curated clothing brand for babies,
             little girls, women, and moms. We believe clothing should feel
             comfortable, look beautiful, and make everyday moments a little
@@ -23,33 +29,40 @@ export default function About() {
       </section>
 
       {/* Our Story */}
-      <section className="bg-[#f8ebe3]">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-24">
-          <div className="overflow-hidden rounded-3xl shadow-lg">
+      <section className="bg-[#F3E8DE]">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-20">
+          <div className="overflow-hidden rounded-3xl border border-[#E2D2C4] bg-[#E9DDD2] shadow-[0_12px_35px_rgba(109,91,77,0.08)]">
             <img
               src="/about-story.jpg"
               alt="Mimi & Me collection"
-              className="h-105 w-full object-cover"
+              loading="lazy"
+              className="aspect-[4/3] w-full object-cover transition duration-700 hover:scale-[1.02]"
             />
           </div>
 
           <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#c98f84]">
-              Our Story
-            </p>
+            <div className="mb-3 flex items-center gap-2">
+              <span className="h-px w-6 bg-[#D0AD97]" />
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9A7660] sm:text-xs">
+                Our Story
+              </p>
+            </div>
 
-            <h2 className="text-3xl font-bold text-[#5f4a3a] md:text-4xl">
-              Made with love, chosen with care.
+            <h2 className="text-2xl font-semibold tracking-tight text-[#4F3C30] sm:text-3xl lg:text-4xl">
+              Made with love,
+              <span className="block text-[#8A6652]">
+                chosen with care.
+              </span>
             </h2>
 
-            <p className="mt-6 leading-8 text-[#8d7968]">
+            <p className="mt-4 text-sm leading-7 text-[#806F60] sm:text-base">
               At Mimi & Me, we focus on bringing together clothing that
               combines comfort, quality, and timeless style. Every piece is
               selected with the idea that what you wear should not only look
               good but also feel right.
             </p>
 
-            <p className="mt-4 leading-8 text-[#8d7968]">
+            <p className="mt-3 text-sm leading-7 text-[#806F60] sm:text-base">
               From playful outfits for little ones to elegant everyday styles
               for women, our collection is designed for the moments that
               become memories.
@@ -59,62 +72,69 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section className="mx-auto max-w-7xl px-6 py-20 md:py-24">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#c98f84]">
-            What We Believe
-          </p>
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+        <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
+          <div className="mb-3 flex items-center justify-center gap-2">
+            <span className="h-px w-6 bg-[#D8BBA6]" />
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9A7660] sm:text-xs">
+              What We Believe
+            </p>
+            <span className="h-px w-6 bg-[#D8BBA6]" />
+          </div>
 
-          <h2 className="text-3xl font-bold text-[#5f4a3a] md:text-4xl">
+          <h2 className="text-2xl font-semibold tracking-tight text-[#4F3C30] sm:text-3xl lg:text-4xl">
             More than just clothing
           </h2>
 
-          <p className="mt-4 leading-7 text-[#8d7968]">
+          <p className="mt-2 text-sm leading-6 text-[#8D7968]">
             We keep three things at the heart of everything we curate.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-3xl border border-[#eadfd5] bg-white p-8 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f8ebe3] text-2xl">
+        <div className="grid gap-5 md:grid-cols-3">
+          {/* Comfort */}
+          <div className="group rounded-2xl border border-[#E6D9CC] bg-[#FFFCF9] p-6 text-center shadow-[0_8px_25px_rgba(109,91,77,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#D3B8A3] hover:shadow-[0_15px_35px_rgba(109,91,77,0.10)]">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#F3E8DE] text-xl text-[#B77D73] transition duration-300 group-hover:bg-[#EEDDD5]">
               ♡
             </div>
 
-            <h3 className="mt-6 text-xl font-semibold text-[#5f4a3a]">
+            <h3 className="mt-5 text-lg font-semibold text-[#4F3C30]">
               Comfort
             </h3>
 
-            <p className="mt-3 leading-7 text-[#8d7968]">
+            <p className="mt-2 text-sm leading-6 text-[#8D7968]">
               Clothing should feel as good as it looks, especially for
               everyday wear.
             </p>
           </div>
 
-          <div className="rounded-3xl border border-[#eadfd5] bg-white p-8 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f8ebe3] text-2xl">
+          {/* Quality */}
+          <div className="group rounded-2xl border border-[#E6D9CC] bg-[#FFFCF9] p-6 text-center shadow-[0_8px_25px_rgba(109,91,77,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#D3B8A3] hover:shadow-[0_15px_35px_rgba(109,91,77,0.10)]">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#F3E8DE] text-xl text-[#8A6652] transition duration-300 group-hover:bg-[#EEDDD5]">
               ✦
             </div>
 
-            <h3 className="mt-6 text-xl font-semibold text-[#5f4a3a]">
+            <h3 className="mt-5 text-lg font-semibold text-[#4F3C30]">
               Quality
             </h3>
 
-            <p className="mt-3 leading-7 text-[#8d7968]">
+            <p className="mt-2 text-sm leading-6 text-[#8D7968]">
               We value pieces that bring together thoughtful design and
               lasting quality.
             </p>
           </div>
 
-          <div className="rounded-3xl border border-[#eadfd5] bg-white p-8 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f8ebe3] text-2xl">
+          {/* Timeless Style */}
+          <div className="group rounded-2xl border border-[#E6D9CC] bg-[#FFFCF9] p-6 text-center shadow-[0_8px_25px_rgba(109,91,77,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#D3B8A3] hover:shadow-[0_15px_35px_rgba(109,91,77,0.10)]">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#F3E8DE] text-xl text-[#9A7660] transition duration-300 group-hover:bg-[#EEDDD5]">
               ✿
             </div>
 
-            <h3 className="mt-6 text-xl font-semibold text-[#5f4a3a]">
+            <h3 className="mt-5 text-lg font-semibold text-[#4F3C30]">
               Timeless Style
             </h3>
 
-            <p className="mt-3 leading-7 text-[#8d7968]">
+            <p className="mt-2 text-sm leading-6 text-[#8D7968]">
               Beautiful styles that feel special today and remain meaningful
               tomorrow.
             </p>
@@ -123,13 +143,19 @@ export default function About() {
       </section>
 
       {/* Closing Section */}
-      <section className="bg-[#f5eee7]">
-        <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-24">
-          <h2 className="text-3xl font-bold text-[#5f4a3a] md:text-4xl">
+      <section className="border-t border-[#E7DBD0] bg-[#F3EAE2]">
+        <div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+          <div className="mb-3 flex items-center justify-center gap-3">
+            <span className="h-px w-7 bg-[#D0AD97]" />
+            <span className="text-[#B77D73]">✦</span>
+            <span className="h-px w-7 bg-[#D0AD97]" />
+          </div>
+
+          <h2 className="text-2xl font-semibold tracking-tight text-[#4F3C30] sm:text-3xl lg:text-4xl">
             For every little moment.
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl leading-8 text-[#8d7968]">
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#8D7968] sm:text-base">
             Whether it is a first outfit, a family celebration, or simply
             another beautiful day, Mimi & Me is here to make getting dressed
             feel a little more special.

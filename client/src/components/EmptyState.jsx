@@ -10,17 +10,24 @@ export default function EmptyState({
   buttonLink = "/shop",
 }) {
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center px-6 text-center">
-      <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-amber-100">
-        <ShoppingBag size={48} className="text-amber-700" />
+    <div className="flex min-h-[60vh] flex-col items-center justify-center bg-[#F8F5F1] px-6 text-center">
+      {/* Icon */}
+      <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-[#E6D9CC] bg-[#F3E8DE]">
+        <ShoppingBag size={36} className="text-[#8A6652]" strokeWidth={1.7} />
       </div>
 
-      <h2 className="mb-3 text-3xl font-bold text-stone-800">{title}</h2>
+      {/* Content */}
+      <h2 className="text-2xl font-semibold tracking-tight text-[#4F3C30] sm:text-3xl">
+        {title}
+      </h2>
 
-      <p className="mb-8 max-w-md text-stone-500">{description}</p>
+      <p className="mt-2.5 max-w-md text-sm leading-6 text-[#8D7968] sm:text-base">
+        {description}
+      </p>
 
-      <Link to={buttonLink}>
-        <Button>{buttonText}</Button>
+      {/* Action */}
+      <Link to={buttonLink} className="mt-6">
+        <Button size="md">{buttonText}</Button>
       </Link>
     </div>
   );

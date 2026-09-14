@@ -1,19 +1,51 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  Heart,
+  Menu,
+  Search,
+  ShoppingBag,
+  User,
+  X,
+} from "lucide-react";
+
 import { NAV_LINKS } from "../constants/navigation";
 import useAuthStore from "../store/authStore";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
-  const { user, isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuthStore();
 
   const iconButton =
     "relative flex h-11 w-11 items-center justify-center rounded-full border border-[#e6d7c9] bg-[#fffaf5] text-[#7d6a59] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#dfc2b3] hover:bg-[#f8ebe3] hover:text-[#c98f84]";
 
   const mobileIconButton =
     "relative flex h-11 w-11 items-center justify-center rounded-full border border-[#e6d7c9] bg-[#fffaf5] text-[#7d6a59] transition-all duration-300 hover:border-[#dfc2b3] hover:bg-[#f8ebe3] hover:text-[#c98f84]";
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+
+    const searchTerm = search.trim();
+
+    if (!searchTerm) {
+      navigate("/shop");
+      return;
+    }
+
+    navigate(`/shop?search=${encodeURIComponent(searchTerm)}`);
+
+    setIsSearchOpen(false);
+    setSearch("");
+    setIsOpen(false);
+  };
+
+  const handleSearchToggle = () => {
+    setIsSearchOpen((prev) => !prev);
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#eadfd5] bg-[#fffaf7]/90 shadow-md backdrop-blur-xl">
@@ -52,14 +84,34 @@ export default function Navbar() {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            to="/shop"
+          {isSearchOpen && (
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <Search
+                size={17}
+                strokeWidth={1.8}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a8879]"
+              />
+
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search products..."
+                autoFocus
+                className="h-11 w-52 rounded-full border border-[#dfd1c5] bg-[#fffaf5] pl-10 pr-4 text-sm text-[#6d5b4d] outline-none transition focus:border-[#c98f84] focus:ring-4 focus:ring-[#c98f84]/10"
+              />
+            </form>
+          )}
+
+          <button
+            type="button"
+            onClick={handleSearchToggle}
             aria-label="Search"
             title="Search"
             className={iconButton}
           >
-            <Search size={19} />
-          </Link>
+            {isSearchOpen ? <X size={19} /> : <Search size={19} />}
+          </button>
 
           <Link
             to="/wishlist"
@@ -108,6 +160,23 @@ export default function Navbar() {
         }`}
       >
         <div className="space-y-2 px-6 py-6">
+          {/* Mobile Search */}
+          <form onSubmit={handleSearchSubmit} className="relative mb-5">
+            <Search
+              size={17}
+              strokeWidth={1.8}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9a8879]"
+            />
+
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search products..."
+              className="h-11 w-full rounded-full border border-[#dfd1c5] bg-[#f8f5f1] pl-11 pr-4 text-sm text-[#6d5b4d] outline-none transition focus:border-[#c98f84] focus:ring-4 focus:ring-[#c98f84]/10"
+            />
+          </form>
+
           {/* Mobile Navigation */}
           {NAV_LINKS.map((link) => (
             <NavLink
@@ -128,15 +197,15 @@ export default function Navbar() {
 
           {/* Mobile Actions */}
           <div className="mt-6 flex items-center gap-3 border-t border-[#eadfd5] pt-6">
-            <Link
-              to="/shop"
-              onClick={() => setIsOpen(false)}
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
               aria-label="Search"
               title="Search"
               className={mobileIconButton}
             >
               <Search size={18} />
-            </Link>
+            </button>
 
             <Link
               to="/wishlist"
@@ -172,4 +241,4 @@ export default function Navbar() {
       </div>
     </header>
   );
-}
+};
