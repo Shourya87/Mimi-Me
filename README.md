@@ -1,380 +1,137 @@
 # 🧸 Mimi & Me
 
-A modern full-stack baby clothing e-commerce platform built with the **MERN Stack**. The application provides a smooth shopping experience for customers and a complete admin dashboard for managing products, orders, and users.
+### A modern full-stack fashion e-commerce platform built with the MERN stack.
 
-> Built to practice production-level full-stack development using React, Node.js, Express, MongoDB, Zustand, JWT Authentication, and Cloudinary.
+Mimi & Me is a full-stack e-commerce application designed around a clean, warm, premium shopping experience for **women, girls, babies, and accessories**.
+
+The platform includes a complete customer shopping flow, secure authentication, cart and wishlist management, Razorpay payments, order management, coupons, product image uploads, and a dedicated admin dashboard.
+
+> Built as a production-oriented full-stack project to practice scalable architecture, secure authentication, state management, REST APIs, payments, file uploads, and modern UI development.
 
 ---
 
-## ✨ Features
+## ✨ Highlights
 
-### 👤 User
+- 🛍️ Complete e-commerce shopping experience
+- 🔐 JWT authentication with HTTP-only cookies
+- 📧 Email OTP verification
+- 🔑 Forgot & reset password
+- ❤️ Wishlist management
+- 🛒 Persistent cart management
+- 💳 Razorpay payment integration
+- 📦 Complete order workflow
+- 🎟️ Coupon management and application
+- 👨‍💼 Role-based admin dashboard
+- ☁️ Cloudinary product image uploads
+- 🧩 Zod request validation
+- 🔔 Centralized toast notifications
+- 📱 Responsive customer & admin UI
+- 🎨 Consistent premium warm fashion theme
 
-- User Registration & Login
+---
+
+# 🛍️ Customer Features
+
+## Authentication
+
+- User Registration
 - Email OTP Verification
-- Secure JWT Authentication
-- Forgot Password & Reset Password
+- User Login
+- User Logout
+- JWT Authentication
+- HTTP-only Cookie Authentication
 - Protected Routes
-- User Profile
-- Browse Products
-- Search Products
-- Filter Products
-- Product Details Page
-- Add to Cart
-- Update Cart Quantity
-- Remove Cart Items
-- Checkout
-- Place Orders
-- View My Orders
-- Cancel Orders
-
----
-
-### 👨‍💼 Admin
-
-- Admin Dashboard
-- Manage Products
-- Add Products
-- Edit Products
-- Delete Products
-- Manage Orders
-- Update Order Status
-- Manage Users
-- Role Based Authorization
-- Product Image Upload using Cloudinary
-
----
-
-## 🚀 Tech Stack
-
-### Frontend
-
-- React.js
-- React Router DOM
-- Tailwind CSS
-- Zustand
-- Axios
-- React Hot Toast
-- Lucide React
-
-### Backend
-
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT
-- bcrypt
-- Nodemailer
-- Cloudinary
-- Multer
-- Cookie Parser
-
----
-
-## 📂 Project Structure
-
-```
-Mimi-Me/
-│
-├── backend/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   ├── uploads/
-│   ├── server.js
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── layouts/
-│   │   ├── pages/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── store/
-│   │   ├── utils/
-│   │   └── App.jsx
-│   └── package.json
-│
-└── README.md
-```
-
----
-
-## 📸 Screenshots
-
-### Home Page
-
-```
-(Add Screenshot Here)
-```
-
-### Product Page
-
-```
-(Add Screenshot Here)
-```
-
-### Cart
-
-```
-(Add Screenshot Here)
-```
-
-### Checkout
-
-```
-(Add Screenshot Here)
-```
-
-### Admin Dashboard
-
-```
-(Add Screenshot Here)
-```
-
----
-
-## ⚙️ Installation
-
-### Clone Repository
-
-```bash
-git clone https://github.com/your-username/mimi-me.git
-
-cd mimi-me
-```
-
----
-
-### Backend
-
-```bash
-cd backend
-
-npm install
-```
-
-Create `.env`
-
-```env
-PORT=5000
-
-MONGO_URI=
-
-JWT_SECRET=
-
-CLIENT_URL=http://localhost:5173
-
-EMAIL_USER=
-EMAIL_PASS=
-
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-
-NODE_ENV=development
-```
-
-Run Backend
-
-```bash
-npm run dev
-```
-
----
-
-### Frontend
-
-```bash
-cd frontend
-
-npm install
-
-npm run dev
-```
-
----
-
-## 🔐 Authentication Flow
-
-- Signup
-- Email OTP Verification
-- Login
-- JWT Token Generation
-- HTTP Only Cookie Authentication
-- Protected Routes
-- Role Based Authorization
+- Current User Session
 - Forgot Password
 - Reset Password
+- Password Hashing with bcrypt
+- Account/Profile Management
 
 ---
 
-## 📦 API Modules
-
-### Authentication
-
-- Signup
-- Login
-- Logout
-- Verify OTP
-- Forgot Password
-- Reset Password
-- Current User
+## 🛒 Shopping
 
 ### Products
 
-- Get All Products
-- Get Single Product
-- Search Products
-- Filter Products
+- Browse all products
+- Product details
+- Product images
+- Product categories
+- Product pricing
+- Discount pricing
+- Stock information
+- Product sizes
+- Product colors
+- Featured products
+- New arrivals
 
-### Cart
+### Search & Filtering
 
-- Add Item
-- Update Quantity
-- Remove Item
-- Get Cart
-
-### Orders
-
-- Create Order
-- My Orders
-- Order Details
-- Cancel Order
-
-### Admin
-
-- Manage Products
-- Manage Orders
-- Manage Users
+- Product search
+- Category filtering
+- Price sorting
+- Name sorting
+- Latest products
+- Product availability
 
 ---
 
-## 🛡️ Security
+## 🛒 Cart
 
-- JWT Authentication
-- HTTP Only Cookies
-- Password Hashing using bcrypt
-- Protected API Routes
-- Admin Middleware
-- Role Based Access Control
-- Environment Variables
-
----
-
-## 🌩️ Image Storage
-
-- Cloudinary Integration
-- Secure Image Upload
-- Optimized Product Images
+- Add products to cart
+- Update quantity
+- Increase/decrease quantity
+- Remove cart items
+- Automatic subtotal calculation
+- Shipping calculation
+- Order total calculation
+- Cart persistence through backend
 
 ---
 
-## 📈 Current Progress
+## ❤️ Wishlist
 
-### Completed
-
-- Authentication
-- Authorization
-- OTP Verification
-- Password Reset
-- Products
-- Cart
-- Checkout
-- Orders
-- Admin Panel
-- Image Upload
+- Add product to wishlist
+- Remove product from wishlist
+- View wishlist
+- Wishlist state management
+- Wishlist authentication protection
 
 ---
 
-### Upcoming Features
+## 💳 Checkout & Payments
 
-- Razorpay Integration
-- Wishlist
-- Product Reviews
-- Coupons
-- Email Notifications
-- Dashboard Analytics
-- Sales Reports
-- Pagination
-- Advanced Filters
-- Product Recommendations
-
----
-
-## 📚 What I Learned
-
-This project helped me understand:
-
-- MERN Architecture
-- REST APIs
-- Authentication
-- Authorization
-- MongoDB Relationships
-- Zustand State Management
-- File Uploads
-- Cloudinary Integration
-- Error Handling
-- Production Folder Structure
-- Admin Dashboard Development
+- Checkout page
+- Order summary
+- Shipping information
+- Coupon application
+- Discount calculation
+- Razorpay payment integration
+- Payment verification
+- Order creation
+- Payment status handling
 
 ---
 
-## 🤝 Contributing
+## 📦 Orders
 
-Contributions are welcome.
+Customers can:
 
-1. Fork the repository
+- Place orders
+- View all personal orders
+- View order details
+- Track order status
+- Cancel eligible orders
+- View payment information
+- View ordered products
+- View pricing and totals
 
-2. Create a feature branch
+### Order Status
 
-```bash
-git checkout -b feature/new-feature
-```
-
-3. Commit changes
-
-```bash
-git commit -m "Add new feature"
-```
-
-4. Push
-
-```bash
-git push origin feature/new-feature
-```
-
-5. Create a Pull Request
-
----
-
-## ⭐ Support
-
-If you found this project useful, consider giving it a ⭐ on GitHub.
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
-
----
-
-## 👨‍💻 Developer
-
-**Shourya Gaur**
-
-B.Tech CSE Student
-
-MERN Stack Developer
-
----
-
-Made with ❤️ using the MERN Stack.
+```text
+Pending
+Confirmed
+Processing
+Shipped
+Delivered
+Cancelled
