@@ -1,3 +1,5 @@
+import AboutStory from "../assets/about-story.png"
+
 export default function About() {
   return (
     <main className="min-h-screen bg-[#F8F5F1] text-[#6d5b4d]">
@@ -33,10 +35,10 @@ export default function About() {
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:py-20">
           <div className="overflow-hidden rounded-3xl border border-[#E2D2C4] bg-[#E9DDD2] shadow-[0_12px_35px_rgba(109,91,77,0.08)]">
             <img
-              src="/about-story.jpg"
+              src={AboutStory}
               alt="Mimi & Me collection"
               loading="lazy"
-              className="aspect-[4/3] w-full object-cover transition duration-700 hover:scale-[1.02]"
+              className="aspect-4/3 w-full object-cover transition duration-700 hover:scale-[1.02]"
             />
           </div>
 

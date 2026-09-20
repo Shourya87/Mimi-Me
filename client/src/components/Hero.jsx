@@ -6,22 +6,25 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
+import hero1 from "../assets/hero1.png";
+import hero2 from "../assets/hero2.png";
+import hero3 from "../assets/hero3.png";
 
 const heroSlides = [
   {
-    image: "/images/hero-1.jpg",
+    image: hero1,
     label: "New Season",
     title: "Made for",
     accent: "beautiful moments.",
   },
   {
-    image: "/images/hero-2.jpg",
+    image: hero2,
     label: "Women's Edit",
     title: "Quietly",
     accent: "beautiful.",
   },
   {
-    image: "/images/hero-3.jpg",
+    image: hero3,
     label: "Little Ones",
     title: "Little styles,",
     accent: "big memories.",
