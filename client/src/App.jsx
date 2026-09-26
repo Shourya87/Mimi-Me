@@ -35,8 +35,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import Profile from "./pages/Profile";
 import Addresses from "./pages/Addresses";
-
-
+import AdminRoute from "./components/AdminRoute";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const { checkAuth } = useAuthStore();
@@ -73,16 +73,24 @@ export default function App() {
         <Route path="/profile/addresses" element={<Addresses />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/products" element={<ManageProducts />} />
-        <Route path="/admin/products/create" element={<CreateProduct />} />
-        <Route path="/admin/products/update/:slug" element={<UpdateProduct />} />
-        <Route path="/admin/orders" element={<ManageOrders />} />
-        <Route path="/admin/users" element={<ManageUsers />} />
-        <Route path="/admin/coupons" element={<ManageCoupons />} />
-        <Route path="/admin/coupons/create" element={<CreateCoupon />} />
-        <Route path="/admin/coupons/update/:id" element={<UpdateCoupon />} />
-        
+        <Route element={<AdminRoute />}>
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/products" element={<ManageProducts />} />
+          <Route path="/admin/products/create" element={<CreateProduct />} />
+          <Route
+            path="/admin/products/update/:slug"
+            element={<UpdateProduct />}
+          />
+          <Route path="/admin/orders" element={<ManageOrders />} />
+          <Route path="/admin/users" element={<ManageUsers />} />
+          <Route path="/admin/coupons" element={<ManageCoupons />} />
+          <Route path="/admin/coupons/create" element={<CreateCoupon />} />
+          <Route path="/admin/coupons/update/:id" element={<UpdateCoupon />} />
+        </Route>
+
+        <Route path="/not-found" element={<NotFound />} />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />

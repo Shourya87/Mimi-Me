@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 import {
   signUpApi,
   verifyOtpApi,
@@ -16,6 +17,7 @@ const useAuthStore = create((set) => ({
   user: null,
   isAuthenticated: false,
   loading: false,
+  authInitialized: false,
 
   // Signup
   signUp: async (userData) => {
@@ -38,7 +40,7 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // Verify Otp
+  // Verify OTP
   verifyOtp: async (otpData) => {
     try {
       set({ loading: true });
@@ -49,6 +51,7 @@ const useAuthStore = create((set) => ({
         user: data.user,
         isAuthenticated: true,
         loading: false,
+        authInitialized: true,
       });
 
       return data;
@@ -72,12 +75,14 @@ const useAuthStore = create((set) => ({
         user: data.user,
         isAuthenticated: true,
         loading: false,
+        authInitialized: true,
       });
 
       return data;
     } catch (error) {
       set({
         loading: false,
+        authInitialized: true,
       });
 
       throw error;
@@ -95,6 +100,7 @@ const useAuthStore = create((set) => ({
         user: null,
         isAuthenticated: false,
         loading: false,
+        authInitialized: true,
       });
     } catch (error) {
       set({
@@ -108,7 +114,9 @@ const useAuthStore = create((set) => ({
   // Check Auth
   checkAuth: async () => {
     try {
-      set({ loading: true });
+      set({
+        loading: true,
+      });
 
       const data = await getCurrentUserApi();
 
@@ -116,15 +124,18 @@ const useAuthStore = create((set) => ({
         user: data.user,
         isAuthenticated: true,
         loading: false,
+        authInitialized: true,
       });
     } catch (error) {
       set({
         user: null,
         isAuthenticated: false,
         loading: false,
+        authInitialized: true,
       });
     }
   },
+
   // Update Profile
   updateProfile: async (profileData) => {
     set({
@@ -177,7 +188,7 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  // Forget Password
+  // Forgot Password
   forgotPassword: async (email) => {
     try {
       set({ loading: true });
