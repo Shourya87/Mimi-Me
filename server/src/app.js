@@ -31,7 +31,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoute);
-app.use("/api/addresses",addressRoutes);
+app.use("/api/addresses", addressRoutes);
 
 // 404 Handler
 app.use((req, res) => {
