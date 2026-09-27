@@ -33,6 +33,11 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoute);
 app.use("/api/addresses", addressRoutes);
 
+
+app.get("/", (req, res) => {
+  res.send("Backend Working 🛰️");
+});
+
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({

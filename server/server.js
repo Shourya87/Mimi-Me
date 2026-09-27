@@ -4,11 +4,6 @@ dotenv.config();
 const app = require("./src/app");
 const ConnectDB = require("./src/config/database");
 
-app.get("/", (req, res) => {
-  res.send("Backend Working 🛰️");
-});
-
-
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const PORT = process.env.PORT || 5000;
