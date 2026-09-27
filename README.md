@@ -1,115 +1,160 @@
 # 🧸 Mimi & Me
 
-### A modern full-stack fashion e-commerce platform built with the MERN stack.
+### A production-oriented full-stack fashion e-commerce platform built with the MERN stack.
 
-Mimi & Me is a full-stack e-commerce application designed around a clean, warm, premium shopping experience for **women, girls, babies, and accessories**.
+Mimi & Me is a modern full-stack e-commerce platform designed to deliver a clean, warm, and premium shopping experience for **women, girls, babies, and accessories**.
 
-The platform includes a complete customer shopping flow, secure authentication, cart and wishlist management, Razorpay payments, order management, coupons, product image uploads, and a dedicated admin dashboard.
+The platform provides an end-to-end commerce workflow covering authentication, product discovery, cart and wishlist management, checkout, Razorpay payments, coupons, order management, user accounts, and a dedicated role-based admin dashboard.
 
-> Built as a production-oriented full-stack project to practice scalable architecture, secure authentication, state management, REST APIs, payments, file uploads, and modern UI development.
+> Built as a production-oriented full-stack application to demonstrate scalable architecture, secure authentication, RESTful API design, state management, payment integration, cloud-based media handling, validation, responsive UI development, and deployment practices.
 
 ---
 
 ## ✨ Highlights
 
-- 🛍️ Complete e-commerce shopping experience
+- 🛍️ Complete end-to-end e-commerce workflow
 - 🔐 JWT authentication with HTTP-only cookies
 - 📧 Email OTP verification
-- 🔑 Forgot & reset password
+- 🔑 Forgot & reset password functionality
+- 👤 User profile and account management
 - ❤️ Wishlist management
-- 🛒 Persistent cart management
+- 🛒 Persistent server-side cart
+- 🔎 Product search, filtering, and sorting
 - 💳 Razorpay payment integration
-- 📦 Complete order workflow
-- 🎟️ Coupon management and application
+- 📦 Complete order lifecycle management
+- 🎟️ Coupon creation, validation, and application
 - 👨‍💼 Role-based admin dashboard
-- ☁️ Cloudinary product image uploads
+- ☁️ Cloudinary-powered image management
 - 🧩 Zod request validation
-- 🔔 Centralized toast notifications
-- 📱 Responsive customer & admin UI
-- 🎨 Consistent premium warm fashion theme
+- 🔔 Centralized toast and error handling
+- 📱 Responsive customer and admin interfaces
+- 🎨 Consistent premium fashion-focused UI
+- 🚀 Production deployment
 
 ---
 
 # 🛍️ Customer Features
 
-## Authentication
+## 🔐 Authentication & Account
 
-- User Registration
-- Email OTP Verification
-- User Login
-- User Logout
-- JWT Authentication
-- HTTP-only Cookie Authentication
-- Protected Routes
-- Current User Session
-- Forgot Password
-- Reset Password
-- Password Hashing with bcrypt
-- Account/Profile Management
+- User registration
+- Email OTP verification
+- Secure login/logout
+- JWT-based authentication
+- HTTP-only cookie authentication
+- Protected routes
+- Persistent user sessions
+- Forgot password
+- Password reset
+- Password hashing with bcrypt
+- User profile management
+- Account information management
+- Address management
+- Change password
 
 ---
 
-## 🛒 Shopping
+## 🛍️ Product Discovery
 
 ### Products
 
-- Browse all products
-- Product details
-- Product images
+- Browse products
+- Product detail pages
+- Product image galleries
 - Product categories
-- Product pricing
+- Regular pricing
 - Discount pricing
-- Stock information
+- Stock availability
 - Product sizes
 - Product colors
 - Featured products
 - New arrivals
 
-### Search & Filtering
+### Search, Filtering & Sorting
 
 - Product search
 - Category filtering
-- Price sorting
-- Name sorting
-- Latest products
-- Product availability
+- Price-based sorting
+- Name-based sorting
+- Latest product sorting
+- Availability-based filtering
 
 ---
 
-## 🛒 Cart
+## 🛒 Shopping Cart
 
 - Add products to cart
-- Update quantity
+- Update product quantity
 - Increase/decrease quantity
 - Remove cart items
+- Server-side cart persistence
 - Automatic subtotal calculation
 - Shipping calculation
-- Order total calculation
-- Cart persistence through backend
+- Discount calculation
+- Final order total calculation
 
 ---
 
 ## ❤️ Wishlist
 
-- Add product to wishlist
-- Remove product from wishlist
-- View wishlist
-- Wishlist state management
-- Wishlist authentication protection
+- Add products to wishlist
+- Remove products from wishlist
+- View saved products
+- Persistent wishlist
+- Authentication-protected wishlist operations
 
 ---
 
 ## 💳 Checkout & Payments
 
-- Checkout page
-- Order summary
+- Checkout workflow
 - Shipping information
+- Order summary
 - Coupon application
 - Discount calculation
-- Razorpay payment integration
+- Razorpay integration
 - Payment verification
-- Order creation
-- Payment status handling
+- Payment status management
+- Order creation after successful payment
+- Payment failure handling
+
+### Payment Flow
+
+```text
+Cart
+  ↓
+Checkout
+  ↓
+Apply Coupon
+  ↓
+Calculate Final Amount
+  ↓
+Create Order / Payment
+  ↓
+Razorpay Checkout
+  ↓
+Payment Verification
+  ↓
+Order Confirmation
+
+## 🎟️ Coupons
+
+Customers can:
+
+- Apply valid coupons
+- Remove applied coupons
+- Receive discount calculations
+- Get validation feedback
+- Use coupons according to configured conditions
+
+The admin can:
+
+- Create coupons
+- Update coupons
+- Delete coupons
+- Configure discount values
+- Configure coupon validity
+- Manage coupon availability
 
 ---
 
@@ -118,20 +163,347 @@ The platform includes a complete customer shopping flow, secure authentication, 
 Customers can:
 
 - Place orders
-- View all personal orders
-- View order details
+- View personal orders
+- View individual order details
 - Track order status
 - Cancel eligible orders
 - View payment information
 - View ordered products
-- View pricing and totals
+- View shipping information
+- View pricing and order totals
 
-### Order Status
+### Order Lifecycle
 
 ```text
 Pending
+   ↓
 Confirmed
+   ↓
 Processing
+   ↓
 Shipped
+   ↓
 Delivered
-Cancelled
+
+# 👨‍💼 Admin Dashboard
+
+Mimi & Me includes a dedicated administrative interface protected by role-based authorization.
+
+## 📊 Dashboard
+
+- Total users
+- Total products
+- Total orders
+- Pending orders
+- Delivered orders
+- Revenue overview
+
+## 📦 Product Management
+
+- Create products
+- Update products
+- Delete products
+- Manage product information
+- Manage pricing
+- Manage discounts
+- Manage stock
+- Manage sizes and colors
+- Upload product images
+
+## 🚚 Order Management
+
+- View all orders
+- View order information
+- Update order status
+- Monitor payment status
+- Manage order lifecycle
+
+## 👥 User Management
+
+- View registered users
+- View user information
+- View account creation dates
+- Identify user/admin roles
+- Delete eligible users
+
+## 🎟️ Coupon Management
+
+- Create coupons
+- Update coupons
+- Delete coupons
+- Configure discount rules
+- Manage coupon validity
+
+---
+
+# 🔒 Security & Validation
+
+The application implements several security and reliability practices:
+
+- JWT-based authentication
+- HTTP-only authentication cookies
+- Password hashing with bcrypt
+- Protected API routes
+- Role-based authorization
+- Admin-only endpoints
+- Request validation with Zod
+- Input validation
+- Authentication middleware
+- Centralized error handling
+- Protected user resources
+- Environment-based configuration
+- Sensitive credentials excluded from source control
+
+---
+
+# ☁️ Media Management
+
+Product and category images are handled through **Cloudinary**.
+
+### Image Flow
+
+```text
+Admin Upload
+     ↓
+Multer
+     ↓
+Cloudinary
+     ↓
+Image URL + Public ID
+     ↓
+MongoDB
+     ↓
+Frontend
+
+# 🏗️ Architecture
+
+Mimi & Me follows a modular client-server architecture.
+
+## Frontend Architecture
+
+```text
+Page
+ ↓
+Zustand Store
+ ↓
+API Service
+ ↓
+Axios
+ ↓
+Backend REST API
+
+## Backend Architecture
+
+```text
+Route
+ ↓
+Middleware
+ ↓
+Controller
+ ↓
+Model
+ ↓
+MongoDB
+
+## High-Level Architecture
+
+```text
+                    ┌──────────────────┐
+                    │     Customer     │
+                    │    / Admin UI    │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ React + Vite     │
+                    │ Tailwind CSS     │
+                    │ Zustand          │
+                    └────────┬─────────┘
+                             │
+                          REST API
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │ Node.js          │
+                    │ Express.js       │
+                    │ Middleware       │
+                    │ Controllers      │
+                    └───────┬──────────┘
+                            │
+                 ┌──────────┴──────────┐
+                 ▼                     ▼
+        ┌─────────────────┐   ┌─────────────────┐
+        │ MongoDB Atlas   │   │   Cloudinary    │
+        │ Application DB  │   │ Media Storage   │
+        └─────────────────┘   └─────────────────┘
+                            │
+                            ▼
+                    ┌─────────────────┐
+                    │    Razorpay     │
+                    │    Payments     │
+                    └─────────────────┘
+
+# 🧰 Tech Stack
+
+## Frontend
+
+| Technology | Purpose |
+|---|---|
+| React | UI development |
+| Vite | Frontend tooling & development |
+| Tailwind CSS | Styling & responsive design |
+| Zustand | Global state management |
+| React Router | Client-side routing |
+| Axios | API communication |
+| Lucide React | UI icons |
+| React Hot Toast | Notifications |
+
+## Backend
+
+| Technology | Purpose |
+|---|---|
+| Node.js | Runtime environment |
+| Express.js | REST API framework |
+| MongoDB | Database |
+| Mongoose | MongoDB ODM |
+| JWT | Authentication |
+| bcrypt | Password hashing |
+| Zod | Request validation |
+| Multer | File upload handling |
+| Nodemailer | Email delivery |
+| Razorpay | Payment processing |
+| Cloudinary | Image/media storage |
+| dotenv | Environment configuration |
+
+---
+
+# 🗂️ Project Structure
+
+```text
+Mimi-Me/
+│
+├── client/
+│   ├── public/
+│   └── src/
+│       ├── assets/
+│       ├── components/
+│       ├── pages/
+│       ├── services/
+│       ├── store/
+│       ├── routes/
+│       ├── utils/
+│       ├── App.jsx
+│       └── main.jsx
+│
+├── server/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── validators/
+│   │   └── app.js
+│   │
+│   └── server.js
+│
+├── .gitignore
+└── README.md
+
+# 🔄 State Management
+
+Global application state is managed using **Zustand**.
+
+Major stores include:
+
+```text
+authStore
+productStore
+categoryStore
+cartStore
+wishlistStore
+orderStore
+couponStore
+
+# 🌐 REST API
+
+The backend exposes RESTful endpoints for major application domains.
+
+```text
+/api/auth
+/api/products
+/api/categories
+/api/cart
+/api/wishlist
+/api/orders
+/api/coupons
+/api/admin
+/api/users
+
+# 🧪 Testing & Quality
+
+The project went through dedicated production-readiness and responsive testing phases covering:
+
+- Authentication flows
+- Product workflows
+- Cart operations
+- Wishlist operations
+- Checkout
+- Payment flow
+- Coupon functionality
+- Order lifecycle
+- User account functionality
+- Admin functionality
+- API protection
+- Responsive layouts
+- Desktop layouts
+- Tablet layouts
+- Mobile layouts
+- Production frontend/backend integration
+
+---
+
+# 🚀 Deployment
+
+The application is deployed using a separated frontend/backend architecture.
+
+```text
+Frontend
+   │
+   └── Vercel
+          │
+          ▼
+       REST API
+          │
+          ▼
+Backend
+   │
+   └── Render
+          │
+          ├── MongoDB Atlas
+          ├── Cloudinary
+          └── Razorpay
+
+# 🚀 Deployment
+
+The application is deployed using a separated frontend/backend architecture.
+
+```text
+Frontend
+   │
+   └── Vercel
+          │
+          ▼
+       REST API
+          │
+          ▼
+Backend
+   │
+   └── Render
+          │
+          ├── MongoDB Atlas
+          ├── Cloudinary
+          └── Razorpay
+adminStore
