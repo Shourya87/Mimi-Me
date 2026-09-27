@@ -58,7 +58,7 @@ const useWishlistStore = create((set, get) => ({
       return data;
     } catch (error) {
       set({
-       error: error.response?.data?.message || error.message,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;
@@ -126,8 +126,28 @@ const useWishlistStore = create((set, get) => ({
   },
 
   // Check if Product Exists in Wishlist
-  isInWishlist: (product) => {
-    return get().wishlist.some((item) => item.product._id === product);
+  isInWishlist: (productId) => {
+    const wishlist = get().wishlist;
+
+    if (!Array.isArray(wishlist)) {
+      return false;
+    }
+
+    return wishlist.some(
+      (item) => item.product?._id === productId || item.product === productId,
+    );
+  },
+
+  getWishlistItem: (productId) => {
+    const wishlist = get().wishlist;
+
+    if (!Array.isArray(wishlist)) {
+      return null;
+    }
+
+    return wishlist.find(
+      (item) => item.product?._id === productId || item.product === productId,
+    );
   },
 
   // Clear Error

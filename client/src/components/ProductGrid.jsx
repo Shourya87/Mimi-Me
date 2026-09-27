@@ -18,8 +18,8 @@ export default function ProductGrid({ products = [] }) {
   }
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 pb-8 pt-1 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+    <section className="mx-auto w-full px-0 pb-8 pt-1">
+      <div className="grid grid-cols-2 gap-3.5 sm:gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
         {products.map((product) => (
           <ProductCard
             key={product._id}

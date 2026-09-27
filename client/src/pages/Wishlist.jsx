@@ -31,7 +31,7 @@ export default function Wishlist() {
           </h2>
 
           <p className="mt-3 text-[#6B5B4D]">
-            {error.message || "Unable to load wishlist."}
+            {error || "Unable to load wishlist."}
           </p>
         </div>
       </section>

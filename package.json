@@ -1,5 +1,13 @@
 {
   "dependencies": {
     "react-hot-toast": "^2.6.0"
+  },
+   "scripts": {
+    "server": "npm start --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4"
   }
 }

@@ -1,5 +1,5 @@
 const wishlistModel = require("../models/wishlist.model");
-const productModel = require("../models/wishlist.model");
+const productModel = require("../models/product.model");
 
 // Get Item
 const getWishlist = async (req, res) => {
@@ -50,12 +50,19 @@ const addToWishlist = async (req, res) => {
       });
     }
 
-    const wishlist = await wishlistModel.create({
+    const wishlistItem = await wishlistModel.create({
       user: req.user._id,
       product,
     });
 
-    res.status(201).json({
+    const wishlist = await wishlistModel
+      .find({ user: req.user._id })
+      .populate(
+        "product",
+        "title slug price discountPrice images stock category",
+      );
+
+    return res.status(201).json({
       message: "Product added to wishlist",
       wishlist,
     });

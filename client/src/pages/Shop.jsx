@@ -1,6 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+
+import {
+  ChevronDown,
+  Search,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -8,39 +14,96 @@ import Loader from "../components/Loader";
 import ProductGrid from "../components/ProductGrid";
 
 import useProductStore from "../store/productStore";
-import useCategoryStore from "../store/categoryStore";
+
+import { categoryToSlug } from "../utils/categoryUtils";
+
+const SORT_OPTIONS = [
+  {
+    value: "latest",
+    label: "Latest",
+  },
+  {
+    value: "price-low",
+    label: "Price: Low to High",
+  },
+  {
+    value: "price-high",
+    label: "Price: High to Low",
+  },
+  {
+    value: "name",
+    label: "Name: A-Z",
+  },
+];
 
 export default function Shop() {
-  const { products, loading: productLoading, getProducts } = useProductStore();
-
   const {
-    categories,
-    loading: categoryLoading,
-    getCategories,
-  } = useCategoryStore();
+    products,
+    loading: productLoading,
+    getProducts,
+  } = useProductStore();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get("category") || "all",
+    searchParams.get("category") || "all"
   );
 
   const [search, setSearch] = useState(
-    searchParams.get("search") || "",
+    searchParams.get("search") || ""
   );
 
   const [sort, setSort] = useState("latest");
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
+  const sortRef = useRef(null);
 
   useEffect(() => {
     getProducts();
-    getCategories();
-  }, [getProducts, getCategories]);
+  }, [getProducts]);
+
+  /*
+   * Derive categories directly from products.
+   * Product.category is now the single source of truth.
+   */
+  const categories = useMemo(() => {
+    return [
+      ...new Set(
+        products
+          .map((product) => product.category)
+          .filter(Boolean)
+      ),
+    ];
+  }, [products]);
 
   // Sync search and category with URL
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
-    setSelectedCategory(searchParams.get("category") || "all");
+    setSelectedCategory(
+      searchParams.get("category") || "all"
+    );
   }, [searchParams]);
+
+  // Close custom sort dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sortRef.current &&
+        !sortRef.current.contains(event.target)
+      ) {
+        setIsSortOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
 
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
@@ -49,8 +112,7 @@ export default function Shop() {
     if (selectedCategory !== "all") {
       filtered = filtered.filter(
         (product) =>
-          product.category?.slug === selectedCategory ||
-          product.category === selectedCategory,
+          categoryToSlug(product.category) === selectedCategory
       );
     }
 
@@ -59,40 +121,50 @@ export default function Shop() {
       const searchTerm = search.toLowerCase().trim();
 
       filtered = filtered.filter((product) =>
-        product.title?.toLowerCase().includes(searchTerm),
+        product.title?.toLowerCase().includes(searchTerm)
       );
     }
 
     // Sorting
     switch (sort) {
       case "price-low":
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort(
+          (a, b) =>
+            Number(a.discountPrice ?? a.price) -
+            Number(b.discountPrice ?? b.price)
+        );
         break;
 
       case "price-high":
-        filtered.sort((a, b) => b.price - a.price);
+        filtered.sort(
+          (a, b) =>
+            Number(b.discountPrice ?? b.price) -
+            Number(a.discountPrice ?? a.price)
+        );
         break;
 
       case "name":
         filtered.sort((a, b) =>
-          (a.title || "").localeCompare(b.title || ""),
+          (a.title || "").localeCompare(b.title || "")
         );
         break;
 
+      case "latest":
       default:
-        // Latest products are kept in API order.
+        filtered.sort(
+          (a, b) =>
+            new Date(b.createdAt || 0) -
+            new Date(a.createdAt || 0)
+        );
         break;
     }
 
     return filtered;
   }, [products, selectedCategory, search, sort]);
 
-  if (productLoading || categoryLoading) {
+  if (productLoading) {
     return <Loader text="Loading Products..." />;
   }
-
-  const hasActiveFilters =
-    selectedCategory !== "all" || search.trim() !== "";
 
   const updateSearchParams = (updates) => {
     const params = new URLSearchParams(searchParams);
@@ -131,11 +203,18 @@ export default function Shop() {
     setSearchParams({});
   };
 
+  const selectedSortLabel =
+    SORT_OPTIONS.find(
+      (option) => option.value === sort
+    )?.label || "Latest";
+
   return (
     <main className="min-h-screen bg-[#F8F5F1]">
-      {/* Shop Header */}
+      {/* =====================================================
+          SHOP HEADER
+      ====================================================== */}
       <section className="border-b border-[#eadfd5] bg-[#fffaf7]">
-        <div className="mx-auto max-w-7xl px-6 py-7 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-6xl px-5 py-6 sm:px-7 sm:py-7 lg:px-8">
           <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
             {/* Heading */}
             <div>
@@ -152,12 +231,12 @@ export default function Shop() {
               </h1>
 
               <p className="mt-1.5 text-sm text-[#9a8879]">
-                Discover our latest collection.
+                Discover pieces made for every little moment.
               </p>
             </div>
 
             {/* Search */}
-            <div className="w-full md:w-80 lg:w-96">
+            <div className="w-full md:w-72 lg:w-80">
               <div className="relative">
                 <Search
                   size={17}
@@ -169,7 +248,9 @@ export default function Shop() {
                   type="text"
                   placeholder="Search products..."
                   value={search}
-                  onChange={(e) => handleSearchChange(e.target.value)}
+                  onChange={(e) =>
+                    handleSearchChange(e.target.value)
+                  }
                   className="!h-11 !rounded-full !border-[#dfd1c5] !bg-[#F8F5F1] !pl-11 !pr-10 !text-sm !text-[#6d5b4d] focus:!border-[#c98f84] focus:!ring-4 focus:!ring-[#c98f84]/10"
                 />
 
@@ -189,127 +270,148 @@ export default function Shop() {
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="mx-auto max-w-7xl px-6 py-6 sm:px-8 lg:px-10">
-        <div className="flex flex-col gap-5">
-          {/* Category Pills */}
-          <div className="flex items-center gap-3 overflow-x-auto pb-1">
-            <span className="mr-1 hidden shrink-0 text-xs font-medium uppercase tracking-[0.16em] text-[#9a8879] sm:block">
-              Categories
-            </span>
+      {/* =====================================================
+          FILTERS
+      ====================================================== */}
+      <section className="mx-auto max-w-6xl px-5 py-5 sm:px-7 sm:py-6 lg:px-8">
+        <div className="space-y-5">
+          {/* CATEGORY FILTER */}
+          <div className="rounded-2xl border border-[#eadfd5] bg-[#fffaf7] px-4 py-4 sm:px-5">
+            <div className="mb-3 flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#c98f84]" />
 
-            <button
-              type="button"
-              onClick={() => handleCategoryChange("all")}
-              className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
-                selectedCategory === "all"
-                  ? "border-[#6d5b4d] bg-[#6d5b4d] text-white shadow-sm"
-                  : "border-[#dfd1c5] bg-[#fffaf7] text-[#7d6a59] hover:border-[#c98f84] hover:text-[#c98f84]"
-              }`}
-            >
-              All
-            </button>
-
-            {categories.map((category) => (
-              <button
-                key={category._id}
-                type="button"
-                onClick={() => handleCategoryChange(category.slug)}
-                className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
-                  selectedCategory === category.slug
-                    ? "border-[#6d5b4d] bg-[#6d5b4d] text-white shadow-sm"
-                    : "border-[#dfd1c5] bg-[#fffaf7] text-[#7d6a59] hover:border-[#c98f84] hover:text-[#c98f84]"
-                }`}
-              >
-                {category.title}
-              </button>
-            ))}
-          </div>
-
-          {/* Bottom Controls */}
-          <div className="flex flex-col gap-4 border-t border-[#eadfd5] pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2 text-sm text-[#9a8879]">
-              <SlidersHorizontal size={16} />
-
-              <span>
-                Showing{" "}
-                <span className="font-medium text-[#6d5b4d]">
-                  {filteredProducts.length}
-                </span>{" "}
-                {filteredProducts.length === 1 ? "product" : "products"}
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#8f7b6b]">
+                Shop by Category
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
-              <label
-                htmlFor="sort"
-                className="text-sm text-[#9a8879]"
+            <div className="flex gap-2.5 overflow-x-auto pb-1">
+              {/* ALL */}
+              <button
+                type="button"
+                onClick={() => handleCategoryChange("all")}
+                className={`shrink-0 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all duration-300 sm:px-5 sm:text-sm ${
+                  selectedCategory === "all"
+                    ? "border-[#6d5b4d] bg-[#6d5b4d] text-white shadow-md shadow-[#6d5b4d]/10"
+                    : "border-[#dfd1c5] bg-[#fffaf7] text-[#7d6a59] hover:border-[#c98f84] hover:bg-[#fdf2eb] hover:text-[#a8756c]"
+                }`}
               >
-                Sort by
-              </label>
+                All
+              </button>
 
-              <select
-                id="sort"
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
-                className="rounded-full border border-[#dfd1c5] bg-[#fffaf7] px-4 py-2.5 text-sm font-medium text-[#7d6a59] outline-none transition-all focus:border-[#c98f84] focus:ring-4 focus:ring-[#c98f84]/10"
-              >
-                <option value="latest">Latest</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="name">Name: A-Z</option>
-              </select>
+              {/* CATEGORIES */}
+              {categories.map((category) => {
+                const categorySlug =
+                  categoryToSlug(category);
+
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() =>
+                      handleCategoryChange(categorySlug)
+                    }
+                    className={`shrink-0 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-all duration-300 sm:px-5 sm:text-sm ${
+                      selectedCategory === categorySlug
+                        ? "border-[#6d5b4d] bg-[#6d5b4d] text-white shadow-md shadow-[#6d5b4d]/10"
+                        : "border-[#dfd1c5] bg-[#fffaf7] text-[#7d6a59] hover:border-[#c98f84] hover:bg-[#fdf2eb] hover:text-[#a8756c]"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Active Filters */}
-          {hasActiveFilters && (
-            <div className="flex items-center justify-between rounded-2xl border border-[#eadfd5] bg-[#fffaf7] px-4 py-3">
-              <p className="text-sm text-[#9a8879]">
-                {search.trim() && (
-                  <>
-                    Search:{" "}
-                    <span className="font-medium text-[#6d5b4d]">
-                      "{search}"
-                    </span>
-                  </>
-                )}
+          {/* =================================================
+              RESULT + SORT
+          ================================================== */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {/* Result Count */}
+            <div className="flex items-center gap-2 text-sm text-[#9a8879]">
+              <SlidersHorizontal
+                size={16}
+                strokeWidth={1.7}
+              />
 
-                {search.trim() &&
-                  selectedCategory !== "all" &&
-                  " · "}
+              <span>
+                Showing{" "}
+                <span className="font-semibold text-[#6d5b4d]">
+                  {filteredProducts.length}
+                </span>{" "}
+                {filteredProducts.length === 1
+                  ? "product"
+                  : "products"}
+              </span>
+            </div>
 
-                {selectedCategory !== "all" && (
-                  <>
-                    Category:{" "}
-                    <span className="font-medium text-[#6d5b4d]">
-                      {categories.find(
-                        (category) =>
-                          category.slug === selectedCategory,
-                      )?.title || selectedCategory}
-                    </span>
-                  </>
-                )}
-              </p>
+            {/* CUSTOM SORT */}
+            <div
+              ref={sortRef}
+              className="relative flex items-center gap-3"
+            >
+              <span className="text-xs text-[#9a8879]">
+                Sort by
+              </span>
 
               <button
                 type="button"
-                onClick={clearFilters}
-                className="text-xs font-medium text-[#c98f84] transition hover:text-[#a8756c]"
+                onClick={() =>
+                  setIsSortOpen((previous) => !previous)
+                }
+                className={`flex min-w-[190px] items-center justify-between gap-4 rounded-xl border bg-[#fffaf7] px-4 py-2.5 text-sm font-medium text-[#6d5b4d] shadow-sm outline-none transition-all duration-200 ${
+                  isSortOpen
+                    ? "border-[#c98f84] ring-4 ring-[#c98f84]/10"
+                    : "border-[#dfd1c5] hover:border-[#c98f84]"
+                }`}
+                aria-haspopup="listbox"
+                aria-expanded={isSortOpen}
               >
-                Clear all
+                <span>{selectedSortLabel}</span>
+
+                <ChevronDown
+                  size={16}
+                  className={`text-[#8d7664] transition-transform duration-200 ${
+                    isSortOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
+
+              {isSortOpen && (
+                <div className="absolute right-0 top-full z-30 mt-2 w-[190px] overflow-hidden rounded-xl border border-[#dfd1c5] bg-[#fffaf7] p-1.5 shadow-[0_14px_35px_rgba(109,91,77,0.14)]">
+                  {SORT_OPTIONS.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => {
+                        setSort(option.value);
+                        setIsSortOpen(false);
+                      }}
+                      className={`flex w-full items-center rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                        sort === option.value
+                          ? "bg-[#f5e8df] font-semibold text-[#6d5b4d]"
+                          : "text-[#7d6a59] hover:bg-[#faf0e9]"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </section>
 
-      {/* Products */}
-      <section className="mx-auto max-w-7xl px-6 pb-14 sm:px-8 lg:px-10">
+      {/* =====================================================
+          PRODUCTS
+      ====================================================== */}
+      <section className="mx-auto max-w-6xl px-5 pb-12 sm:px-7 lg:px-8">
         {filteredProducts.length > 0 ? (
           <ProductGrid products={filteredProducts} />
         ) : (
-          <div className="flex min-h-[360px] flex-col items-center justify-center rounded-3xl border border-[#eadfd5] bg-[#fffaf7] px-6 text-center">
+          <div className="flex min-h-[330px] flex-col items-center justify-center rounded-2xl border border-[#eadfd5] bg-[#fffaf7] px-6 text-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#f8ebe3] text-[#c98f84]">
               <Search size={22} strokeWidth={1.8} />
             </div>
@@ -323,10 +425,7 @@ export default function Shop() {
             </p>
 
             <div className="mt-6">
-              <Button
-                onClick={clearFilters}
-                variant="primary"
-              >
+              <Button onClick={clearFilters} variant="primary">
                 Clear Filters
               </Button>
             </div>

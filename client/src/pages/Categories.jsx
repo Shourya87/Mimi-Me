@@ -1,21 +1,33 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 import Loader from "../components/Loader";
-import useCategoryStore from "../store/categoryStore";
+import useProductStore from "../store/productStore";
+import { categoryToSlug } from "../utils/categoryUtils";
 
 export default function Categories() {
-  const {
-    categories,
-    getCategories,
-    loading,
-    error,
-  } = useCategoryStore();
+  const { products, getProducts, loading, error } = useProductStore();
 
   useEffect(() => {
-    getCategories();
-  }, [getCategories]);
+    getProducts();
+  }, [getProducts]);
+
+  const categories = useMemo(() => {
+    return [
+      ...new Set(products.map((product) => product.category).filter(Boolean)),
+    ];
+  }, [products]);
+
+  const categoryImages = useMemo(() => {
+    return categories.reduce((acc, category) => {
+      const product = products.find((product) => product.category === category);
+
+      acc[category] = product?.images?.[0]?.url || "/placeholder.png";
+
+      return acc;
+    }, {});
+  }, [categories, products]);
 
   if (loading) {
     return <Loader text="Loading Categories..." />;
@@ -33,13 +45,11 @@ export default function Categories() {
             Unable to Load Categories
           </h1>
 
-          <p className="mt-2 text-sm leading-6 text-[#8D7968]">
-            {error}
-          </p>
+          <p className="mt-2 text-sm leading-6 text-[#8D7968]">{error}</p>
 
           <button
             type="button"
-            onClick={getCategories}
+            onClick={getProducts}
             className="mt-6 rounded-xl bg-[#74533F] px-5 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#604330] hover:shadow-md"
           >
             Try Again
@@ -69,8 +79,8 @@ export default function Categories() {
           </h1>
 
           <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#8D7968] sm:text-base">
-            Discover thoughtfully curated styles for women, girls,
-            babies, and every little moment worth dressing up for.
+            Discover thoughtfully curated styles for women, girls, babies, and
+            every little moment worth dressing up for.
           </p>
         </div>
       </section>
@@ -88,40 +98,34 @@ export default function Categories() {
             </h2>
 
             <p className="mt-2 text-sm text-[#8D7968]">
-              Categories will appear here once they are added.
+              Categories will appear here once products are added.
             </p>
           </div>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {categories.map((category) => (
               <Link
-                key={category._id}
-                to={`/categories/${category.slug}`}
+                key={category}
+                to={`/categories/${categoryToSlug(category)}`}
                 className="group overflow-hidden rounded-2xl border border-[#E6D9CC] bg-[#FFFCF9] shadow-[0_8px_25px_rgba(109,91,77,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#D3B8A3] hover:shadow-[0_15px_35px_rgba(109,91,77,0.10)]"
               >
-                {/* Image */}
+                {/* Category Visual */}
                 <div className="relative overflow-hidden bg-[#F1E9DD]">
                   <img
-                    src={category.image?.url || "/placeholder.png"}
-                    alt={category.title}
+                    src={categoryImages[category]}
+                    alt={category}
                     loading="lazy"
                     className="aspect-[4/4.5] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
 
-                  {/* Soft Image Overlay */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/15 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-                  {/* Explore Badge */}
-                  <div className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-[#FFFCF9]/90 text-[#74533F] opacity-0 shadow-md backdrop-blur-sm transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                    <ArrowRight size={16} />
-                  </div>
                 </div>
 
                 {/* Details */}
                 <div className="flex items-center justify-between gap-3 px-4 py-4 sm:px-5">
                   <div className="min-w-0">
                     <h2 className="truncate text-base font-semibold text-[#4F3C30] transition-colors duration-300 group-hover:text-[#8A6652] sm:text-lg">
-                      {category.title}
+                      {category}
                     </h2>
 
                     <p className="mt-1 text-[11px] text-[#9A8879] sm:text-xs">

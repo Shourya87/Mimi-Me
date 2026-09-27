@@ -50,23 +50,6 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
       min: 1,
     },
-
-    razorpayOrderId: {
-      type: String,
-      unique: true,
-      sparse: true,
-      trim: true,
-    },
-
-    razorpayPaymentId: {
-      type: String,
-      trim: true,
-    },
-
-    razorpaySignature: {
-      type: String,
-      trim: true,
-    },
   },
   {
     _id: false,
@@ -154,6 +137,23 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ["Pending", "Paid", "Failed"],
       default: "Pending",
+    },
+
+    razorpayOrderId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+    },
+
+    razorpayPaymentId: {
+      type: String,
+      trim: true,
+    },
+
+    razorpaySignature: {
+      type: String,
+      trim: true,
     },
 
     paidAt: {

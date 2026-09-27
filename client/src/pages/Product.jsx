@@ -14,6 +14,7 @@ import {
   ShoppingBag,
   Star,
   Truck,
+  Zap,
 } from "lucide-react";
 
 import Button from "../components/Button";
@@ -43,8 +44,13 @@ export default function ProductDetails() {
 
   const { addCart } = useCartStore();
 
-  const { getWishlist, addWishlist, removeWishlist, isInWishlist } =
-    useWishlistStore();
+  const {
+    getWishlist,
+    addWishlist,
+    removeWishlist,
+    isInWishlist,
+    getWishlistItem,
+  } = useWishlistStore();
 
   const [selectedImage, setSelectedImage] = useState("");
   const [imageBroken, setImageBroken] = useState(false);
@@ -119,8 +125,12 @@ export default function ProductDetails() {
       setWishlistLoading(true);
 
       if (isInWishlist(displayProduct._id)) {
-        await removeWishlist(displayProduct._id);
-        toast.success("Removed from wishlist");
+        const wishlistItem = getWishlistItem(displayProduct._id);
+
+        if (wishlistItem?._id) {
+          await removeWishlist(wishlistItem._id);
+          toast.success("Removed from wishlist");
+        }
       } else {
         await addWishlist(displayProduct._id);
         toast.success("Added to wishlist");
@@ -134,6 +144,7 @@ export default function ProductDetails() {
     displayProduct,
     wishlistLoading,
     isInWishlist,
+    getWishlistItem,
     addWishlist,
     removeWishlist,
   ]);
@@ -269,25 +280,28 @@ export default function ProductDetails() {
   const productInWishlist = isInWishlist(displayProduct._id);
 
   return (
-    <section className="min-h-screen bg-[#F8F5F1] py-6 sm:py-8 lg:py-10">
+    <section className="min-h-screen bg-[#F8F5F1] py-5 sm:py-7 lg:py-9">
       <div className="mx-auto max-w-6xl px-4 sm:px-5 lg:px-6">
         {/* BACK TO SHOP */}
         <Link
           to="/shop"
-          className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#E6D9CC] bg-[#FFFCF9] px-3.5 py-2 text-xs font-medium text-[#725B49] shadow-sm transition-all duration-300 hover:border-[#B9967B] hover:bg-[#F5EBE2] sm:mb-7 sm:px-4 sm:py-2.5 sm:text-sm"
+          className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#E6D9CC] bg-[#FFFCF9] px-3.5 py-2 text-xs font-medium text-[#725B49] shadow-sm transition-all duration-300 hover:border-[#B9967B] hover:bg-[#F5EBE2] sm:mb-6 sm:px-4 sm:py-2.5 sm:text-sm"
         >
           <ArrowLeft size={16} />
           Back to Shop
         </Link>
 
-        <div className="grid items-start gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8 xl:gap-10">
-          {/* IMAGE SECTION */}
+        <div className="grid items-start gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-8 xl:gap-10">
+          {/* =====================================================
+              IMAGE SECTION
+          ====================================================== */}
           <div className="lg:sticky lg:top-20">
-            <div className="group mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-[#E5D8CA] bg-[#FFFCF9] shadow-[0_14px_40px_rgba(109,91,77,0.10)] sm:rounded-3xl lg:max-w-md">
-              <div className="aspect-4/5 max-h-[62vh] overflow-hidden bg-[#F1E9DD]">
+            <div className="group relative mx-auto w-full max-w-85 overflow-hidden rounded-2xl border border-[#E5D8CA] bg-[#FFFCF9] shadow-[0_14px_40px_rgba(109,91,77,0.10)] sm:rounded-3xl lg:max-w-92.5">
+              <div className="relative aspect-4/5 w-full overflow-hidden bg-[#F1E9DD]">
                 {imageBroken || !selectedImage ? (
                   <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-[#AA9582]">
                     <ImageOff size={32} />
+
                     <span className="text-xs font-medium">
                       Image unavailable
                     </span>
@@ -301,18 +315,19 @@ export default function ProductDetails() {
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                   />
                 )}
-              </div>
 
-              {hasDiscount && (
-                <span className="absolute left-3 top-3 rounded-full bg-[#7A5C48] px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-md sm:left-4 sm:top-4 sm:px-3.5 sm:py-1.5 sm:text-xs">
-                  {discountPercentage}% Off
-                </span>
-              )}
+                {/* DISCOUNT BADGE */}
+                {hasDiscount && (
+                  <span className="absolute left-3 top-3 rounded-full bg-[#7A5C48] px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-md sm:left-4 sm:top-4 sm:px-3.5 sm:py-1.5 sm:text-xs">
+                    {discountPercentage}% Off
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* IMAGE THUMBNAILS */}
             {images?.length > 1 && (
-              <div className="mx-auto mt-3 flex max-w-sm gap-2 overflow-x-auto pb-1 sm:mt-4 sm:max-w-md sm:gap-2.5">
+              <div className="mx-auto mt-3 flex max-w-85 gap-2 overflow-x-auto pb-1 sm:mt-4 sm:max-w-92.5 sm:gap-2.5">
                 {images.map((image, index) => (
                   <button
                     key={image.url || index}
@@ -343,7 +358,9 @@ export default function ProductDetails() {
             )}
           </div>
 
-          {/* PRODUCT DETAILS */}
+          {/* =====================================================
+              PRODUCT DETAILS
+          ====================================================== */}
           <div className="rounded-2xl border border-[#E5D8CA] bg-[#FFFCF9] p-5 shadow-[0_14px_40px_rgba(109,91,77,0.06)] sm:rounded-3xl sm:p-6 lg:p-7">
             {/* CATEGORY */}
             {category?.title && (
@@ -353,7 +370,7 @@ export default function ProductDetails() {
             )}
 
             {/* TITLE */}
-            <h1 className="mt-4 text-2xl font-semibold leading-tight tracking-tight text-[#49382D] sm:mt-5 sm:text-3xl lg:text-[2.15rem]">
+            <h1 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-[#49382D] sm:mt-4 sm:text-3xl lg:text-[2.1rem]">
               {title}
             </h1>
 
@@ -372,7 +389,7 @@ export default function ProductDetails() {
             )}
 
             {/* RATING */}
-            <div className="mt-5 flex flex-wrap items-center gap-2.5 sm:mt-6 sm:gap-3">
+            <div className="mt-4 flex flex-wrap items-center gap-2.5 sm:mt-5 sm:gap-3">
               <div
                 className="flex items-center gap-0.5 rounded-full border border-[#E9DCCF] bg-[#FAF4EE] px-3 py-1.5"
                 role="img"
@@ -401,10 +418,10 @@ export default function ProductDetails() {
             </div>
 
             {/* PRICE */}
-            <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7">
+            <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-6">
               {hasDiscount ? (
                 <>
-                  <span className="text-2xl font-bold tracking-tight text-[#624735] sm:text-3xl lg:text-4xl">
+                  <span className="text-3xl font-bold tracking-tight text-[#624735] sm:text-4xl">
                     ₹{formatCurrency(discountPrice)}
                   </span>
 
@@ -417,7 +434,7 @@ export default function ProductDetails() {
                   </span>
                 </>
               ) : (
-                <span className="text-2xl font-bold tracking-tight text-[#624735] sm:text-3xl lg:text-4xl">
+                <span className="text-3xl font-bold tracking-tight text-[#624735] sm:text-4xl">
                   ₹{formatCurrency(price)}
                 </span>
               )}
@@ -428,7 +445,7 @@ export default function ProductDetails() {
             </p>
 
             {/* STOCK */}
-            <div className="mt-5">
+            <div className="mt-4">
               {!outOfStock ? (
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#D8E7D8] bg-[#F1F7F0] px-3.5 py-1.5 text-xs font-semibold text-[#4E7650]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#5D8A5E]" />
@@ -442,30 +459,113 @@ export default function ProductDetails() {
               )}
             </div>
 
-            {/* DESCRIPTION */}
+            {/* =====================================================
+                PRIMARY CTAs
+            ====================================================== */}
+            <div className="mt-6 border-t border-[#EEE3D8] pt-5 sm:mt-7 sm:pt-6">
+              <div className="mb-3 flex items-center gap-2">
+                <Zap size={16} className="text-[#A47755]" />
+
+                <span className="text-xs font-semibold text-[#6F5543]">
+                  Ready to make it yours?
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                {/* BUY NOW */}
+                <Button
+                  size="lg"
+                  disabled={outOfStock || buyLoading}
+                  onClick={handleBuyNow}
+                  className="group/order flex-1 rounded-xl bg-[#74533F] py-3.5 text-sm font-semibold text-white shadow-md shadow-[#74533F]/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#604330] hover:shadow-lg hover:shadow-[#74533F]/20 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <Zap
+                    size={17}
+                    className="transition-transform duration-300 group-hover/order:scale-110"
+                  />
+
+                  {buyLoading ? "Processing..." : "Buy Now"}
+                </Button>
+
+                {/* ADD TO CART */}
+                <Button
+                  size="lg"
+                  disabled={outOfStock || cartLoading}
+                  onClick={handleAddCart}
+                  variant="outline"
+                  className="flex-1 rounded-xl border-[#CDB49F] bg-[#FAF5EF] py-3.5 text-sm font-semibold text-[#694B38] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#A9866D] hover:bg-[#F3E8DD] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <ShoppingBag size={17} />
+
+                  {cartLoading ? "Adding..." : "Add to Cart"}
+                </Button>
+              </div>
+
+              {/* SECONDARY ACTIONS */}
+              <div className="mt-3 flex gap-2.5">
+                <button
+                  type="button"
+                  onClick={handleWishlist}
+                  disabled={wishlistLoading}
+                  aria-pressed={productInWishlist}
+                  aria-label={
+                    productInWishlist
+                      ? "Remove from wishlist"
+                      : "Add to wishlist"
+                  }
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E5D8CC] bg-[#FFFCF9] text-[#704F3A] shadow-sm transition-all duration-300 hover:border-[#A98770] hover:bg-[#F7EEE6] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <Heart
+                    size={17}
+                    className={
+                      productInWishlist ? "fill-red-500 text-red-500" : ""
+                    }
+                  />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  aria-label="Share this product"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E5D8CC] bg-[#FFFCF9] text-[#704F3A] shadow-sm transition-all duration-300 hover:border-[#A98770] hover:bg-[#F7EEE6]"
+                >
+                  <Share2 size={17} />
+                </button>
+
+                <div className="flex flex-1 items-center justify-center rounded-xl border border-[#EEE3D8] bg-[#FAF6F1] px-3 text-center text-[10px] font-medium text-[#806F60] sm:text-xs">
+                  Secure checkout • Easy returns
+                </div>
+              </div>
+            </div>
+
+            {/* =====================================================
+                DESCRIPTION
+            ====================================================== */}
             {description && (
               <div className="mt-6 border-t border-[#EEE3D8] pt-6 sm:mt-7 sm:pt-7">
-                <h3 className="mb-2.5 text-base font-semibold text-[#49382D] sm:text-lg">
+                <h3 className="text-base font-semibold text-[#49382D] sm:text-lg">
                   Product Description
                 </h3>
 
-                <p className="text-xs leading-6 text-[#766658] sm:text-sm sm:leading-7">
+                <p className="mt-2.5 text-xs leading-6 text-[#766658] sm:text-sm sm:leading-7">
                   {description}
                 </p>
               </div>
             )}
 
-            {/* FEATURES */}
+            {/* =====================================================
+                FEATURES
+            ====================================================== */}
             <div className="mt-6 grid gap-3 border-t border-[#EEE3D8] pt-6 sm:mt-7 sm:grid-cols-3 sm:gap-3 sm:pt-7">
               <div className="rounded-xl border border-[#E8DDD2] bg-[#FCF9F5] p-3.5 sm:rounded-2xl sm:p-4">
                 <Truck size={20} className="mb-2.5 text-[#92705A]" />
 
                 <h4 className="text-xs font-semibold text-[#4A392E] sm:text-sm">
-                  Free Shipping
+                  Fast Delivery
                 </h4>
 
                 <p className="mt-1 text-[11px] leading-5 text-[#806F60] sm:text-xs">
-                  Fast & secure delivery.
+                  Safe & reliable delivery.
                 </p>
               </div>
 
@@ -494,65 +594,9 @@ export default function ProductDetails() {
               </div>
             </div>
 
-            {/* ACTIONS */}
-            <div className="mt-6 space-y-3 sm:mt-7">
-              <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
-                <Button
-                  size="lg"
-                  disabled={outOfStock || cartLoading}
-                  onClick={handleAddCart}
-                  className="flex-1 rounded-xl bg-[#74533F] py-3 text-sm text-white shadow-md transition-all duration-300 hover:bg-[#604330] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <ShoppingBag size={18} />
-
-                  {cartLoading ? "Adding..." : "Add to Cart"}
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="lg"
-                  disabled={outOfStock || buyLoading}
-                  onClick={handleBuyNow}
-                  className="flex-1 rounded-xl border-[#CDB49F] bg-[#FAF5EF] py-3 text-sm text-[#694B38] transition-all duration-300 hover:border-[#A9866D] hover:bg-[#F3E8DD] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {buyLoading ? "Processing..." : "Buy Now"}
-                </Button>
-              </div>
-
-              {/* SECONDARY ACTIONS */}
-              <div className="flex gap-2.5">
-                <button
-                  type="button"
-                  onClick={handleWishlist}
-                  disabled={wishlistLoading}
-                  aria-pressed={productInWishlist}
-                  aria-label={
-                    productInWishlist
-                      ? "Remove from wishlist"
-                      : "Add to wishlist"
-                  }
-                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E5D8CC] bg-[#FFFCF9] text-[#704F3A] shadow-sm transition-all duration-300 hover:border-[#A98770] hover:bg-[#F7EEE6] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <Heart
-                    size={18}
-                    className={
-                      productInWishlist ? "fill-red-500 text-red-500" : ""
-                    }
-                  />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleShare}
-                  aria-label="Share this product"
-                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#E5D8CC] bg-[#FFFCF9] text-[#704F3A] shadow-sm transition-all duration-300 hover:border-[#A98770] hover:bg-[#F7EEE6]"
-                >
-                  <Share2 size={18} />
-                </button>
-              </div>
-            </div>
-
-            {/* TRUST SECTION */}
+            {/* =====================================================
+                TRUST SECTION
+            ====================================================== */}
             <div className="mt-6 rounded-2xl border border-[#E5D8CA] bg-[#F8F0E8] p-4 sm:mt-7 sm:p-5">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>

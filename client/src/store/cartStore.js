@@ -25,7 +25,7 @@ const useCartStore = create((set) => ({
       const data = await getCartApi();
 
       set({
-        cart: data.cart,
+        cart: Array.isArray(data.cart) ? data.cart : [],
       });
 
       return data;
@@ -53,7 +53,7 @@ const useCartStore = create((set) => ({
       const data = await addCartApi(productId, quantity);
 
       set({
-        cart: data.cart,
+        cart: Array.isArray(data.cart) ? data.cart : [],
       });
 
       return data;
@@ -152,7 +152,7 @@ const useCartStore = create((set) => ({
       return data;
     } catch (error) {
       set({
-       error: error.response?.data?.message || error.message,
+        error: error.response?.data?.message || error.message,
       });
 
       throw error;

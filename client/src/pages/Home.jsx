@@ -1,39 +1,48 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import Loader from "../components/Loader";
-
 import ProductGrid from "../components/ProductGrid";
 import CategoryCard from "../components/CategoryCard";
-
-import useProductStore from "../store/productStore";
-import useCategoryStore from "../store/categoryStore";
 import Hero from "../components/Hero";
 import PromoBanner from "../components/PromoBanner";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Newsletter from "../components/Newsletter";
+
+import useProductStore from "../store/productStore";
+
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
   const { products, getProducts, loading: productLoading } = useProductStore();
 
-  const {
-    categories,
-    getCategories,
-    loading: categoryLoading,
-  } = useCategoryStore();
-
   useEffect(() => {
     getProducts();
-    getCategories();
-  }, [getProducts, getCategories]);
+  }, [getProducts]);
+
+  const categories = useMemo(() => {
+    return [
+      ...new Set(products.map((product) => product.category).filter(Boolean)),
+    ];
+  }, [products]);
+
+  const categoryImages = useMemo(() => {
+    return categories.reduce((acc, category) => {
+      const product = products.find((product) => product.category === category);
+
+      acc[category] = product?.images?.[0]?.url || "/placeholder.png";
+
+      return acc;
+    }, {});
+  }, [categories, products]);
 
   const featuredProducts = products
     .filter((product) => product.isFeatured)
     .slice(0, 8);
 
-  // Show fullscreen loader while initial data is loading
-  if (productLoading || categoryLoading) {
+  const newArrivals = products.slice(8, 16);
+
+  if (productLoading) {
     return <Loader text="Loading Mimi & Me..." />;
   }
 
@@ -77,11 +86,17 @@ export default function Home() {
         </div>
 
         {/* Categories */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {categories.map((category) => (
-            <CategoryCard key={category._id} category={category} />
-          ))}
-        </div>
+        {categories.length > 0 && (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {categories.map((category) => (
+              <CategoryCard
+                key={category}
+                category={category}
+                image={categoryImages[category]}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Featured Products */}
@@ -107,7 +122,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* View All */}
             <Link
               to="/shop"
               className="group hidden items-center gap-2 text-sm font-medium text-[#7d6a59] transition-colors hover:text-[#c98f84] sm:flex"
@@ -124,6 +138,7 @@ export default function Home() {
           <ProductGrid products={featuredProducts} />
         </section>
       )}
+
       {/* Promo Banner */}
       <PromoBanner />
 
@@ -149,7 +164,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* View All */}
           <Link
             to="/shop"
             className="group hidden items-center gap-2 text-sm font-medium text-[#7d6a59] sm:flex"
@@ -163,7 +177,7 @@ export default function Home() {
         </div>
 
         {/* Products */}
-        <ProductGrid products={products.slice(8, 16)} />
+        {newArrivals.length > 0 && <ProductGrid products={newArrivals} />}
       </section>
 
       {/* Why Choose Us */}
