@@ -173,7 +173,7 @@ Customers can:
 
 
 ### Order Lifecycle
-
+```
 Pending
    ↓
 Confirmed
@@ -183,7 +183,7 @@ Processing
 Shipped
    ↓
 Delivered
-
+```
 
 
 # 👨‍💼 Admin Dashboard
@@ -281,7 +281,7 @@ MongoDB
      ↓
 Frontend
 ```
-
+---
 
 # 🏗️ Architecture
 
@@ -313,7 +313,7 @@ Model
  ↓
 MongoDB
 ```
-
+---
 
 ## High-Level Architecture
 
@@ -352,7 +352,7 @@ MongoDB
                     │    Payments     │
                     └─────────────────┘
 
-
+---
 
 # 🧰 Tech Stack
 
