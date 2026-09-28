@@ -425,6 +425,7 @@ Mimi-Me/
 ├── .gitignore
 └── README.md
 ```
+---
 
 # 🔄 State Management
 
@@ -438,7 +439,7 @@ cartStore
 wishlistStore
 orderStore
 couponStore
-
+---
 
 # 🌐 REST API
 
@@ -452,6 +453,7 @@ The backend exposes RESTful endpoints for major application domains.
 /api/coupons
 /api/admin
 /api/users
+---
 
 # 🧪 Testing & Quality
 
@@ -479,7 +481,7 @@ The project went through dedicated production-readiness and responsive testing p
 # 🚀 Deployment
 
 The application is deployed using a separated frontend/backend architecture.
-
+```
 Frontend
    │
    └── Vercel
@@ -495,7 +497,8 @@ Backend
           ├── MongoDB Atlas
           ├── Cloudinary
           └── Razorpay
-
+```
+---
 
 # ⚙️ Local Development
 
@@ -564,6 +567,7 @@ npm run dev
 
 ```
 ```
+---
 
 # 📌 Development Principles
 
@@ -581,6 +585,7 @@ The project was developed around the following principles:
 - Environment-based configuration
 - Maintainable folder structure
 - Production-oriented development practices
+---
 
 # 📈 Project Development Journey
 
@@ -598,6 +603,7 @@ Phase 8  → Production Readiness Audit
 Phase 9  → Deployment & Production
 Phase 10 → Documentation & Portfolio
 ```
+---
 
 # 🔮 Future Improvements
 
@@ -614,7 +620,7 @@ Potential future iterations may include:
 - Performance optimizations
 - Additional payment methods
 - Progressive Web App capabilities
-
+---
 
 # 📚 What This Project Demonstrates
 
@@ -635,6 +641,7 @@ Mimi & Me demonstrates practical experience with:
 - Responsive UI engineering
 - Production deployment
 - End-to-end application development
+---
 
 
 # 👨‍💻 Author
