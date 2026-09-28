@@ -430,7 +430,7 @@ Mimi-Me/
 # 🔄 State Management
 
 Global application state is managed using **Zustand**.
-
+```
 Major stores include:
 authStore
 productStore
@@ -439,11 +439,13 @@ cartStore
 wishlistStore
 orderStore
 couponStore
+```
 ---
 
 # 🌐 REST API
 
 The backend exposes RESTful endpoints for major application domains.
+```
 /api/auth
 /api/products
 /api/categories
@@ -453,12 +455,13 @@ The backend exposes RESTful endpoints for major application domains.
 /api/coupons
 /api/admin
 /api/users
+```
 ---
 
 # 🧪 Testing & Quality
 
 The project went through dedicated production-readiness and responsive testing phases covering:
-
+```
 - Authentication flows
 - Product workflows
 - Cart operations
@@ -475,7 +478,7 @@ The project went through dedicated production-readiness and responsive testing p
 - Tablet layouts
 - Mobile layouts
 - Production frontend/backend integration
-
+```
 ---
 
 # 🚀 Deployment
