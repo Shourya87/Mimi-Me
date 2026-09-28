@@ -171,9 +171,9 @@ Customers can:
 - View shipping information
 - View pricing and order totals
 
+
 ### Order Lifecycle
 
-```text
 Pending
    ↓
 Confirmed
@@ -184,9 +184,11 @@ Shipped
    ↓
 Delivered
 
+
 # 👨‍💼 Admin Dashboard
 
 Mimi & Me includes a dedicated administrative interface protected by role-based authorization.
+
 
 ## 📊 Dashboard
 
@@ -196,6 +198,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - Pending orders
 - Delivered orders
 - Revenue overview
+
 
 ## 📦 Product Management
 
@@ -209,6 +212,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - Manage sizes and colors
 - Upload product images
 
+
 ## 🚚 Order Management
 
 - View all orders
@@ -217,6 +221,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - Monitor payment status
 - Manage order lifecycle
 
+
 ## 👥 User Management
 
 - View registered users
@@ -224,6 +229,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - View account creation dates
 - Identify user/admin roles
 - Delete eligible users
+
 
 ## 🎟️ Coupon Management
 
@@ -261,7 +267,6 @@ Product and category images are handled through **Cloudinary**.
 
 ### Image Flow
 
-```text
 Admin Upload
      ↓
 Multer
@@ -274,13 +279,14 @@ MongoDB
      ↓
 Frontend
 
+
 # 🏗️ Architecture
 
 Mimi & Me follows a modular client-server architecture.
 
+
 ## Frontend Architecture
 
-```text
 Page
  ↓
 Zustand Store
@@ -291,9 +297,9 @@ Axios
  ↓
 Backend REST API
 
+
 ## Backend Architecture
 
-```text
 Route
  ↓
 Middleware
@@ -304,9 +310,9 @@ Model
  ↓
 MongoDB
 
+
 ## High-Level Architecture
 
-```text
                     ┌──────────────────┐
                     │     Customer     │
                     │    / Admin UI    │
@@ -341,6 +347,7 @@ MongoDB
                     │    Razorpay     │
                     │    Payments     │
                     └─────────────────┘
+
 
 # 🧰 Tech Stack
 
@@ -378,7 +385,6 @@ MongoDB
 
 # 🗂️ Project Structure
 
-```text
 Mimi-Me/
 │
 ├── client/
@@ -411,13 +417,12 @@ Mimi-Me/
 ├── .gitignore
 └── README.md
 
+
 # 🔄 State Management
 
 Global application state is managed using **Zustand**.
 
 Major stores include:
-
-```text
 authStore
 productStore
 categoryStore
@@ -426,11 +431,10 @@ wishlistStore
 orderStore
 couponStore
 
+
 # 🌐 REST API
 
 The backend exposes RESTful endpoints for major application domains.
-
-```text
 /api/auth
 /api/products
 /api/categories
@@ -468,7 +472,6 @@ The project went through dedicated production-readiness and responsive testing p
 
 The application is deployed using a separated frontend/backend architecture.
 
-```text
 Frontend
    │
    └── Vercel
@@ -485,11 +488,11 @@ Backend
           ├── Cloudinary
           └── Razorpay
 
+
 # 🚀 Deployment
 
 The application is deployed using a separated frontend/backend architecture.
 
-```text
 Frontend
    │
    └── Vercel
