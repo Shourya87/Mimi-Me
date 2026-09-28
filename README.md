@@ -280,6 +280,7 @@ MongoDB
 Frontend
 
 
+
 # 🏗️ Architecture
 
 Mimi & Me follows a modular client-server architecture.
@@ -309,6 +310,7 @@ Controller
 Model
  ↓
 MongoDB
+
 
 
 ## High-Level Architecture
@@ -349,10 +351,11 @@ MongoDB
                     └─────────────────┘
 
 
+
 # 🧰 Tech Stack
 
 ## Frontend
-
+```
 | Technology | Purpose |
 |---|---|
 | React | UI development |
@@ -363,9 +366,9 @@ MongoDB
 | Axios | API communication |
 | Lucide React | UI icons |
 | React Hot Toast | Notifications |
-
+```
 ## Backend
-
+```
 | Technology | Purpose |
 |---|---|
 | Node.js | Runtime environment |
@@ -380,11 +383,11 @@ MongoDB
 | Razorpay | Payment processing |
 | Cloudinary | Image/media storage |
 | dotenv | Environment configuration |
-
+```
 ---
 
 # 🗂️ Project Structure
-
+```
 Mimi-Me/
 │
 ├── client/
@@ -416,7 +419,7 @@ Mimi-Me/
 │
 ├── .gitignore
 └── README.md
-
+```
 
 # 🔄 State Management
 
@@ -522,9 +525,11 @@ Create `.env` files according to the required frontend and backend configuration
 Example backend configuration:
 
 ```env
-PORT=5000
+PORT=3000
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+
+BREVO_API_KEY=your_brevo_api_key
 
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
@@ -534,7 +539,6 @@ RAZORPAY_KEY_ID=your_key_id
 RAZORPAY_KEY_SECRET=your_key_secret
 
 EMAIL_USER=your_email
-EMAIL_PASSWORD=your_email_password
 ```
 
 > Never commit real credentials, API keys, secrets, or `.env` files to the repository.
