@@ -119,7 +119,7 @@ The platform provides an end-to-end commerce workflow covering authentication, p
 - Payment failure handling
 
 ### Payment Flow
-
+```
 Cart
   ↓
 Checkout
@@ -135,6 +135,8 @@ Razorpay Checkout
 Payment Verification
   ↓
 Order Confirmation
+```
+---
 
 ## 🎟️ Coupons
 
