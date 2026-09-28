@@ -185,6 +185,7 @@ Shipped
 Delivered
 
 
+
 # 👨‍💼 Admin Dashboard
 
 Mimi & Me includes a dedicated administrative interface protected by role-based authorization.
@@ -261,12 +262,13 @@ The application implements several security and reliability practices:
 
 ---
 
+
 # ☁️ Media Management
 
 Product and category images are handled through **Cloudinary**.
 
 ### Image Flow
-
+```
 Admin Upload
      ↓
 Multer
@@ -278,7 +280,7 @@ Image URL + Public ID
 MongoDB
      ↓
 Frontend
-
+```
 
 
 # 🏗️ Architecture
@@ -287,7 +289,7 @@ Mimi & Me follows a modular client-server architecture.
 
 
 ## Frontend Architecture
-
+```
 Page
  ↓
 Zustand Store
@@ -297,10 +299,10 @@ API Service
 Axios
  ↓
 Backend REST API
-
+```
 
 ## Backend Architecture
-
+```
 Route
  ↓
 Middleware
@@ -310,7 +312,7 @@ Controller
 Model
  ↓
 MongoDB
-
+```
 
 
 ## High-Level Architecture
