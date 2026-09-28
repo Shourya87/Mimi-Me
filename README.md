@@ -120,7 +120,6 @@ The platform provides an end-to-end commerce workflow covering authentication, p
 
 ### Payment Flow
 
-```text
 Cart
   ↓
 Checkout
