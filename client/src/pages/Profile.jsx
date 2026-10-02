@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import useAuthStore from "../store/authStore";
@@ -14,6 +14,8 @@ const Profile = () => {
     loading,
     logOut,
   } = useAuthStore();
+
+  const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState({
     name: "",
@@ -136,6 +138,7 @@ const Profile = () => {
     try {
       await logOut();
       toast.success("Logged out successfully.");
+      navigate("/", { replace: true });
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||

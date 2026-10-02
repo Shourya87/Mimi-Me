@@ -37,6 +37,7 @@ import Profile from "./pages/Profile";
 import Addresses from "./pages/Addresses";
 import AdminRoute from "./components/AdminRoute";
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   const { checkAuth } = useAuthStore();
@@ -54,7 +55,14 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/shop" element={<Shop />} />
         <Route path="/products/:slug" element={<Product />} />
         <Route path="/categories" element={<Categories />} />

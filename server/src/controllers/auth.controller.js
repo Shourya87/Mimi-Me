@@ -186,7 +186,12 @@ const verifyOtp = async (req, res) => {
 const logOut = async (req, res) => {
   try {
     // Clear JWT Cookie
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+    });
 
     return res.status(200).json({
       message: "Logged out successfully.",
@@ -285,9 +290,7 @@ const changePassword = async (req, res) => {
       });
     }
 
-    const user = await userModel
-      .findById(req.user._id)
-      .select("+password");
+    const user = await userModel.findById(req.user._id).select("+password");
 
     if (!user) {
       return res.status(404).json({
@@ -308,10 +311,7 @@ const changePassword = async (req, res) => {
       });
     }
 
-    const isSamePassword = await bcrypt.compare(
-      newPassword,
-      user.password,
-    );
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
 
     if (isSamePassword) {
       return res.status(400).json({
