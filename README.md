@@ -119,8 +119,7 @@ The platform provides an end-to-end commerce workflow covering authentication, p
 - Payment failure handling
 
 ### Payment Flow
-
-```text
+```
 Cart
   ↓
 Checkout
@@ -136,6 +135,8 @@ Razorpay Checkout
 Payment Verification
   ↓
 Order Confirmation
+```
+---
 
 ## 🎟️ Coupons
 
@@ -172,9 +173,9 @@ Customers can:
 - View shipping information
 - View pricing and order totals
 
-### Order Lifecycle
 
-```text
+### Order Lifecycle
+```
 Pending
    ↓
 Confirmed
@@ -184,10 +185,14 @@ Processing
 Shipped
    ↓
 Delivered
+```
+---
+
 
 # 👨‍💼 Admin Dashboard
 
 Mimi & Me includes a dedicated administrative interface protected by role-based authorization.
+
 
 ## 📊 Dashboard
 
@@ -197,6 +202,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - Pending orders
 - Delivered orders
 - Revenue overview
+
 
 ## 📦 Product Management
 
@@ -210,6 +216,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - Manage sizes and colors
 - Upload product images
 
+
 ## 🚚 Order Management
 
 - View all orders
@@ -218,6 +225,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - Monitor payment status
 - Manage order lifecycle
 
+
 ## 👥 User Management
 
 - View registered users
@@ -225,6 +233,7 @@ Mimi & Me includes a dedicated administrative interface protected by role-based 
 - View account creation dates
 - Identify user/admin roles
 - Delete eligible users
+
 
 ## 🎟️ Coupon Management
 
@@ -256,13 +265,13 @@ The application implements several security and reliability practices:
 
 ---
 
+
 # ☁️ Media Management
 
 Product and category images are handled through **Cloudinary**.
 
 ### Image Flow
-
-```text
+```
 Admin Upload
      ↓
 Multer
@@ -274,14 +283,16 @@ Image URL + Public ID
 MongoDB
      ↓
 Frontend
+```
+---
 
 # 🏗️ Architecture
 
 Mimi & Me follows a modular client-server architecture.
 
-## Frontend Architecture
 
-```text
+## Frontend Architecture
+```
 Page
  ↓
 Zustand Store
@@ -291,10 +302,10 @@ API Service
 Axios
  ↓
 Backend REST API
+```
 
 ## Backend Architecture
-
-```text
+```
 Route
  ↓
 Middleware
@@ -304,10 +315,11 @@ Controller
 Model
  ↓
 MongoDB
+```
+---
 
 ## High-Level Architecture
 
-```text
                     ┌──────────────────┐
                     │     Customer     │
                     │    / Admin UI    │
@@ -343,10 +355,12 @@ MongoDB
                     │    Payments     │
                     └─────────────────┘
 
+---
+
 # 🧰 Tech Stack
 
 ## Frontend
-
+```
 | Technology | Purpose |
 |---|---|
 | React | UI development |
@@ -357,9 +371,9 @@ MongoDB
 | Axios | API communication |
 | Lucide React | UI icons |
 | React Hot Toast | Notifications |
-
+```
 ## Backend
-
+```
 | Technology | Purpose |
 |---|---|
 | Node.js | Runtime environment |
@@ -374,12 +388,11 @@ MongoDB
 | Razorpay | Payment processing |
 | Cloudinary | Image/media storage |
 | dotenv | Environment configuration |
-
+```
 ---
 
 # 🗂️ Project Structure
-
-```text
+```
 Mimi-Me/
 │
 ├── client/
@@ -411,14 +424,14 @@ Mimi-Me/
 │
 ├── .gitignore
 └── README.md
+```
+---
 
 # 🔄 State Management
 
 Global application state is managed using **Zustand**.
-
+```
 Major stores include:
-
-```text
 authStore
 productStore
 categoryStore
@@ -426,12 +439,13 @@ cartStore
 wishlistStore
 orderStore
 couponStore
+```
+---
 
 # 🌐 REST API
 
 The backend exposes RESTful endpoints for major application domains.
-
-```text
+```
 /api/auth
 /api/products
 /api/categories
@@ -441,11 +455,13 @@ The backend exposes RESTful endpoints for major application domains.
 /api/coupons
 /api/admin
 /api/users
+```
+---
 
 # 🧪 Testing & Quality
 
 The project went through dedicated production-readiness and responsive testing phases covering:
-
+```
 - Authentication flows
 - Product workflows
 - Cart operations
@@ -462,14 +478,13 @@ The project went through dedicated production-readiness and responsive testing p
 - Tablet layouts
 - Mobile layouts
 - Production frontend/backend integration
-
+```
 ---
 
 # 🚀 Deployment
 
 The application is deployed using a separated frontend/backend architecture.
-
-```text
+```
 Frontend
    │
    └── Vercel
@@ -485,25 +500,163 @@ Backend
           ├── MongoDB Atlas
           ├── Cloudinary
           └── Razorpay
+```
+---
 
-# 🚀 Deployment
+# ⚙️ Local Development
 
-The application is deployed using a separated frontend/backend architecture.
+## 1. Clone the repository
+
+```bash
+git clone <your-repository-url>
+
+cd Mimi-Me
+````
+
+## 2. Install dependencies
+
+### Frontend
+
+```bash
+cd client
+npm install
+```
+
+### Backend
+
+```bash
+cd ../server
+npm install
+```
+
+## 3. Configure Environment Variables
+
+Create `.env` files according to the required frontend and backend configuration.
+
+Example backend configuration:
+
+```env
+PORT=3000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+
+BREVO_API_KEY=your_brevo_api_key
+
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+RAZORPAY_KEY_ID=your_key_id
+RAZORPAY_KEY_SECRET=your_key_secret
+
+EMAIL_USER=your_email
+```
+
+> Never commit real credentials, API keys, secrets, or `.env` files to the repository.
+
+## 4. Start the Backend
+
+```bash
+cd server
+npm start
+```
+
+## 5. Start the Frontend
+
+```bash
+cd client
+npm run dev
+```
+
+```
+```
+---
+
+# 📌 Development Principles
+
+The project was developed around the following principles:
+
+- Modular architecture
+- Separation of concerns
+- Reusable components
+- Centralized API services
+- Centralized state management
+- Protected resources
+- Input validation
+- Consistent error handling
+- Responsive-first UI
+- Environment-based configuration
+- Maintainable folder structure
+- Production-oriented development practices
+---
+
+# 📈 Project Development Journey
+
+Mimi & Me was developed through structured implementation phases:
 
 ```text
-Frontend
-   │
-   └── Vercel
-          │
-          ▼
-       REST API
-          │
-          ▼
-Backend
-   │
-   └── Render
-          │
-          ├── MongoDB Atlas
-          ├── Cloudinary
-          └── Razorpay
-adminStore
+Phase 1  → Code Quality & Refactoring
+Phase 2  → Payment System
+Phase 3  → Coupons System
+Phase 4  → User Profile & Account
+Phase 5  → UI/UX Enhancement
+Phase 6  → Responsive & E2E Testing
+Phase 7  → Information & Support Pages
+Phase 8  → Production Readiness Audit
+Phase 9  → Deployment & Production
+Phase 10 → Documentation & Portfolio
+```
+---
+
+# 🔮 Future Improvements
+
+Potential future iterations may include:
+
+- Advanced product recommendations
+- More powerful search
+- Advanced analytics
+- Sales reporting
+- Product reviews and ratings
+- Inventory alerts
+- Automated email notifications
+- Order tracking integrations
+- Performance optimizations
+- Additional payment methods
+- Progressive Web App capabilities
+---
+
+# 📚 What This Project Demonstrates
+
+Mimi & Me demonstrates practical experience with:
+
+- Full-stack MERN development
+- REST API architecture
+- Authentication & authorization
+- JWT and HTTP-only cookies
+- MongoDB data modeling
+- Zustand state management
+- Payment gateway integration
+- Cloud media management
+- Email-based authentication
+- Request validation
+- Role-based access control
+- Admin dashboard development
+- Responsive UI engineering
+- Production deployment
+- End-to-end application development
+---
+
+
+# 👨‍💻 Author
+
+**Shourya Gaur**
+
+B.Tech — Computer Science & Engineering
+
+Built with React, Node.js, Express, MongoDB, and a focus on clean, scalable full-stack development.
+
+---
+
+## 📄 License
+
+This project is intended for educational, portfolio, and demonstration purposes.
